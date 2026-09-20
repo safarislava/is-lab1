@@ -1,9 +1,18 @@
 plugins {
     id("java")
+    id("checkstyle")
+    id("pmd")
+    id("com.github.spotbugs") version "6.1.7"
 }
 
 group = "ru.ifmo.se.api"
 version = "1.0-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
 
 repositories {
     mavenCentral()
@@ -13,6 +22,56 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:6.0.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+    options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror", "-parameters"))
+}
+
+checkstyle {
+    toolVersion = "10.21.4"
+    isIgnoreFailures = false
+    maxWarnings = 0
+    maxErrors = 0
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+pmd {
+    toolVersion = "7.11.0"
+    isIgnoreFailures = false
+    isConsoleOutput = true
+    ruleSets = listOf()
+    ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
+}
+
+tasks.withType<Pmd> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+spotbugs {
+    ignoreFailures.set(false)
+    effort.set(com.github.spotbugs.snom.Effort.MAX)
+    reportLevel.set(com.github.spotbugs.snom.Confidence.LOW)
+}
+
+tasks.withType<com.github.spotbugs.snom.SpotBugsTask> {
+    reports.create("html") {
+        required.set(true)
+    }
+    reports.create("xml") {
+        required.set(true)
+    }
 }
 
 tasks.test {

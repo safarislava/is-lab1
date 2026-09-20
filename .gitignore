@@ -1,4 +1,9 @@
 .gradle
+build/
+out/
+bin/
+*.class
 .DS_Store
 .idea
 is-lab1.iml
+*.log
