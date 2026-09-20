@@ -1,4 +1,4 @@
-name: Strict Code Linting & Quality Checks
+name: Strict Monorepo Lint & Code Quality
 
 on:
   push:
@@ -14,9 +14,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint & Static Code Analysis
+  backend-lint:
+    name: Backend Lint & Analysis (Java)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - name: Checkout repository
@@ -30,21 +33,56 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          build-root-directory: backend
 
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
 
-      - name: Run strict linter and quality checks (Checkstyle, PMD, SpotBugs, Compiler)
+      - name: Run Backend Quality Checks (Checkstyle, PMD, SpotBugs, Compiler)
         run: ./gradlew check --no-daemon --stacktrace
 
-      - name: Upload Lint & Test Reports
+      - name: Upload Backend Lint & Test Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lint-and-test-reports
+          name: backend-reports
           path: |
-            build/reports/checkstyle/
-            build/reports/pmd/
-            build/reports/spotbugs/
-            build/reports/tests/
+            backend/build/reports/checkstyle/
+            backend/build/reports/pmd/
+            backend/build/reports/spotbugs/
+            backend/build/reports/tests/
           if-no-files-found: ignore
+
+  frontend-lint:
+    name: Frontend Lint & Typecheck (Vue 3 + TS)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript type check
+        run: npm run type-check
+
+      - name: Run ESLint (0 warnings allowed)
+        run: npm run lint
+
+      - name: Run Prettier format check
+        run: npm run format:check
+
+      - name: Run Vite build check
+        run: npm run build
