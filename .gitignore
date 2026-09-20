@@ -1,9 +1,33 @@
-.gradle
+# Gradle & Java
+.gradle/
 build/
+backend/build/
 out/
 bin/
 *.class
-.DS_Store
-.idea
-is-lab1.iml
 *.log
+is-lab1.iml
+*.iml
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+dist-ssr/
+frontend/dist-ssr/
+coverage/
+frontend/coverage/
+*.tsbuildinfo
+.eslintcache
+frontend/.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE & OS
+.idea/
+.DS_Store
+.vscode/
+*.local

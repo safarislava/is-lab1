@@ -34,7 +34,7 @@ checkstyle {
     isIgnoreFailures = false
     maxWarnings = 0
     maxErrors = 0
-    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    configFile = file("${projectDir}/config/checkstyle/checkstyle.xml")
 }
 
 tasks.withType<Checkstyle> {
@@ -49,7 +49,7 @@ pmd {
     isIgnoreFailures = false
     isConsoleOutput = true
     ruleSets = listOf()
-    ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
+    ruleSetFiles = files("${projectDir}/config/pmd/pmd.xml")
 }
 
 tasks.withType<Pmd> {
