@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("war")
     id("io.freefair.lombok") version "8.11"
     id("checkstyle")
     id("pmd")
@@ -20,13 +21,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly("jakarta.platform:jakarta.jakartaee-api:10.0.0")
+    providedCompile("jakarta.platform:jakarta.jakartaee-api:10.0.0")
 
     implementation("jakarta.enterprise:jakarta.enterprise.cdi-api:4.1.0")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
     implementation("org.eclipse.persistence:eclipselink:4.0.4")
 
-    runtimeOnly("org.postgresql:postgresql:42.7.12")
+    implementation("org.postgresql:postgresql:42.7.12")
 
     testImplementation(platform("org.junit:junit-bom:6.0.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -85,4 +86,8 @@ tasks.withType<com.github.spotbugs.snom.SpotBugsTask> {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.war {
+    archiveFileName.set("backend.war")
 }
