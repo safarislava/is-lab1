@@ -5,8 +5,8 @@ plugins {
     id("com.github.spotbugs") version "6.1.7"
 }
 
-group = "ru.ifmo.se.api"
-version = "1.0-SNAPSHOT"
+group = "ru.ifmo.se"
+version = "1.0"
 
 java {
     toolchain {
