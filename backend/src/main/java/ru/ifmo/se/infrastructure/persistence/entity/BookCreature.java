@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -46,7 +47,7 @@ public class BookCreature {
     @Column(nullable = false)
     private BookCreatureType creatureType; //Поле не может быть null
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private MagicCity creatureLocation; //Поле может быть null
 
     @Column(nullable = false, columnDefinition = "REAL CHECK (attackLevel > 0)")
@@ -55,6 +56,6 @@ public class BookCreature {
     @Column(nullable = false, columnDefinition = "REAL CHECK (defenseLevel > 0)")
     private float defenseLevel; //Значение поля должно быть больше 0
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Ring ring;
 }
