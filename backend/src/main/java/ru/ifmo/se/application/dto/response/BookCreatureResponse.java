@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.ifmo.se.application.dto.request.CoordinatesRequest;
 import ru.ifmo.se.persistence.entity.BookCreatureType;
 
 import java.time.ZonedDateTime;
@@ -16,7 +15,7 @@ import java.time.ZonedDateTime;
 public class BookCreatureResponse {
     private int id;
     private String name;
-    private CoordinatesRequest coordinates;
+    private CoordinatesResponse coordinates;
     private ZonedDateTime creationDate;
     private int age;
     private BookCreatureType creatureType;
