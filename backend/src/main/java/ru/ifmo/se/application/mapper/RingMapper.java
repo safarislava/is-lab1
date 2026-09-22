@@ -2,11 +2,20 @@ package ru.ifmo.se.application.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import ru.ifmo.se.application.dto.request.RingCreateCommand;
+import ru.ifmo.se.application.dto.request.RingUpdateCommand;
 import ru.ifmo.se.application.dto.response.RingResponse;
 import ru.ifmo.se.persistence.entity.Ring;
 
 @ApplicationScoped
 public class RingMapper {
+
+    public void updateEntity(Ring ring, RingUpdateCommand command) {
+        if (ring == null || command == null) {
+            return;
+        }
+        ring.setName(command.getName());
+        ring.setPower(command.getPower());
+    }
 
     public Ring toEntity(RingCreateCommand command) {
         if (command == null) {
