@@ -1,4 +1,4 @@
-package ru.ifmo.se.persistence.repository;
+package ru.ifmo.se.application.repository;
 
 import ru.ifmo.se.persistence.entity.MagicCity;
 
