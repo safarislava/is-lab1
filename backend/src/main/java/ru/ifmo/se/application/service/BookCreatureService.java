@@ -21,6 +21,8 @@ import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
 import ru.ifmo.se.persistence.entity.Ring;
 
+import java.util.List;
+
 @ApplicationScoped
 public class BookCreatureService implements BookCreatureUseCase {
     @Inject
@@ -72,7 +74,17 @@ public class BookCreatureService implements BookCreatureUseCase {
 
     @Override
     public PageResponse<BookCreatureResponse> search(@Valid CreatureSearchQuery query) {
-        return null;
+        PageResponse<BookCreature> page = bookCreatureRepository.findBySearchQuery(query);
+        List<BookCreatureResponse> content = page.getContent().stream()
+                .map(bookCreatureMapper::toResponse)
+                .toList();
+        return new PageResponse<>(
+                content,
+                page.getTotalElements(),
+                page.getPageNumber(),
+                page.getPageSize(),
+                page.getTotalPages()
+        );
     }
 
     private MagicCity resolveCity(Integer cityId) {
