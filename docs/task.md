@@ -34,6 +34,7 @@ public class Ring {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Integer power; //Значение поля должно быть больше 0, Поле не может быть null
 }
+
 public enum BookCreatureType {
     HOBBIT,
     ELF,
