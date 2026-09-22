@@ -12,9 +12,9 @@ import ru.ifmo.se.persistence.entity.BookCreatureType;
 @AllArgsConstructor
 public class CreatureSearchQuery {
     private int page;
-    private int size = 10;
-    private String sortBy = "id";
-    private String sortDirection = "ASC";
+    private int size;
+    private String sortBy;
+    private String sortDirection;
 
     private String nameFilter;
     private BookCreatureType creatureTypeFilter;

@@ -80,10 +80,9 @@ public class BookCreatureService implements BookCreatureUseCase {
                 .toList();
         return new PageResponse<>(
                 content,
-                page.getTotalElements(),
-                page.getPageNumber(),
-                page.getPageSize(),
-                page.getTotalPages()
+                page.getTotal(),
+                page.getPage(),
+                page.getSize()
         );
     }
 
