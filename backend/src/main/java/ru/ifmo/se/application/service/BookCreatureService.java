@@ -27,9 +27,7 @@ public class BookCreatureService implements BookCreatureUseCase {
     }
 
     @Override
-    public void delete(int id) {
-
-    }
+    public void delete(int id) {}
 
     @Override
     public PageResponse<BookCreatureResponse> search(@Valid CreatureSearchQuery query) {
