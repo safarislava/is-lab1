@@ -28,10 +28,6 @@ dependencies {
     implementation("org.eclipse.persistence:eclipselink:4.0.4")
 
     implementation("org.postgresql:postgresql:42.7.12")
-
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<JavaCompile> {
