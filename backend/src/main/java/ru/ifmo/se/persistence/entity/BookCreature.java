@@ -1,4 +1,4 @@
-package ru.ifmo.se.infrastructure.persistence.entity;
+package ru.ifmo.se.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -55,7 +55,6 @@ public class BookCreature {
     @Column(nullable = false, columnDefinition = "REAL CHECK (defenseLevel > 0)")
     private float defenseLevel;
 
-    @OneToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @OneToOne
     private Ring ring;
 }

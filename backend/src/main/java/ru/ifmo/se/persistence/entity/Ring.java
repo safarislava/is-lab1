@@ -1,4 +1,4 @@
-package ru.ifmo.se.infrastructure.persistence.entity;
+package ru.ifmo.se.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,9 +23,9 @@ public class Ring {
     private int id;
 
     @Column(nullable = false, columnDefinition = "TEXT CHECK (trim(name) != '')")
-    private String name; //Поле не может быть null, Строка не может быть пустой
+    private String name;
 
     @Column(nullable = false, columnDefinition = "INT CHECK (power > 0)")
-    private Integer power; //Значение поля должно быть больше 0, Поле не может быть null
+    private Integer power;
 }
 

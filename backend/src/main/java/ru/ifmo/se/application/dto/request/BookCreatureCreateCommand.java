@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.ifmo.se.domain.model.BookCreatureType;
+import ru.ifmo.se.persistence.entity.BookCreatureType;
 
 @Getter
 @Setter

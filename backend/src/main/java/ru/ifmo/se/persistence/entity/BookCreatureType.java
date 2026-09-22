@@ -1,4 +1,4 @@
-package ru.ifmo.se.domain.model;
+package ru.ifmo.se.persistence.entity;
 
 public enum BookCreatureType {
     HOBBIT,

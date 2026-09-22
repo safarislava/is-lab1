@@ -1,4 +1,4 @@
-package ru.ifmo.se.infrastructure.persistence.entity;
+package ru.ifmo.se.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,22 +28,22 @@ public class MagicCity {
     private int id;
 
     @Column(nullable = false, columnDefinition = "TEXT CHECK (TRIM(name) != '')")
-    private String name; //Поле не может быть null, Строка не может быть пустой
+    private String name;
 
     @Column(nullable = false, columnDefinition = "INT CHECK (area > 0)")
-    private int area; //Значение поля должно быть больше 0
+    private int area;
 
     @Column(nullable = false, columnDefinition = "BIGINT CHECK (population > 0)")
-    private Long population; //Значение поля должно быть больше 0, Поле не может быть null
+    private Long population;
 
     private LocalDateTime establishmentDate;
 
     @Enumerated(EnumType.STRING)
-    private BookCreatureType governor; //Поле может быть null
+    private BookCreatureType governor;
 
-    private Boolean capital; //Поле может быть null
+    private Boolean capital;
 
     @Column(columnDefinition = "DECIMAL CHECK (populationDensity > 0)")
-    private Float populationDensity; //Значение поля должно быть больше 0
+    private Float populationDensity;
 }
 
