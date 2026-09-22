@@ -3,6 +3,7 @@ package ru.ifmo.se.application.mapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import ru.ifmo.se.application.dto.request.BookCreatureCreateCommand;
+import ru.ifmo.se.application.dto.request.BookCreatureUpdateCommand;
 import ru.ifmo.se.application.dto.response.BookCreatureResponse;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
@@ -33,6 +34,17 @@ public class BookCreatureMapper {
         creature.setDefenseLevel(command.getDefenseLevel());
         creature.setRing(ring);
         return creature;
+    }
+
+    public void updateEntity(BookCreature creature, BookCreatureUpdateCommand command, MagicCity city, Ring ring) {
+        creature.setName(command.getName());
+        creature.setCoordinates(coordinatesMapper.toEntity(command.getCoordinates()));
+        creature.setAge(command.getAge());
+        creature.setCreatureType(command.getCreatureType());
+        creature.setCreatureLocation(city);
+        creature.setAttackLevel(command.getAttackLevel());
+        creature.setDefenseLevel(command.getDefenseLevel());
+        creature.setRing(ring);
     }
 
     public BookCreatureResponse toResponse(BookCreature creature) {

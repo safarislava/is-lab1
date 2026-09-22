@@ -17,6 +17,6 @@ public class CoordinatesRequest {
     private long x;
 
     @NotNull
-    @DecimalMin(value = "-780")
+    @DecimalMin("-780")
     private Float y;
 }

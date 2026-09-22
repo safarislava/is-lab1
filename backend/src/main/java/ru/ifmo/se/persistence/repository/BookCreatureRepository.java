@@ -9,5 +9,7 @@ public interface BookCreatureRepository {
 
     Optional<BookCreature> findById(int id);
 
+    Optional<BookCreature> findByRingId(Integer ringId);
+
     void deleteById(int id);
 }
