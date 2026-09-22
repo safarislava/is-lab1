@@ -1,4 +1,4 @@
-package ru.ifmo.se.application.dto.response;
+package ru.ifmo.se.application.exception;
 
 import ru.ifmo.se.persistence.entity.BookCreature;
 

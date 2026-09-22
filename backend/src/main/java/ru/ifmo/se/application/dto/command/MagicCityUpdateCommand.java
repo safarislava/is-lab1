@@ -1,4 +1,4 @@
-package ru.ifmo.se.application.dto.request;
+package ru.ifmo.se.application.dto.command;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

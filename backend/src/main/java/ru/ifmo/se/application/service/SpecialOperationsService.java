@@ -2,7 +2,7 @@ package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import ru.ifmo.se.application.dto.response.BookCreatureResponse;
+import ru.ifmo.se.application.dto.result.BookCreatureResult;
 import ru.ifmo.se.application.mapper.BookCreatureMapper;
 import ru.ifmo.se.application.repository.SpecialOperationsRepository;
 import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
@@ -36,10 +36,10 @@ public class SpecialOperationsService implements SpecialOperationsUseCase {
     }
 
     @Override
-    public List<BookCreatureResponse> findCreaturesWithAttackLevelLessThan(float maxAttackLevel) {
+    public List<BookCreatureResult> findCreaturesWithAttackLevelLessThan(float maxAttackLevel) {
         return specialOperationsRepository.findCreaturesWithAttackLevelLessThan(maxAttackLevel)
                 .stream()
-                .map(bookCreatureMapper::toResponse)
+                .map(bookCreatureMapper::toResult)
                 .toList();
     }
 

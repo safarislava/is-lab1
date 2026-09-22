@@ -2,9 +2,9 @@ package ru.ifmo.se.application.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import ru.ifmo.se.application.dto.request.BookCreatureCreateCommand;
-import ru.ifmo.se.application.dto.request.BookCreatureUpdateCommand;
-import ru.ifmo.se.application.dto.response.BookCreatureResponse;
+import ru.ifmo.se.application.dto.command.BookCreatureCreateCommand;
+import ru.ifmo.se.application.dto.command.BookCreatureUpdateCommand;
+import ru.ifmo.se.application.dto.result.BookCreatureResult;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
 import ru.ifmo.se.persistence.entity.Ring;
@@ -47,21 +47,21 @@ public class BookCreatureMapper {
         creature.setRing(ring);
     }
 
-    public BookCreatureResponse toResponse(BookCreature creature) {
+    public BookCreatureResult toResult(BookCreature creature) {
         if (creature == null) {
             return null;
         }
-        return new BookCreatureResponse(
+        return new BookCreatureResult(
                 creature.getId(),
                 creature.getName(),
-                coordinatesMapper.toResponse(creature.getCoordinates()),
+                coordinatesMapper.toResult(creature.getCoordinates()),
                 creature.getCreationDate(),
                 creature.getAge(),
                 creature.getCreatureType(),
-                magicCityMapper.toResponse(creature.getCreatureLocation()),
+                magicCityMapper.toResult(creature.getCreatureLocation()),
                 creature.getAttackLevel(),
                 creature.getDefenseLevel(),
-                ringMapper.toResponse(creature.getRing())
+                ringMapper.toResult(creature.getRing())
         );
     }
 }

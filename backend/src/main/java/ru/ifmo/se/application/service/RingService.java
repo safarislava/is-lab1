@@ -3,10 +3,10 @@ package ru.ifmo.se.application.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import ru.ifmo.se.application.dto.request.RingCreateCommand;
-import ru.ifmo.se.application.dto.request.RingUpdateCommand;
-import ru.ifmo.se.application.dto.response.RingNotFoundException;
-import ru.ifmo.se.application.dto.response.RingResponse;
+import ru.ifmo.se.application.dto.command.RingCreateCommand;
+import ru.ifmo.se.application.dto.command.RingUpdateCommand;
+import ru.ifmo.se.application.dto.result.RingResult;
+import ru.ifmo.se.application.exception.RingNotFoundException;
 import ru.ifmo.se.application.mapper.RingMapper;
 import ru.ifmo.se.application.repository.RingRepository;
 import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
@@ -27,28 +27,28 @@ public class RingService implements RingUseCase {
     private NotificationBroadcastUseCase notificationBroadcastUseCase;
 
     @Override
-    public RingResponse create(@Valid RingCreateCommand command) {
+    public RingResult create(@Valid RingCreateCommand command) {
         Ring ring = ringMapper.toEntity(command);
         Ring saved = ringRepository.save(ring);
         notificationBroadcastUseCase.broadcastChange("CREATE", "RING", saved.getId());
-        return ringMapper.toResponse(saved);
+        return ringMapper.toResult(saved);
     }
 
     @Override
-    public RingResponse getById(int id) {
+    public RingResult getById(int id) {
         Ring ring = ringRepository.findById(id)
                 .orElseThrow(() -> new RingNotFoundException(id));
-        return ringMapper.toResponse(ring);
+        return ringMapper.toResult(ring);
     }
 
     @Override
-    public RingResponse update(int id, @Valid RingUpdateCommand command) {
+    public RingResult update(int id, @Valid RingUpdateCommand command) {
         Ring ring = ringRepository.findById(id)
                 .orElseThrow(() -> new RingNotFoundException(id));
         ringMapper.updateEntity(ring, command);
         Ring saved = ringRepository.save(ring);
         notificationBroadcastUseCase.broadcastChange("UPDATE", "RING", saved.getId());
-        return ringMapper.toResponse(saved);
+        return ringMapper.toResult(saved);
     }
 
     @Override
@@ -61,9 +61,9 @@ public class RingService implements RingUseCase {
     }
 
     @Override
-    public List<RingResponse> getAll() {
+    public List<RingResult> getAll() {
         return ringRepository.findAll().stream()
-                .map(ringMapper::toResponse)
+                .map(ringMapper::toResult)
                 .toList();
     }
 }

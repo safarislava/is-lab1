@@ -1,4 +1,4 @@
-package ru.ifmo.se.application.dto.response;
+package ru.ifmo.se.application.dto.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageResponse<T> {
+public class PageResult<T> {
     private List<T> content;
     private long total;
     private int page;

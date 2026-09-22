@@ -1,9 +1,9 @@
 package ru.ifmo.se.application.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import ru.ifmo.se.application.dto.request.MagicCityCreateCommand;
-import ru.ifmo.se.application.dto.request.MagicCityUpdateCommand;
-import ru.ifmo.se.application.dto.response.MagicCityResponse;
+import ru.ifmo.se.application.dto.command.MagicCityCreateCommand;
+import ru.ifmo.se.application.dto.command.MagicCityUpdateCommand;
+import ru.ifmo.se.application.dto.result.MagicCityResult;
 import ru.ifmo.se.persistence.entity.MagicCity;
 
 @ApplicationScoped
@@ -37,11 +37,11 @@ public class MagicCityMapper {
         return city;
     }
 
-    public MagicCityResponse toResponse(MagicCity city) {
+    public MagicCityResult toResult(MagicCity city) {
         if (city == null) {
             return null;
         }
-        return new MagicCityResponse(
+        return new MagicCityResult(
                 city.getId(),
                 city.getName(),
                 city.getArea(),

@@ -3,15 +3,15 @@ package ru.ifmo.se.application.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import ru.ifmo.se.application.dto.request.BookCreatureCreateCommand;
-import ru.ifmo.se.application.dto.request.BookCreatureUpdateCommand;
-import ru.ifmo.se.application.dto.request.CreatureSearchQuery;
-import ru.ifmo.se.application.dto.response.BookCreatureNotFoundException;
-import ru.ifmo.se.application.dto.response.BookCreatureResponse;
-import ru.ifmo.se.application.dto.response.MagicCityNotFoundException;
-import ru.ifmo.se.application.dto.response.PageResponse;
-import ru.ifmo.se.application.dto.response.RingAlreadyInUseException;
-import ru.ifmo.se.application.dto.response.RingNotFoundException;
+import ru.ifmo.se.application.dto.command.BookCreatureCreateCommand;
+import ru.ifmo.se.application.dto.command.BookCreatureUpdateCommand;
+import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
+import ru.ifmo.se.application.dto.result.BookCreatureResult;
+import ru.ifmo.se.application.dto.result.PageResult;
+import ru.ifmo.se.application.exception.BookCreatureNotFoundException;
+import ru.ifmo.se.application.exception.MagicCityNotFoundException;
+import ru.ifmo.se.application.exception.RingAlreadyInUseException;
+import ru.ifmo.se.application.exception.RingNotFoundException;
 import ru.ifmo.se.application.mapper.BookCreatureMapper;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.application.repository.MagicCityRepository;
@@ -42,24 +42,24 @@ public class BookCreatureService implements BookCreatureUseCase {
     private NotificationBroadcastUseCase notificationBroadcastUseCase;
 
     @Override
-    public BookCreatureResponse create(@Valid BookCreatureCreateCommand command) {
+    public BookCreatureResult create(@Valid BookCreatureCreateCommand command) {
         MagicCity city = resolveCity(command.getCreatureLocationId());
         Ring ring = resolveRing(command.getRingId(), null);
         BookCreature creature = bookCreatureMapper.toEntity(command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
         notificationBroadcastUseCase.broadcastChange("CREATE", "BOOK_CREATURE", saved.getId());
-        return bookCreatureMapper.toResponse(saved);
+        return bookCreatureMapper.toResult(saved);
     }
 
     @Override
-    public BookCreatureResponse getById(int id) {
+    public BookCreatureResult getById(int id) {
         BookCreature creature = bookCreatureRepository.findById(id)
                 .orElseThrow(() -> new BookCreatureNotFoundException(id));
-        return bookCreatureMapper.toResponse(creature);
+        return bookCreatureMapper.toResult(creature);
     }
 
     @Override
-    public BookCreatureResponse update(int id, @Valid BookCreatureUpdateCommand command) {
+    public BookCreatureResult update(int id, @Valid BookCreatureUpdateCommand command) {
         BookCreature creature = bookCreatureRepository.findById(id)
                 .orElseThrow(() -> new BookCreatureNotFoundException(id));
         MagicCity city = resolveCity(command.getCreatureLocationId());
@@ -67,7 +67,7 @@ public class BookCreatureService implements BookCreatureUseCase {
         bookCreatureMapper.updateEntity(creature, command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
         notificationBroadcastUseCase.broadcastChange("UPDATE", "BOOK_CREATURE", saved.getId());
-        return bookCreatureMapper.toResponse(saved);
+        return bookCreatureMapper.toResult(saved);
     }
 
     @Override
@@ -80,12 +80,12 @@ public class BookCreatureService implements BookCreatureUseCase {
     }
 
     @Override
-    public PageResponse<BookCreatureResponse> search(@Valid CreatureSearchQuery query) {
-        PageResponse<BookCreature> page = bookCreatureRepository.findBySearchQuery(query);
-        List<BookCreatureResponse> content = page.getContent().stream()
-                .map(bookCreatureMapper::toResponse)
+    public PageResult<BookCreatureResult> search(@Valid CreatureSearchQuery query) {
+        PageResult<BookCreature> page = bookCreatureRepository.findBySearchQuery(query);
+        List<BookCreatureResult> content = page.getContent().stream()
+                .map(bookCreatureMapper::toResult)
                 .toList();
-        return new PageResponse<>(
+        return new PageResult<>(
                 content,
                 page.getTotal(),
                 page.getPage(),

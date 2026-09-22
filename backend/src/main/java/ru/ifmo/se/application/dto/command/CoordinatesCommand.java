@@ -1,4 +1,4 @@
-package ru.ifmo.se.application.dto.request;
+package ru.ifmo.se.application.dto.command;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CoordinatesRequest {
+public class CoordinatesCommand {
     @DecimalMax("500")
     private long x;
 

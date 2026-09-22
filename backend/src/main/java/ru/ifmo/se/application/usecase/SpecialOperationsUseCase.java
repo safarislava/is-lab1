@@ -1,6 +1,6 @@
 package ru.ifmo.se.application.usecase;
 
-import ru.ifmo.se.application.dto.response.BookCreatureResponse;
+import ru.ifmo.se.application.dto.result.BookCreatureResult;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public interface SpecialOperationsUseCase {
 
     Double calculateAverageDefenseLevel();
 
-    List<BookCreatureResponse> findCreaturesWithAttackLevelLessThan(float maxAttackLevel);
+    List<BookCreatureResult> findCreaturesWithAttackLevelLessThan(float maxAttackLevel);
 
     int takeAllRingsFromHobbits();
 

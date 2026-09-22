@@ -2,17 +2,31 @@ package ru.ifmo.se.persistence.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import ru.ifmo.se.application.dto.request.CreatureSearchQuery;
-import ru.ifmo.se.application.dto.response.PageResponse;
-import ru.ifmo.se.application.dto.response.UnknownSearchSortByException;
+import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
+import ru.ifmo.se.application.dto.result.PageResult;
+import ru.ifmo.se.application.exception.UnknownSearchSortByException;
 import ru.ifmo.se.persistence.entity.BookCreature;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BookCreatureSearch {
+    private static final Map<String, String> SORT_PATHS = Map.of(
+            "name", "b.name",
+            "age", "b.age",
+            "creation_date", "b.creationDate",
+            "creature_type", "b.creatureType",
+            "city_name", "c.name",
+            "ring_name", "r.name",
+            "coordinate_x", "b.coordinates.x",
+            "coordinate_y", "b.coordinates.y",
+            "attack_level", "b.attackLevel",
+            "defense_level", "b.defenseLevel"
+    );
+
     private final EntityManager entityManager;
     private final CreatureSearchQuery query;
 
@@ -21,7 +35,7 @@ public class BookCreatureSearch {
         this.query = query;
     }
 
-    public PageResponse<BookCreature> execute() {
+    public PageResult<BookCreature> execute() {
         int page = query.getPage();
         int size = query.getSize();
 
@@ -34,11 +48,11 @@ public class BookCreatureSearch {
 
         long total = countTotal(from, params);
         if (total == 0) {
-            return new PageResponse<>(List.of(), 0, page, size);
+            return new PageResult<>(List.of(), 0, page, size);
         }
 
         List<BookCreature> content = getPage(from, params, page, size);
-        return new PageResponse<>(content, total, page, size);
+        return new PageResult<>(content, total, page, size);
     }
 
     private long countTotal(String from, Map<String, Object> params) {
@@ -60,7 +74,7 @@ public class BookCreatureSearch {
     private void buildConditions(List<String> conditions, Map<String, Object> params) {
         if (query.getNameFilter() != null) {
             conditions.add("LOWER(b.name) LIKE CONCAT('%', :name, '%')");
-            params.put("name", query.getNameFilter().toLowerCase());
+            params.put("name", query.getNameFilter().toLowerCase(Locale.ROOT));
         }
         if (query.getCreatureTypeFilter() != null) {
             conditions.add("b.creatureType = CONCAT('%', :type, '%')");
@@ -68,11 +82,11 @@ public class BookCreatureSearch {
         }
         if (query.getCityNameFilter() != null) {
             conditions.add("LOWER(c.name) LIKE CONCAT('%', :city, '%')");
-            params.put("city", query.getCityNameFilter().toLowerCase());
+            params.put("city", query.getCityNameFilter().toLowerCase(Locale.ROOT));
         }
         if (query.getRingNameFilter() != null) {
             conditions.add("LOWER(r.name) LIKE CONCAT('%', :ring, '%')");
-            params.put("ring", query.getRingNameFilter().toLowerCase());
+            params.put("ring", query.getRingNameFilter().toLowerCase(Locale.ROOT));
         }
     }
 
@@ -86,18 +100,10 @@ public class BookCreatureSearch {
     }
 
     private String resolveSortPath(String sortBy) {
-        return switch (sortBy) {
-            case "name" -> "b.name";
-            case "age" -> "b.age";
-            case "creation_date" -> "b.creationDate";
-            case "creature_type" -> "b.creatureType";
-            case "city_name" -> "c.name";
-            case "ring_name" -> "r.name";
-            case "coordinate_x" -> "b.coordinates.x";
-            case "coordinate_y" -> "b.coordinates.y";
-            case "attack_level" -> "b.attackLevel";
-            case "defense_level" -> "b.defenseLevel";
-            default -> throw new UnknownSearchSortByException(sortBy);
-        };
+        String path = SORT_PATHS.get(sortBy);
+        if (path == null) {
+            throw new UnknownSearchSortByException(sortBy);
+        }
+        return path;
     }
 }

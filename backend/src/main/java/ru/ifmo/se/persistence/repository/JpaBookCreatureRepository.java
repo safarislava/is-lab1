@@ -3,8 +3,8 @@ package ru.ifmo.se.persistence.repository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import ru.ifmo.se.application.dto.request.CreatureSearchQuery;
-import ru.ifmo.se.application.dto.response.PageResponse;
+import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
+import ru.ifmo.se.application.dto.result.PageResult;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
@@ -65,7 +65,7 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
     }
 
     @Override
-    public PageResponse<BookCreature> findBySearchQuery(CreatureSearchQuery query) {
+    public PageResult<BookCreature> findBySearchQuery(CreatureSearchQuery query) {
         return new BookCreatureSearch(entityManager, query).execute();
     }
 }

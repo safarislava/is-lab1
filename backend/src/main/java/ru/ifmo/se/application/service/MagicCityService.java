@@ -3,11 +3,11 @@ package ru.ifmo.se.application.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import ru.ifmo.se.application.dto.request.MagicCityCreateCommand;
-import ru.ifmo.se.application.dto.request.MagicCityUpdateCommand;
-import ru.ifmo.se.application.dto.response.MagicCityNotFoundException;
-import ru.ifmo.se.application.dto.response.MagicCityResponse;
-import ru.ifmo.se.application.dto.response.MagicCitySwapSameException;
+import ru.ifmo.se.application.dto.command.MagicCityCreateCommand;
+import ru.ifmo.se.application.dto.command.MagicCityUpdateCommand;
+import ru.ifmo.se.application.dto.result.MagicCityResult;
+import ru.ifmo.se.application.exception.MagicCityNotFoundException;
+import ru.ifmo.se.application.exception.MagicCitySwapSameException;
 import ru.ifmo.se.application.mapper.MagicCityMapper;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.application.repository.MagicCityRepository;
@@ -32,28 +32,28 @@ public class MagicCityService implements MagicCityUseCase {
     private NotificationBroadcastUseCase notificationBroadcastUseCase;
 
     @Override
-    public MagicCityResponse create(@Valid MagicCityCreateCommand command) {
+    public MagicCityResult create(@Valid MagicCityCreateCommand command) {
         MagicCity city = magicCityMapper.toEntity(command);
         MagicCity saved = magicCityRepository.save(city);
         notificationBroadcastUseCase.broadcastChange("CREATE", "MAGIC_CITY", saved.getId());
-        return magicCityMapper.toResponse(saved);
+        return magicCityMapper.toResult(saved);
     }
 
     @Override
-    public MagicCityResponse getById(int id) {
+    public MagicCityResult getById(int id) {
         MagicCity city = magicCityRepository.findById(id)
                 .orElseThrow(() -> new MagicCityNotFoundException(id));
-        return magicCityMapper.toResponse(city);
+        return magicCityMapper.toResult(city);
     }
 
     @Override
-    public MagicCityResponse update(int id, @Valid MagicCityUpdateCommand command) {
+    public MagicCityResult update(int id, @Valid MagicCityUpdateCommand command) {
         MagicCity city = magicCityRepository.findById(id)
                 .orElseThrow(() -> new MagicCityNotFoundException(id));
         magicCityMapper.updateEntity(city, command);
         MagicCity saved = magicCityRepository.save(city);
         notificationBroadcastUseCase.broadcastChange("UPDATE", "MAGIC_CITY", saved.getId());
-        return magicCityMapper.toResponse(saved);
+        return magicCityMapper.toResult(saved);
     }
 
     @Override
@@ -72,9 +72,9 @@ public class MagicCityService implements MagicCityUseCase {
     }
 
     @Override
-    public List<MagicCityResponse> getAll() {
+    public List<MagicCityResult> getAll() {
         return magicCityRepository.findAll().stream()
-                .map(magicCityMapper::toResponse)
+                .map(magicCityMapper::toResult)
                 .toList();
     }
 }

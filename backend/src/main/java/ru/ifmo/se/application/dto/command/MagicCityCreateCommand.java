@@ -1,5 +1,8 @@
-package ru.ifmo.se.application.dto.response;
+package ru.ifmo.se.application.dto.command;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +15,23 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MagicCityResponse {
-    private int id;
+public class MagicCityCreateCommand {
+    @NotBlank
     private String name;
+
+    @Positive
     private int area;
+
+    @NotNull
+    @Positive
     private Long population;
+
     private LocalDateTime establishmentDate;
+
     private BookCreatureType governor;
+
     private Boolean capital;
+
+    @Positive
     private Float populationDensity;
 }

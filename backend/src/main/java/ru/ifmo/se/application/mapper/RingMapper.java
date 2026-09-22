@@ -1,9 +1,9 @@
 package ru.ifmo.se.application.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import ru.ifmo.se.application.dto.request.RingCreateCommand;
-import ru.ifmo.se.application.dto.request.RingUpdateCommand;
-import ru.ifmo.se.application.dto.response.RingResponse;
+import ru.ifmo.se.application.dto.command.RingCreateCommand;
+import ru.ifmo.se.application.dto.command.RingUpdateCommand;
+import ru.ifmo.se.application.dto.result.RingResult;
 import ru.ifmo.se.persistence.entity.Ring;
 
 @ApplicationScoped
@@ -27,10 +27,10 @@ public class RingMapper {
         return ring;
     }
 
-    public RingResponse toResponse(Ring ring) {
+    public RingResult toResult(Ring ring) {
         if (ring == null) {
             return null;
         }
-        return new RingResponse(ring.getId(), ring.getName(), ring.getPower());
+        return new RingResult(ring.getId(), ring.getName(), ring.getPower());
     }
 }

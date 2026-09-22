@@ -1,7 +1,7 @@
 package ru.ifmo.se.application.repository;
 
-import ru.ifmo.se.application.dto.request.CreatureSearchQuery;
-import ru.ifmo.se.application.dto.response.PageResponse;
+import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
+import ru.ifmo.se.application.dto.result.PageResult;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
 
@@ -18,5 +18,5 @@ public interface BookCreatureRepository {
 
     void deleteById(int id);
 
-    PageResponse<BookCreature> findBySearchQuery(CreatureSearchQuery query);
+    PageResult<BookCreature> findBySearchQuery(CreatureSearchQuery query);
 }

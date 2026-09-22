@@ -1,4 +1,4 @@
-package ru.ifmo.se.application.dto.response;
+package ru.ifmo.se.application.dto.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RingResponse {
+public class RingResult {
     private int id;
     private String name;
     private Integer power;

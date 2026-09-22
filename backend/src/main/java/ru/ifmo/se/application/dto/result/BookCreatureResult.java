@@ -1,4 +1,4 @@
-package ru.ifmo.se.application.dto.response;
+package ru.ifmo.se.application.dto.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,15 +12,15 @@ import java.time.ZonedDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookCreatureResponse {
+public class BookCreatureResult {
     private int id;
     private String name;
-    private CoordinatesResponse coordinates;
+    private CoordinatesResult coordinates;
     private ZonedDateTime creationDate;
     private int age;
     private BookCreatureType creatureType;
-    private MagicCityResponse creatureLocation;
+    private MagicCityResult creatureLocation;
     private float attackLevel;
     private float defenseLevel;
-    private RingResponse ring;
+    private RingResult ring;
 }

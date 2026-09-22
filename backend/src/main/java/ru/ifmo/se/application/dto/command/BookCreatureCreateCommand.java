@@ -1,4 +1,4 @@
-package ru.ifmo.se.application.dto.request;
+package ru.ifmo.se.application.dto.command;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +20,7 @@ public class BookCreatureCreateCommand {
 
     @NotNull
     @Valid
-    private CoordinatesRequest coordinates;
+    private CoordinatesCommand coordinates;
 
     @Positive
     private int age;
