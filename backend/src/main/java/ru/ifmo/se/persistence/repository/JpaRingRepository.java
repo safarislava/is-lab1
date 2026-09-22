@@ -39,9 +39,8 @@ public class JpaRingRepository implements RingRepository {
     @Override
     @Transactional
     public void deleteById(int id) {
-        Ring ring = entityManager.find(Ring.class, id);
-        if (ring != null) {
-            entityManager.remove(ring);
-        }
+        entityManager.createNativeQuery("SELECT delete_ring_with_detach(:ring)")
+            .setParameter("ring", id)
+            .getSingleResult();
     }
 }
