@@ -1,7 +1,7 @@
 package ru.ifmo.se.application.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import jakarta.validation.Valid;
 import ru.ifmo.se.application.dto.request.BookCreatureCreateCommand;
 import ru.ifmo.se.application.dto.request.BookCreatureUpdateCommand;
@@ -21,7 +21,7 @@ import ru.ifmo.se.persistence.repository.BookCreatureRepository;
 import ru.ifmo.se.persistence.repository.MagicCityRepository;
 import ru.ifmo.se.persistence.repository.RingRepository;
 
-@Named
+@ApplicationScoped
 public class BookCreatureService implements BookCreatureUseCase {
     @Inject
     private BookCreatureRepository bookCreatureRepository;
