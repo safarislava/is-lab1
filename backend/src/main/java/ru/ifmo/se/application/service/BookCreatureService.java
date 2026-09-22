@@ -13,13 +13,13 @@ import ru.ifmo.se.application.dto.response.PageResponse;
 import ru.ifmo.se.application.dto.response.RingAlreadyInUseException;
 import ru.ifmo.se.application.dto.response.RingNotFoundException;
 import ru.ifmo.se.application.mapper.BookCreatureMapper;
+import ru.ifmo.se.application.repository.BookCreatureRepository;
+import ru.ifmo.se.application.repository.MagicCityRepository;
+import ru.ifmo.se.application.repository.RingRepository;
 import ru.ifmo.se.application.usecase.BookCreatureUseCase;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
 import ru.ifmo.se.persistence.entity.Ring;
-import ru.ifmo.se.application.repository.BookCreatureRepository;
-import ru.ifmo.se.application.repository.MagicCityRepository;
-import ru.ifmo.se.application.repository.RingRepository;
 
 @ApplicationScoped
 public class BookCreatureService implements BookCreatureUseCase {
