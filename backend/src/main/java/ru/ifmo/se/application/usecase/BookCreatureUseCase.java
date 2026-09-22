@@ -13,7 +13,7 @@ public interface BookCreatureUseCase {
 
     BookCreatureResponse update(int id, BookCreatureUpdateCommand command);
 
-    void delete(int id, Integer relinkCreatureId);
+    void delete(int id);
 
     PageResponse<BookCreatureResponse> search(CreatureSearchQuery query);
 }
