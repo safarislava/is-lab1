@@ -12,15 +12,14 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookCreature {
-    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; // Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; // Поле не может быть null
-    private ZonedDateTime creationDate; // Поле не может быть null, генерируется автоматически
-    private int age; // Значение поля должно быть больше 0
-    private BookCreatureType creatureType; // Поле не может быть null
-    private MagicCity creatureLocation; // Поле может быть null
-    private float attackLevel; // Значение поля должно быть больше 0
-    private float defenseLevel; // Значение поля должно быть больше 0
+    private int id;
+    private String name;
+    private Coordinates coordinates;
+    private ZonedDateTime creationDate;
+    private int age;
+    private BookCreatureType creatureType;
+    private MagicCity creatureLocation;
+    private float attackLevel;
+    private float defenseLevel;
     private Ring ring;
 }
-

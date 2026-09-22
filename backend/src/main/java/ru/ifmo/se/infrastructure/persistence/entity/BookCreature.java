@@ -5,7 +5,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,33 +28,34 @@ import java.time.ZonedDateTime;
 public class BookCreature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private int id;
 
     @Column(nullable = false, columnDefinition = "TEXT CHECK (trim(name) != '')")
-    private String name; //Поле не может быть null, Строка не может быть пустой
+    private String name;
 
     @Embedded
-    private Coordinates coordinates; //Поле не может быть null
+    private Coordinates coordinates;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ DEFAULT now()")
-    private ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private ZonedDateTime creationDate;
 
     @Column(nullable = false, columnDefinition = "INT CHECK (age > 0)")
-    private int age; //Значение поля должно быть больше 0
+    private int age;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BookCreatureType creatureType; //Поле не может быть null
+    private BookCreatureType creatureType;
 
     @ManyToOne
-    private MagicCity creatureLocation; //Поле может быть null
+    private MagicCity creatureLocation;
 
     @Column(nullable = false, columnDefinition = "REAL CHECK (attackLevel > 0)")
-    private float attackLevel; //Значение поля должно быть больше 0
+    private float attackLevel;
 
     @Column(nullable = false, columnDefinition = "REAL CHECK (defenseLevel > 0)")
-    private float defenseLevel; //Значение поля должно быть больше 0
+    private float defenseLevel;
 
-    @OneToOne
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false)
     private Ring ring;
 }
