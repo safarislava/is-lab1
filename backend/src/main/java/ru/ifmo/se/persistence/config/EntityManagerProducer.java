@@ -1,0 +1,26 @@
+package ru.ifmo.se.persistence.config;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.inject.Disposes;
+import jakarta.enterprise.inject.Produces;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
+@ApplicationScoped
+public class EntityManagerProducer {
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("is-lab1-pu");
+
+    @Produces
+    @RequestScoped
+    public EntityManager createEntityManager() {
+        return emf.createEntityManager();
+    }
+
+    public void closeEntityManager(@Disposes EntityManager em) {
+        if (em.isOpen()) {
+            em.close();
+        }
+    }
+}
