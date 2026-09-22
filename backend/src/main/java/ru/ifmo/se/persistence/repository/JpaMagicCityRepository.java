@@ -3,9 +3,6 @@ package ru.ifmo.se.persistence.repository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import ru.ifmo.se.application.repository.MagicCityRepository;
 import ru.ifmo.se.persistence.entity.MagicCity;
 import ru.ifmo.se.persistence.interceptor.Transactional;
@@ -35,11 +32,8 @@ public class JpaMagicCityRepository implements MagicCityRepository {
 
     @Override
     public List<MagicCity> findAll() {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<MagicCity> cq = cb.createQuery(MagicCity.class);
-        Root<MagicCity> root = cq.from(MagicCity.class);
-        cq.select(root);
-        return entityManager.createQuery(cq).getResultList();
+        return entityManager.createQuery("SELECT c FROM MagicCity c", MagicCity.class)
+                .getResultList();
     }
 
     @Override
@@ -51,4 +45,3 @@ public class JpaMagicCityRepository implements MagicCityRepository {
         }
     }
 }
-

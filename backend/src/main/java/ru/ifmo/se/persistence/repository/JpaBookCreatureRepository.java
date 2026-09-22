@@ -3,9 +3,8 @@ package ru.ifmo.se.persistence.repository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import ru.ifmo.se.application.dto.request.CreatureSearchQuery;
+import ru.ifmo.se.application.dto.response.PageResponse;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.interceptor.Transactional;
@@ -15,9 +14,6 @@ import java.util.Optional;
 
 @ApplicationScoped
 public class JpaBookCreatureRepository implements BookCreatureRepository {
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_RING = "ring";
-
     @Inject
     private EntityManager entityManager;
 
@@ -41,11 +37,10 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
         if (ringId == null) {
             return Optional.empty();
         }
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<BookCreature> cq = cb.createQuery(BookCreature.class);
-        Root<BookCreature> root = cq.from(BookCreature.class);
-        cq.select(root).where(cb.equal(root.get(FIELD_RING).get(FIELD_ID), ringId));
-        List<BookCreature> results = entityManager.createQuery(cq).getResultList();
+        List<BookCreature> results = entityManager.createQuery(
+                "SELECT b FROM BookCreature b WHERE b.ring.id = :ringId", BookCreature.class)
+                .setParameter("ringId", ringId)
+                .getResultList();
         return results.isEmpty() ? Optional.empty() : Optional.of(results.getFirst());
     }
 
@@ -56,5 +51,10 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
         if (creature != null) {
             entityManager.remove(creature);
         }
+    }
+
+    @Override
+    public PageResponse<BookCreature> findBySearchQuery(CreatureSearchQuery query) {
+        return new BookCreatureSearch(entityManager, query).execute();
     }
 }

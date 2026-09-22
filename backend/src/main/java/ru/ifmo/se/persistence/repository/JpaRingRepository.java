@@ -3,9 +3,6 @@ package ru.ifmo.se.persistence.repository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import ru.ifmo.se.application.repository.RingRepository;
 import ru.ifmo.se.persistence.entity.Ring;
 import ru.ifmo.se.persistence.interceptor.Transactional;
@@ -35,11 +32,8 @@ public class JpaRingRepository implements RingRepository {
 
     @Override
     public List<Ring> findAll() {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Ring> cq = cb.createQuery(Ring.class);
-        Root<Ring> root = cq.from(Ring.class);
-        cq.select(root);
-        return entityManager.createQuery(cq).getResultList();
+        return entityManager.createQuery("SELECT r FROM Ring r", Ring.class)
+                .getResultList();
     }
 
     @Override
@@ -51,4 +45,3 @@ public class JpaRingRepository implements RingRepository {
         }
     }
 }
-

@@ -20,10 +20,4 @@ public class CreatureSearchQuery {
     private BookCreatureType creatureTypeFilter;
     private String cityNameFilter;
     private String ringNameFilter;
-    private Integer minAge;
-    private Integer maxAge;
-    private Float minAttackLevel;
-    private Float maxAttackLevel;
-    private Float minDefenseLevel;
-    private Float maxDefenseLevel;
 }
