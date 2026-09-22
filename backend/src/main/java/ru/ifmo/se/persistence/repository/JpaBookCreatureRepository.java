@@ -7,6 +7,7 @@ import ru.ifmo.se.application.dto.request.CreatureSearchQuery;
 import ru.ifmo.se.application.dto.response.PageResponse;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.persistence.entity.BookCreature;
+import ru.ifmo.se.persistence.entity.MagicCity;
 import ru.ifmo.se.persistence.interceptor.Transactional;
 
 import java.util.List;
@@ -42,6 +43,16 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
                 .setParameter("ringId", ringId)
                 .getResultList();
         return results.isEmpty() ? Optional.empty() : Optional.of(results.getFirst());
+    }
+
+    @Override
+    @Transactional
+    public void reassignCity(int oldCityId, MagicCity newCity) {
+        entityManager.createQuery(
+                "UPDATE BookCreature b SET b.creatureLocation = :newCity WHERE b.creatureLocation.id = :oldCityId")
+                .setParameter("newCity", newCity)
+                .setParameter("oldCityId", oldCityId)
+                .executeUpdate();
     }
 
     @Override

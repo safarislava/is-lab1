@@ -13,7 +13,7 @@ public interface MagicCityUseCase {
 
     MagicCityResponse update(int id, MagicCityUpdateCommand command);
 
-    void delete(int id);
+    void delete(int id, Integer replacementCityId);
 
     List<MagicCityResponse> getAll();
 }
