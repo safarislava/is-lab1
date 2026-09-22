@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import ru.ifmo.se.application.dto.request.CreatureSearchQuery;
 import ru.ifmo.se.application.dto.response.PageResponse;
+import ru.ifmo.se.application.dto.response.UnknownSearchSortByException;
 import ru.ifmo.se.persistence.entity.BookCreature;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class BookCreatureSearch {
             case "coordinate_y" -> "b.coordinates.y";
             case "attack_level" -> "b.attackLevel";
             case "defense_level" -> "b.defenseLevel";
-            default -> "b.id";
+            default -> throw new UnknownSearchSortByException(sortBy);
         };
     }
 }
