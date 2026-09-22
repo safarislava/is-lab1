@@ -17,6 +17,7 @@ import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.application.repository.MagicCityRepository;
 import ru.ifmo.se.application.repository.RingRepository;
 import ru.ifmo.se.application.usecase.BookCreatureUseCase;
+import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
 import ru.ifmo.se.persistence.entity.Ring;
@@ -37,12 +38,16 @@ public class BookCreatureService implements BookCreatureUseCase {
     @Inject
     private BookCreatureMapper bookCreatureMapper;
 
+    @Inject
+    private NotificationBroadcastUseCase notificationBroadcastUseCase;
+
     @Override
     public BookCreatureResponse create(@Valid BookCreatureCreateCommand command) {
         MagicCity city = resolveCity(command.getCreatureLocationId());
         Ring ring = resolveRing(command.getRingId(), null);
         BookCreature creature = bookCreatureMapper.toEntity(command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
+        notificationBroadcastUseCase.broadcastChange("CREATE", "BOOK_CREATURE", saved.getId());
         return bookCreatureMapper.toResponse(saved);
     }
 
@@ -61,6 +66,7 @@ public class BookCreatureService implements BookCreatureUseCase {
         Ring ring = resolveRing(command.getRingId(), id);
         bookCreatureMapper.updateEntity(creature, command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
+        notificationBroadcastUseCase.broadcastChange("UPDATE", "BOOK_CREATURE", saved.getId());
         return bookCreatureMapper.toResponse(saved);
     }
 
@@ -70,6 +76,7 @@ public class BookCreatureService implements BookCreatureUseCase {
             throw new BookCreatureNotFoundException(id);
         }
         bookCreatureRepository.deleteById(id);
+        notificationBroadcastUseCase.broadcastChange("DELETE", "BOOK_CREATURE", id);
     }
 
     @Override

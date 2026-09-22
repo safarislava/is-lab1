@@ -12,6 +12,7 @@ import ru.ifmo.se.application.mapper.MagicCityMapper;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.application.repository.MagicCityRepository;
 import ru.ifmo.se.application.usecase.MagicCityUseCase;
+import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
 import ru.ifmo.se.persistence.entity.MagicCity;
 
 import java.util.List;
@@ -19,7 +20,6 @@ import java.util.List;
 @ApplicationScoped
 public class MagicCityService implements MagicCityUseCase {
     @Inject
-
     private MagicCityRepository magicCityRepository;
 
     @Inject
@@ -28,10 +28,14 @@ public class MagicCityService implements MagicCityUseCase {
     @Inject
     private MagicCityMapper magicCityMapper;
 
+    @Inject
+    private NotificationBroadcastUseCase notificationBroadcastUseCase;
+
     @Override
     public MagicCityResponse create(@Valid MagicCityCreateCommand command) {
         MagicCity city = magicCityMapper.toEntity(command);
         MagicCity saved = magicCityRepository.save(city);
+        notificationBroadcastUseCase.broadcastChange("CREATE", "MAGIC_CITY", saved.getId());
         return magicCityMapper.toResponse(saved);
     }
 
@@ -48,21 +52,23 @@ public class MagicCityService implements MagicCityUseCase {
                 .orElseThrow(() -> new MagicCityNotFoundException(id));
         magicCityMapper.updateEntity(city, command);
         MagicCity saved = magicCityRepository.save(city);
+        notificationBroadcastUseCase.broadcastChange("UPDATE", "MAGIC_CITY", saved.getId());
         return magicCityMapper.toResponse(saved);
     }
 
     @Override
-    public void delete(int id, Integer replacementCityId) {
+    public void delete(int id, int replacementCityId) {
+        if (replacementCityId == id) {
+            throw new MagicCitySwapSameException(id);
+        }
         if (magicCityRepository.findById(id).isEmpty()) {
             throw new MagicCityNotFoundException(id);
         }
-        if (replacementCityId.equals(id)) {
-            throw new MagicCitySwapSameException(id);
-        }
         MagicCity replacementCity = magicCityRepository.findById(replacementCityId)
-            .orElseThrow(() -> new MagicCityNotFoundException(replacementCityId));
+                .orElseThrow(() -> new MagicCityNotFoundException(replacementCityId));
         bookCreatureRepository.reassignCity(id, replacementCity);
         magicCityRepository.deleteById(id);
+        notificationBroadcastUseCase.broadcastChange("DELETE", "MAGIC_CITY", id);
     }
 
     @Override
