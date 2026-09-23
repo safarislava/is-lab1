@@ -12,8 +12,8 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationEvent {
-    private String entityName;
     private String action;
+    private String entityName;
     private int entityId;
     private ZonedDateTime timestamp;
 }

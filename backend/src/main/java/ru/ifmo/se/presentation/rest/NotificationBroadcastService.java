@@ -30,7 +30,7 @@ public class NotificationBroadcastService implements NotificationBroadcastUseCas
 
     @Override
     public void broadcastChange(String action, String entityName, int entityId) {
-        NotificationEvent event = new NotificationEvent(entityName, action, entityId, ZonedDateTime.now());
+        NotificationEvent event = new NotificationEvent(action, entityName, entityId, ZonedDateTime.now());
         OutboundSseEvent sseEvent = sse.newEventBuilder()
                 .name("entity-change")
                 .data(NotificationEvent.class, event)
