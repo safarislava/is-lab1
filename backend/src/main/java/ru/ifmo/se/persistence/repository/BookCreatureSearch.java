@@ -71,22 +71,26 @@ public class BookCreatureSearch {
         return dataQuery.getResultList();
     }
 
+    private String buildRegex(String name) {
+        return String.format("%%%s%%", name.toLowerCase());
+    }
+
     private void buildConditions(List<String> conditions, Map<String, Object> params) {
         if (query.getNameFilter() != null) {
             conditions.add("LOWER(b.name) LIKE CONCAT('%', :name, '%')");
-            params.put("name", query.getNameFilter().toLowerCase(Locale.ROOT));
+            params.put("name", buildRegex(query.getNameFilter()));
         }
         if (query.getCreatureTypeFilter() != null) {
             conditions.add("b.creatureType = CONCAT('%', :type, '%')");
-            params.put("type", query.getCreatureTypeFilter());
+            params.put("type", buildRegex(query.getCreatureTypeFilter().toString()));
         }
         if (query.getCityNameFilter() != null) {
             conditions.add("LOWER(c.name) LIKE CONCAT('%', :city, '%')");
-            params.put("city", query.getCityNameFilter().toLowerCase(Locale.ROOT));
+            params.put("city", buildRegex(query.getCityNameFilter()));
         }
         if (query.getRingNameFilter() != null) {
             conditions.add("LOWER(r.name) LIKE CONCAT('%', :ring, '%')");
-            params.put("ring", query.getRingNameFilter().toLowerCase(Locale.ROOT));
+            params.put("ring", buildRegex(query.getRingNameFilter()));
         }
     }
 
