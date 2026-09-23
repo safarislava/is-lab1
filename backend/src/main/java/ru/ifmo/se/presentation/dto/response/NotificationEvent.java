@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.ifmo.se.application.enums.ActionType;
+import ru.ifmo.se.application.enums.EntityType;
 
 import java.time.ZonedDateTime;
 
@@ -12,8 +14,8 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationEvent {
-    private String action;
-    private String entityName;
+    private ActionType action;
+    private EntityType entityType;
     private int entityId;
     private ZonedDateTime timestamp;
 }

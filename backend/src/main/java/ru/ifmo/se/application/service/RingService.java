@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import ru.ifmo.se.application.dto.command.RingCreateCommand;
 import ru.ifmo.se.application.dto.command.RingUpdateCommand;
 import ru.ifmo.se.application.dto.result.RingResult;
+import ru.ifmo.se.application.enums.ActionType;
+import ru.ifmo.se.application.enums.EntityType;
 import ru.ifmo.se.application.exception.RingNotFoundException;
 import ru.ifmo.se.application.mapper.RingMapper;
 import ru.ifmo.se.application.repository.RingRepository;
@@ -30,7 +32,7 @@ public class RingService implements RingUseCase {
     public RingResult create(@Valid RingCreateCommand command) {
         Ring ring = ringMapper.toEntity(command);
         Ring saved = ringRepository.save(ring);
-        notificationBroadcastUseCase.broadcastChange("CREATE", "RING", saved.getId());
+        notificationBroadcastUseCase.broadcastChange(ActionType.CREATE, EntityType.RING, saved.getId());
         return ringMapper.toResult(saved);
     }
 
@@ -47,7 +49,7 @@ public class RingService implements RingUseCase {
                 .orElseThrow(() -> new RingNotFoundException(id));
         ringMapper.updateEntity(ring, command);
         Ring saved = ringRepository.save(ring);
-        notificationBroadcastUseCase.broadcastChange("UPDATE", "RING", saved.getId());
+        notificationBroadcastUseCase.broadcastChange(ActionType.UPDATE, EntityType.RING, saved.getId());
         return ringMapper.toResult(saved);
     }
 
@@ -57,7 +59,7 @@ public class RingService implements RingUseCase {
             throw new RingNotFoundException(id);
         }
         ringRepository.deleteById(id);
-        notificationBroadcastUseCase.broadcastChange("DELETE", "RING", id);
+        notificationBroadcastUseCase.broadcastChange(ActionType.DELETE, EntityType.RING, id);
     }
 
     @Override

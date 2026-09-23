@@ -7,6 +7,8 @@ import jakarta.ws.rs.sse.OutboundSseEvent;
 import jakarta.ws.rs.sse.Sse;
 import jakarta.ws.rs.sse.SseBroadcaster;
 import jakarta.ws.rs.sse.SseEventSink;
+import ru.ifmo.se.application.enums.ActionType;
+import ru.ifmo.se.application.enums.EntityType;
 import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
 import ru.ifmo.se.presentation.dto.response.NotificationEvent;
 
@@ -29,8 +31,8 @@ public class NotificationBroadcastService implements NotificationBroadcastUseCas
     }
 
     @Override
-    public void broadcastChange(String action, String entityName, int entityId) {
-        NotificationEvent event = new NotificationEvent(action, entityName, entityId, ZonedDateTime.now());
+    public void broadcastChange(ActionType action, EntityType entityType, int entityId) {
+        NotificationEvent event = new NotificationEvent(action, entityType, entityId, ZonedDateTime.now());
         OutboundSseEvent sseEvent = sse.newEventBuilder()
                 .name("entity-change")
                 .data(NotificationEvent.class, event)

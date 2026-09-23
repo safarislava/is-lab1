@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import ru.ifmo.se.application.dto.command.MagicCityCreateCommand;
 import ru.ifmo.se.application.dto.command.MagicCityUpdateCommand;
 import ru.ifmo.se.application.dto.result.MagicCityResult;
+import ru.ifmo.se.application.enums.ActionType;
+import ru.ifmo.se.application.enums.EntityType;
 import ru.ifmo.se.application.exception.MagicCityNotFoundException;
 import ru.ifmo.se.application.exception.MagicCitySwapSameException;
 import ru.ifmo.se.application.mapper.MagicCityMapper;
@@ -35,7 +37,7 @@ public class MagicCityService implements MagicCityUseCase {
     public MagicCityResult create(@Valid MagicCityCreateCommand command) {
         MagicCity city = magicCityMapper.toEntity(command);
         MagicCity saved = magicCityRepository.save(city);
-        notificationBroadcastUseCase.broadcastChange("CREATE", "MAGIC_CITY", saved.getId());
+        notificationBroadcastUseCase.broadcastChange(ActionType.CREATE, EntityType.MAGIC_CITY, saved.getId());
         return magicCityMapper.toResult(saved);
     }
 
@@ -52,7 +54,7 @@ public class MagicCityService implements MagicCityUseCase {
                 .orElseThrow(() -> new MagicCityNotFoundException(id));
         magicCityMapper.updateEntity(city, command);
         MagicCity saved = magicCityRepository.save(city);
-        notificationBroadcastUseCase.broadcastChange("UPDATE", "MAGIC_CITY", saved.getId());
+        notificationBroadcastUseCase.broadcastChange(ActionType.UPDATE, EntityType.MAGIC_CITY, saved.getId());
         return magicCityMapper.toResult(saved);
     }
 
@@ -68,7 +70,7 @@ public class MagicCityService implements MagicCityUseCase {
                 .orElseThrow(() -> new MagicCityNotFoundException(replacementCityId));
         bookCreatureRepository.reassignCity(id, replacementCity);
         magicCityRepository.deleteById(id);
-        notificationBroadcastUseCase.broadcastChange("DELETE", "MAGIC_CITY", id);
+        notificationBroadcastUseCase.broadcastChange(ActionType.DELETE, EntityType.MAGIC_CITY, id);
     }
 
     @Override

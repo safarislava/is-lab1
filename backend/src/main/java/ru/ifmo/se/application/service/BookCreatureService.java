@@ -8,6 +8,8 @@ import ru.ifmo.se.application.dto.command.BookCreatureUpdateCommand;
 import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
 import ru.ifmo.se.application.dto.result.BookCreatureResult;
 import ru.ifmo.se.application.dto.result.PageResult;
+import ru.ifmo.se.application.enums.ActionType;
+import ru.ifmo.se.application.enums.EntityType;
 import ru.ifmo.se.application.exception.BookCreatureNotFoundException;
 import ru.ifmo.se.application.exception.MagicCityNotFoundException;
 import ru.ifmo.se.application.exception.RingAlreadyInUseException;
@@ -47,7 +49,7 @@ public class BookCreatureService implements BookCreatureUseCase {
         Ring ring = resolveRing(command.getRingId(), null);
         BookCreature creature = bookCreatureMapper.toEntity(command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
-        notificationBroadcastUseCase.broadcastChange("CREATE", "BOOK_CREATURE", saved.getId());
+        notificationBroadcastUseCase.broadcastChange(ActionType.CREATE, EntityType.BOOK_CREATURE, saved.getId());
         return bookCreatureMapper.toResult(saved);
     }
 
@@ -66,7 +68,7 @@ public class BookCreatureService implements BookCreatureUseCase {
         Ring ring = resolveRing(command.getRingId(), id);
         bookCreatureMapper.updateEntity(creature, command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
-        notificationBroadcastUseCase.broadcastChange("UPDATE", "BOOK_CREATURE", saved.getId());
+        notificationBroadcastUseCase.broadcastChange(ActionType.UPDATE, EntityType.BOOK_CREATURE, saved.getId());
         return bookCreatureMapper.toResult(saved);
     }
 
@@ -76,7 +78,7 @@ public class BookCreatureService implements BookCreatureUseCase {
             throw new BookCreatureNotFoundException(id);
         }
         bookCreatureRepository.deleteById(id);
-        notificationBroadcastUseCase.broadcastChange("DELETE", "BOOK_CREATURE", id);
+        notificationBroadcastUseCase.broadcastChange(ActionType.DELETE, EntityType.BOOK_CREATURE, id);
     }
 
     @Override
