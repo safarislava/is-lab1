@@ -3,12 +3,14 @@ package ru.ifmo.se.application.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import ru.ifmo.se.application.dto.result.BookCreatureResult;
+import ru.ifmo.se.application.dto.result.PageResult;
 import ru.ifmo.se.application.enums.ActionType;
 import ru.ifmo.se.application.enums.EntityType;
 import ru.ifmo.se.application.mapper.BookCreatureMapper;
 import ru.ifmo.se.application.repository.SpecialOperationsRepository;
 import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
 import ru.ifmo.se.application.usecase.SpecialOperationsUseCase;
+import ru.ifmo.se.persistence.entity.BookCreature;
 
 import java.util.List;
 
@@ -38,11 +40,17 @@ public class SpecialOperationsService implements SpecialOperationsUseCase {
     }
 
     @Override
-    public List<BookCreatureResult> findCreaturesWithAttackLevelLessThan(float maxAttackLevel) {
-        return specialOperationsRepository.findCreaturesWithAttackLevelLessThan(maxAttackLevel)
-                .stream()
+    public PageResult<BookCreatureResult> findCreaturesWithAttackLevelLessThan(float maxAttackLevel, int page, int size) {
+        PageResult<BookCreature> pageResult = specialOperationsRepository.findCreaturesWithAttackLevelLessThan(maxAttackLevel, page, size);
+        List<BookCreatureResult> content = pageResult.getContent().stream()
                 .map(bookCreatureMapper::toResult)
                 .toList();
+        return new PageResult<>(
+                content,
+                pageResult.getTotal(),
+                pageResult.getPage(),
+                pageResult.getSize()
+        );
     }
 
     @Override

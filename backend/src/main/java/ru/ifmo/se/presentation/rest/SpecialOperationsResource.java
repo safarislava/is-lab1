@@ -2,9 +2,12 @@ package ru.ifmo.se.presentation.rest;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -13,13 +16,12 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import ru.ifmo.se.application.dto.result.BookCreatureResult;
+import ru.ifmo.se.application.dto.result.PageResult;
 import ru.ifmo.se.application.usecase.SpecialOperationsUseCase;
 import ru.ifmo.se.presentation.dto.response.AverageResponse;
-import ru.ifmo.se.presentation.dto.response.BookCreatureResponse;
 import ru.ifmo.se.presentation.dto.response.CountResponse;
+import ru.ifmo.se.presentation.dto.response.PageResponse;
 import ru.ifmo.se.presentation.mapper.BookCreaturePresentationMapper;
-
-import java.util.List;
 
 @Path("/creatures/special")
 @RequestScoped
@@ -48,11 +50,12 @@ public class SpecialOperationsResource {
 
     @GET
     @Path("/attack-less-than")
-    public Response findCreaturesWithAttackLevelLessThan(@QueryParam("max_attack_level") @Positive float maxAttackLevel) {
-        List<BookCreatureResult> creatures = specialOperationsUseCase.findCreaturesWithAttackLevelLessThan(maxAttackLevel);
-        List<BookCreatureResponse> response = creatures.stream()
-                .map(bookCreatureMapper::toResponse)
-                .toList();
+    public Response findCreaturesWithAttackLevelLessThan(
+            @QueryParam("max_attack_level") @Positive float maxAttackLevel,
+            @QueryParam("page") @DefaultValue("0") @Min(0) int page,
+            @QueryParam("size") @DefaultValue("10") @Min(1) @Max(100) int size) {
+        PageResult<BookCreatureResult> result = specialOperationsUseCase.findCreaturesWithAttackLevelLessThan(maxAttackLevel, page, size);
+        PageResponse response = bookCreatureMapper.toResponse(result);
         return Response.ok(response).build();
     }
 
