@@ -62,7 +62,11 @@ export const useSpecialOperationsStore = defineStore('specialOperations', () => 
   ): Promise<PageResponse<BookCreatureResponse>> {
     attackLessThanLoading.value = true;
     try {
-      const res = await creaturesApi.findCreaturesWithAttackLevelLessThan(maxAttackLevel, page, size);
+      const res = await creaturesApi.findCreaturesWithAttackLevelLessThan(
+        maxAttackLevel,
+        page,
+        size,
+      );
       attackLessThanResult.value = res;
       return res;
     } finally {
