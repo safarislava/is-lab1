@@ -64,9 +64,15 @@ export const creaturesApi = {
 
   async findCreaturesWithAttackLevelLessThan(
     maxAttackLevel: number,
-  ): Promise<BookCreatureResponse[]> {
-    const qs = buildQueryString({ max_attack_level: maxAttackLevel });
-    return request<BookCreatureResponse[]>(`${BASE_URL}/special/attack-less-than${qs}`);
+    page: number = 0,
+    size: number = 10,
+  ): Promise<PageResponse<BookCreatureResponse>> {
+    const qs = buildQueryString({
+      max_attack_level: maxAttackLevel,
+      page,
+      size,
+    });
+    return request<PageResponse<BookCreatureResponse>>(`${BASE_URL}/special/attack-less-than${qs}`);
   },
 
   async takeAllRingsFromHobbits(): Promise<CountResponse> {

@@ -15,20 +15,34 @@ const creaturesStore = useCreaturesStore();
 const targetDefenseLevel = ref<number | null>(10.0);
 const maxAttackLevel = ref<number | null>(50.0);
 
-// Pagination for search results
+// Server-side pagination for search results
 const searchPage = ref(0);
 const searchPageSize = ref(5);
 
-const totalSearchResults = computed(() => specialStore.attackLessThanResult?.length ?? 0);
+const totalSearchResults = computed(() => specialStore.attackLessThanResult?.total ?? 0);
+const searchResultsList = computed(() => specialStore.attackLessThanResult?.content ?? []);
 
-const paginatedSearchResults = computed(() => {
-  if (!specialStore.attackLessThanResult) return [];
-  const start = searchPage.value * searchPageSize.value;
-  return specialStore.attackLessThanResult.slice(start, start + searchPageSize.value);
-});
+async function fetchSearchResults() {
+  if (maxAttackLevel.value === null || maxAttackLevel.value <= 0) return;
+  try {
+    await specialStore.searchAttackLessThan(
+      Number(maxAttackLevel.value),
+      searchPage.value,
+      searchPageSize.value,
+    );
+  } catch (err) {
+    error3.value = err instanceof Error ? err.message : 'Ошибка при поиске существ';
+  }
+}
 
 function onSearchPageChange(newPage: number) {
   searchPage.value = newPage;
+  fetchSearchResults();
+}
+
+function onSearchPageSizeChange() {
+  searchPage.value = 0;
+  fetchSearchResults();
 }
 
 const error1 = ref<string | null>(null);
@@ -67,11 +81,7 @@ async function handleSearchAttackLessThan() {
     return;
   }
   searchPage.value = 0;
-  try {
-    await specialStore.searchAttackLessThan(Number(maxAttackLevel.value));
-  } catch (err) {
-    error3.value = err instanceof Error ? err.message : 'Ошибка при поиске существ';
-  }
+  await fetchSearchResults();
 }
 
 async function handleTakeRingsFromHobbits() {
@@ -320,7 +330,7 @@ function getTypeLabel(type: string): string {
                 id="searchPageSizeSelect"
                 v-model="searchPageSize"
                 class="form-select size-select"
-                @change="searchPage = 0"
+                @change="onSearchPageSizeChange"
               >
                 <option :value="5">5</option>
                 <option :value="10">10</option>
@@ -350,7 +360,7 @@ function getTypeLabel(type: string): string {
                     Существ с атакой меньше {{ maxAttackLevel }} не найдено.
                   </td>
                 </tr>
-                <tr v-for="c in paginatedSearchResults" :key="c.id">
+                <tr v-for="c in searchResultsList" :key="c.id">
                   <td>#{{ c.id }}</td>
                   <td>
                     <strong>{{ c.name }}</strong>

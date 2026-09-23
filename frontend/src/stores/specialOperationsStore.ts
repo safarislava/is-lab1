@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { creaturesApi } from '@/api/creaturesApi';
+import type { PageResponse } from '@/types/common';
 import type { BookCreatureResponse } from '@/types/creature';
 import { useNotificationStore } from './notificationStore';
 
@@ -17,7 +18,7 @@ export const useSpecialOperationsStore = defineStore('specialOperations', () => 
 
   // Operation 3: Attack less than
   const attackLessThanLoading = ref(false);
-  const attackLessThanResult = ref<BookCreatureResponse[] | null>(null);
+  const attackLessThanResult = ref<PageResponse<BookCreatureResponse> | null>(null);
 
   // Operation 4: Take rings from hobbits
   const takeRingsLoading = ref(false);
@@ -54,10 +55,14 @@ export const useSpecialOperationsStore = defineStore('specialOperations', () => 
     }
   }
 
-  async function searchAttackLessThan(maxAttackLevel: number): Promise<BookCreatureResponse[]> {
+  async function searchAttackLessThan(
+    maxAttackLevel: number,
+    page: number = 0,
+    size: number = 10,
+  ): Promise<PageResponse<BookCreatureResponse>> {
     attackLessThanLoading.value = true;
     try {
-      const res = await creaturesApi.findCreaturesWithAttackLevelLessThan(maxAttackLevel);
+      const res = await creaturesApi.findCreaturesWithAttackLevelLessThan(maxAttackLevel, page, size);
       attackLessThanResult.value = res;
       return res;
     } finally {
