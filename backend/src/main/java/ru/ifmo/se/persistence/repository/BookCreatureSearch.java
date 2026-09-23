@@ -77,19 +77,19 @@ public class BookCreatureSearch {
 
     private void buildConditions(List<String> conditions, Map<String, Object> params) {
         if (query.getNameFilter() != null) {
-            conditions.add("LOWER(b.name) LIKE CONCAT('%', :name, '%')");
+            conditions.add("LOWER(b.name) LIKE :name");
             params.put("name", buildRegex(query.getNameFilter()));
         }
         if (query.getCreatureTypeFilter() != null) {
-            conditions.add("b.creatureType = CONCAT('%', :type, '%')");
-            params.put("type", buildRegex(query.getCreatureTypeFilter().toString()));
+            conditions.add("b.creatureType = :type");
+            params.put("type", query.getCreatureTypeFilter());
         }
         if (query.getCityNameFilter() != null) {
-            conditions.add("LOWER(c.name) LIKE CONCAT('%', :city, '%')");
+            conditions.add("LOWER(c.name) LIKE :city");
             params.put("city", buildRegex(query.getCityNameFilter()));
         }
         if (query.getRingNameFilter() != null) {
-            conditions.add("LOWER(r.name) LIKE CONCAT('%', :ring, '%')");
+            conditions.add("LOWER(r.name) LIKE :ring");
             params.put("ring", buildRegex(query.getRingNameFilter()));
         }
     }
