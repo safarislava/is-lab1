@@ -12,7 +12,7 @@ public class BookCreature {
     private MagicCity creatureLocation; //Поле может быть null
     private float attackLevel; //Значение поля должно быть больше 0
     private float defenseLevel; //Значение поля должно быть больше 0
-    private Ring ring; //Поле не может быть null
+    private Ring ring;
 }
 
 public class Coordinates {
@@ -34,6 +34,7 @@ public class Ring {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Integer power; //Значение поля должно быть больше 0, Поле не может быть null
 }
+
 public enum BookCreatureType {
     HOBBIT,
     ELF,
