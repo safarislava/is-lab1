@@ -72,7 +72,7 @@ public class BookCreatureSearch {
     }
 
     private String buildRegex(String name) {
-        return String.format("%%%s%%", name.toLowerCase());
+        return String.format("%%%s%%", name.toLowerCase(Locale.ROOT));
     }
 
     private void buildConditions(List<String> conditions, Map<String, Object> params) {
