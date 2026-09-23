@@ -1,5 +1,6 @@
 package ru.ifmo.se.presentation.rest;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
@@ -18,10 +19,14 @@ import java.time.ZonedDateTime;
 public class NotificationBroadcastService implements NotificationBroadcastUseCase {
 
     @Inject
+    private Sse sse;
+
     private SseBroadcaster broadcaster;
 
-    @Inject
-    private Sse sse;
+    @PostConstruct
+    public void init() {
+        this.broadcaster = sse.newBroadcaster();
+    }
 
     public void registerSink(SseEventSink sink) {
         if (sink == null) {
