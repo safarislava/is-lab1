@@ -16,7 +16,7 @@ public class Coordinates {
     @Column(columnDefinition = "BIGINT CHECK (x <= 500)")
     private long x;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL CHECK (y > -780)")
+    @Column(nullable = false, columnDefinition = "DECIMAL CHECK (y >= -780)")
     private Float y;
 }
 
