@@ -4,5 +4,6 @@ public enum BookCreatureType {
     HOBBIT,
     ELF,
     HUMAN,
-    GOLLUM
+    GOLLUM,
+    ORC,
 }
