@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useSpecialOperationsStore } from '@/stores/specialOperationsStore';
 import { useCreaturesStore } from '@/stores/creaturesStore';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseBadge, { type BadgeVariant } from '@/components/ui/BaseBadge.vue';
+import CreaturePagination from '@/components/creatures/CreaturePagination.vue';
 import { Trash2, Calculator, Search, ShieldAlert, Sparkles } from 'lucide-vue-next';
 
 const specialStore = useSpecialOperationsStore();
@@ -13,6 +14,22 @@ const creaturesStore = useCreaturesStore();
 // Form inputs
 const targetDefenseLevel = ref<number | null>(10.0);
 const maxAttackLevel = ref<number | null>(50.0);
+
+// Pagination for search results
+const searchPage = ref(0);
+const searchPageSize = ref(5);
+
+const totalSearchResults = computed(() => specialStore.attackLessThanResult?.length ?? 0);
+
+const paginatedSearchResults = computed(() => {
+  if (!specialStore.attackLessThanResult) return [];
+  const start = searchPage.value * searchPageSize.value;
+  return specialStore.attackLessThanResult.slice(start, start + searchPageSize.value);
+});
+
+function onSearchPageChange(newPage: number) {
+  searchPage.value = newPage;
+}
 
 const error1 = ref<string | null>(null);
 const error2 = ref<string | null>(null);
@@ -49,6 +66,7 @@ async function handleSearchAttackLessThan() {
     error3.value = 'Укажите максимальный уровень атаки (> 0)';
     return;
   }
+  searchPage.value = 0;
   try {
     await specialStore.searchAttackLessThan(Number(maxAttackLevel.value));
   } catch (err) {
@@ -87,6 +105,17 @@ function getBadgeVariant(type: string): BadgeVariant {
     ORC: 'orc',
   };
   return map[type] || 'neutral';
+}
+
+function getTypeLabel(type: string): string {
+  const map: Record<string, string> = {
+    HOBBIT: 'Хоббит',
+    ELF: 'Эльф',
+    HUMAN: 'Человек',
+    GOLLUM: 'Голлум',
+    ORC: 'Орк',
+  };
+  return map[type] || type;
 }
 </script>
 
@@ -284,7 +313,20 @@ function getBadgeVariant(type: string): BadgeVariant {
         <!-- Results Table -->
         <div v-if="specialStore.attackLessThanResult !== null" class="search-results-section">
           <div class="results-header">
-            <h4>Найдено существ: {{ specialStore.attackLessThanResult.length }}</h4>
+            <h4>Найдено существ: {{ totalSearchResults }}</h4>
+            <div v-if="totalSearchResults > 0" class="page-size-selector">
+              <label for="searchPageSizeSelect">Показывать по:</label>
+              <select
+                id="searchPageSizeSelect"
+                v-model="searchPageSize"
+                class="form-select size-select"
+                @change="searchPage = 0"
+              >
+                <option :value="5">5</option>
+                <option :value="10">10</option>
+                <option :value="25">25</option>
+              </select>
+            </div>
           </div>
 
           <div class="table-container">
@@ -303,19 +345,19 @@ function getBadgeVariant(type: string): BadgeVariant {
                 </tr>
               </thead>
               <tbody>
-                <tr v-if="specialStore.attackLessThanResult.length === 0">
+                <tr v-if="totalSearchResults === 0">
                   <td colspan="9" class="empty-results">
                     Существ с атакой меньше {{ maxAttackLevel }} не найдено.
                   </td>
                 </tr>
-                <tr v-for="c in specialStore.attackLessThanResult" :key="c.id">
+                <tr v-for="c in paginatedSearchResults" :key="c.id">
                   <td>#{{ c.id }}</td>
                   <td>
                     <strong>{{ c.name }}</strong>
                   </td>
                   <td>
                     <BaseBadge :variant="getBadgeVariant(c.creatureType)" size="sm">
-                      {{ c.creatureType }}
+                      {{ getTypeLabel(c.creatureType) }}
                     </BaseBadge>
                   </td>
                   <td>({{ c.coordinates.x }}, {{ c.coordinates.y }})</td>
@@ -332,6 +374,14 @@ function getBadgeVariant(type: string): BadgeVariant {
               </tbody>
             </table>
           </div>
+
+          <CreaturePagination
+            v-if="totalSearchResults > 0"
+            :page="searchPage"
+            :size="searchPageSize"
+            :total="totalSearchResults"
+            @page-change="onSearchPageChange"
+          />
         </div>
       </div>
     </div>
@@ -488,9 +538,32 @@ function getBadgeVariant(type: string): BadgeVariant {
 }
 
 .results-header {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-size: 0.9rem;
   color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.page-size-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+.size-select {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.825rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  cursor: pointer;
 }
 
 .empty-results {

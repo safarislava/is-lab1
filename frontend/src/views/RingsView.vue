@@ -39,7 +39,6 @@ function openDeleteDialog(ring: RingResponse) {
     <div class="page-header">
       <div>
         <h1 class="page-title"><span>💍</span> Магические кольца</h1>
-        <p class="page-subtitle">Управление кольцами власти и магическими артефактами существ</p>
       </div>
 
       <BaseButton variant="primary" @click="openCreateDialog">

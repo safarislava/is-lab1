@@ -58,9 +58,6 @@ function onPageChange(newPage: number) {
     <div class="page-header">
       <div>
         <h1 class="page-title"><span>🧙‍♂️</span> Существа из книги</h1>
-        <p class="page-subtitle">
-          Управление персонажами, характеристиками, координатами и связанными артефактами
-        </p>
       </div>
 
       <BaseButton variant="primary" @click="openCreateDialog">
