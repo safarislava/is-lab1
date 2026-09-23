@@ -1,15 +1,14 @@
 package ru.ifmo.se.application.usecase;
 
 import ru.ifmo.se.application.dto.result.BookCreatureResult;
-
-import java.util.List;
+import ru.ifmo.se.application.dto.result.PageResult;
 
 public interface SpecialOperationsUseCase {
     int deleteByDefenseLevel(float defenseLevel);
 
     Double calculateAverageDefenseLevel();
 
-    List<BookCreatureResult> findCreaturesWithAttackLevelLessThan(float maxAttackLevel);
+    PageResult<BookCreatureResult> findCreaturesWithAttackLevelLessThan(float maxAttackLevel, int page, int size);
 
     int takeAllRingsFromHobbits();
 

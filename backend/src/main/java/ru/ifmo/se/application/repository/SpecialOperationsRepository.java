@@ -1,15 +1,14 @@
 package ru.ifmo.se.application.repository;
 
+import ru.ifmo.se.application.dto.result.PageResult;
 import ru.ifmo.se.persistence.entity.BookCreature;
-
-import java.util.List;
 
 public interface SpecialOperationsRepository {
     int deleteByDefenseLevel(float defenseLevel);
 
     Double calculateAverageDefenseLevel();
 
-    List<BookCreature> findCreaturesWithAttackLevelLessThan(float maxAttackLevel);
+    PageResult<BookCreature> findCreaturesWithAttackLevelLessThan(float maxAttackLevel, int page, int size);
 
     int takeAllRingsFromHobbits();
 
