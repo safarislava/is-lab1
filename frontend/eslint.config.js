@@ -27,6 +27,12 @@ export default tseslint.config(
     rules: {
       'vue/multi-word-component-names': 'off',
       'vue/no-unused-vars': 'error',
+      'vue/max-attributes-per-line': 'off',
+      'vue/singleline-html-element-content-newline': 'off',
+      'vue/multiline-html-element-content-newline': 'off',
+      'vue/html-self-closing': 'off',
+      'vue/html-indent': 'off',
+      'vue/attributes-order': 'off',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-debugger': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
