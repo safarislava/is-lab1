@@ -83,8 +83,8 @@ onUnmounted(() => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,27 +95,27 @@ onUnmounted(() => {
 .modal-container {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-xl);
   width: 100%;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: modalScale 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: modalScale 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 1.4rem;
+  padding: 0.75rem 1.1rem;
   border-bottom: 1px solid var(--border-color);
-  background: var(--bg-card);
+  background: var(--bg-surface);
 }
 
 .modal-title {
-  font-size: 1.15rem;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--text-main);
   margin: 0;
@@ -126,12 +126,12 @@ onUnmounted(() => {
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0.35rem;
-  border-radius: var(--radius-sm);
+  padding: 0.25rem;
+  border-radius: var(--radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: all 0.12s ease;
 }
 
 .modal-close-btn:hover {
@@ -140,24 +140,24 @@ onUnmounted(() => {
 }
 
 .modal-body {
-  padding: 1.4rem;
+  padding: 1.1rem;
   overflow-y: auto;
   color: var(--text-main);
 }
 
 .modal-footer {
-  padding: 1rem 1.4rem;
+  padding: 0.75rem 1.1rem;
   border-top: 1px solid var(--border-color);
-  background: var(--bg-card);
+  background: var(--bg-surface);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .modal-fade-enter-active,
 .modal-fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.15s ease;
 }
 
 .modal-fade-enter-from,
@@ -167,11 +167,11 @@ onUnmounted(() => {
 
 @keyframes modalScale {
   from {
-    transform: scale(0.96);
+    transform: scale(0.98);
     opacity: 0;
   }
   to {
-    transform: scale(1);
+    transform: none;
     opacity: 1;
   }
 }

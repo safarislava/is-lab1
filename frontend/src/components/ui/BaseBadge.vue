@@ -34,85 +34,86 @@ withDefaults(
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  font-weight: 600;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  gap: 0.25rem;
+  font-weight: 500;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.01em;
+  font-size: 11.5px;
+  line-height: 1.2;
 }
 
 .badge-sm {
-  padding: 0.15rem 0.5rem;
-  font-size: 0.675rem;
+  padding: 0.15rem 0.45rem;
+  font-size: 11px;
 }
 
 .badge-md {
-  padding: 0.25rem 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 12px;
 }
 
 .badge-hobbit {
-  background: rgba(16, 185, 129, 0.18);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: rgba(89, 168, 105, 0.15);
+  color: #59a869;
+  border: 1px solid rgba(89, 168, 105, 0.35);
 }
 
 .badge-elf {
-  background: rgba(168, 85, 247, 0.18);
-  color: #c084fc;
-  border: 1px solid rgba(168, 85, 247, 0.35);
+  background: rgba(199, 125, 187, 0.15);
+  color: #c77dbb;
+  border: 1px solid rgba(199, 125, 187, 0.35);
 }
 
 .badge-human {
-  background: rgba(56, 189, 248, 0.18);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(86, 182, 194, 0.15);
+  color: #56b6c2;
+  border: 1px solid rgba(86, 182, 194, 0.35);
 }
 
 .badge-gollum {
-  background: rgba(148, 163, 184, 0.18);
-  color: #cbd5e1;
-  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(140, 146, 158, 0.15);
+  color: #8c929e;
+  border: 1px solid rgba(140, 146, 158, 0.35);
 }
 
 .badge-orc {
-  background: rgba(244, 63, 94, 0.18);
-  color: #fb7185;
-  border: 1px solid rgba(244, 63, 94, 0.35);
+  background: rgba(229, 83, 75, 0.15);
+  color: #e5534b;
+  border: 1px solid rgba(229, 83, 75, 0.35);
 }
 
 .badge-primary {
   background: var(--primary-bg);
-  color: var(--primary);
-  border: 1px solid var(--primary);
+  color: #589df6;
+  border: 1px solid rgba(53, 116, 240, 0.4);
 }
 
 .badge-success {
   background: var(--success-bg);
-  color: var(--success);
-  border: 1px solid var(--success);
+  color: #59a869;
+  border: 1px solid rgba(89, 168, 105, 0.4);
 }
 
 .badge-warning {
   background: var(--warning-bg);
-  color: var(--warning);
-  border: 1px solid var(--warning);
+  color: #f2c55c;
+  border: 1px solid rgba(242, 197, 92, 0.4);
 }
 
 .badge-danger {
   background: var(--danger-bg);
-  color: var(--danger);
-  border: 1px solid var(--danger);
+  color: #e5534b;
+  border: 1px solid rgba(229, 83, 75, 0.4);
 }
 
 .badge-info {
   background: var(--info-bg);
-  color: var(--info);
-  border: 1px solid var(--info);
+  color: #56b6c2;
+  border: 1px solid rgba(86, 182, 194, 0.4);
 }
 
 .badge-neutral {
-  background: var(--bg-card-hover);
+  background: var(--bg-well);
   color: var(--text-muted);
   border: 1px solid var(--border-color);
 }

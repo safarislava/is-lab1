@@ -329,22 +329,22 @@ function getTypeLabel(type: string): string {
 }
 
 .city-tag {
-  color: #38bdf8;
+  color: var(--info);
   font-weight: 500;
 }
 
 .ring-tag {
-  color: #f59e0b;
+  color: var(--warning);
   font-weight: 500;
 }
 
 .stat-attack {
-  color: #fb7185;
+  color: var(--danger);
   font-weight: 600;
 }
 
 .stat-defense {
-  color: #34d399;
+  color: var(--success);
   font-weight: 600;
 }
 

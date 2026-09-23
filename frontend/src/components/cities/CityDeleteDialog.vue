@@ -124,7 +124,7 @@ async function confirmDelete() {
   gap: 0.85rem;
   background: var(--warning-bg);
   border: 1px solid var(--warning);
-  color: #fef08a;
+  color: var(--text-main);
   padding: 0.85rem 1rem;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
@@ -140,7 +140,7 @@ async function confirmDelete() {
 .no-replacements-alert {
   background: var(--danger-bg);
   border: 1px solid var(--danger);
-  color: #fecdd3;
+  color: var(--danger);
   padding: 0.85rem 1rem;
   border-radius: var(--radius-md);
   font-size: 0.85rem;

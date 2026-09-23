@@ -262,11 +262,11 @@ function getTypeLabel(type?: string): string {
 }
 
 .stat-attack {
-  color: #fb7185;
+  color: var(--danger);
 }
 
 .stat-defense {
-  color: #34d399;
+  color: var(--success);
 }
 
 .text-sm {
@@ -347,11 +347,11 @@ function getTypeLabel(type?: string): string {
 }
 
 .ring-card {
-  border-left: 3px solid #f59e0b;
+  border-left: 3px solid var(--warning);
 }
 
 .ring-name {
-  color: #f59e0b;
+  color: var(--warning);
 }
 
 .ring-power {

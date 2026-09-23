@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCreaturesStore } from '@/stores/creaturesStore';
 import BaseButton from '@/components/ui/BaseButton.vue';
+import BaseSelect from '@/components/ui/BaseSelect.vue';
 import { Search, RotateCcw } from 'lucide-vue-next';
 import type { BookCreatureType } from '@/types/creature';
 
@@ -13,6 +14,13 @@ const typeOptions: Array<{ label: string; value: BookCreatureType | '' }> = [
   { label: 'Человек', value: 'HUMAN' },
   { label: 'Голлум', value: 'GOLLUM' },
   { label: 'Орк', value: 'ORC' },
+];
+
+const pageSizeOptions = [
+  { label: '5', value: 5 },
+  { label: '10', value: 10 },
+  { label: '20', value: 20 },
+  { label: '50', value: 50 },
 ];
 
 function onSearch() {
@@ -29,24 +37,22 @@ function onReset() {
     <div class="filters-grid">
       <div class="filter-item">
         <label class="filter-label">Имя существа</label>
-        <div class="input-with-icon">
-          <input
-            v-model="store.nameFilter"
-            type="text"
-            placeholder="Поиск по имени..."
-            class="form-input"
-            @keydown.enter="onSearch"
-          />
-        </div>
+        <input
+          v-model="store.nameFilter"
+          type="text"
+          placeholder="Поиск по имени..."
+          class="form-input"
+          @keydown.enter="onSearch"
+        />
       </div>
 
       <div class="filter-item">
         <label class="filter-label">Тип существа</label>
-        <select v-model="store.creatureTypeFilter" class="form-select" @change="onSearch">
-          <option v-for="opt in typeOptions" :key="opt.value" :value="opt.value">
-            {{ opt.label }}
-          </option>
-        </select>
+        <BaseSelect
+          v-model="store.creatureTypeFilter"
+          :options="typeOptions"
+          @update:model-value="onSearch"
+        />
       </div>
 
       <div class="filter-item">
@@ -75,16 +81,14 @@ function onReset() {
     <div class="filters-actions">
       <div class="page-size-selector">
         <label class="filter-label">Показывать по:</label>
-        <select
-          :value="store.size"
-          class="form-select size-select"
-          @change="(e) => store.setSize(Number((e.target as HTMLSelectElement).value))"
-        >
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-          <option :value="50">50</option>
-        </select>
+        <div class="size-select-wrap">
+          <BaseSelect
+            :model-value="store.size"
+            :options="pageSizeOptions"
+            size="sm"
+            @update:model-value="(val) => store.setSize(Number(val))"
+          />
+        </div>
       </div>
 
       <div class="btn-group">
@@ -145,9 +149,13 @@ function onReset() {
   gap: 0.5rem;
 }
 
-.size-select {
-  width: auto;
-  padding: 0.35rem 0.65rem;
+.size-select-wrap {
+  width: 70px;
+}
+
+.size-select-wrap :deep(.form-group),
+.filter-item :deep(.form-group) {
+  margin-bottom: 0;
 }
 
 .btn-group {

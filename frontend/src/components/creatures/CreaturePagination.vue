@@ -159,9 +159,9 @@ function goToPage(p: number) {
 
 .page-number.active {
   background: var(--primary);
-  color: #0b0f19;
+  color: #ffffff;
   border-color: var(--primary);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .page-ellipsis {

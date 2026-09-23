@@ -4,12 +4,19 @@ import { useSpecialOperationsStore } from '@/stores/specialOperationsStore';
 import { useCreaturesStore } from '@/stores/creaturesStore';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
+import BaseSelect from '@/components/ui/BaseSelect.vue';
 import BaseBadge, { type BadgeVariant } from '@/components/ui/BaseBadge.vue';
 import CreaturePagination from '@/components/creatures/CreaturePagination.vue';
 import { Trash2, Calculator, Search, ShieldAlert, Sparkles } from 'lucide-vue-next';
 
 const specialStore = useSpecialOperationsStore();
 const creaturesStore = useCreaturesStore();
+
+const searchPageSizeOptions = [
+  { label: '5', value: 5 },
+  { label: '10', value: 10 },
+  { label: '25', value: 25 },
+];
 
 // Form inputs
 const targetDefenseLevel = ref<number | null>(10.0);
@@ -328,17 +335,20 @@ function getTypeLabel(type: string): string {
           <div class="results-header">
             <h4>Найдено существ: {{ totalSearchResults }}</h4>
             <div v-if="totalSearchResults > 0" class="page-size-selector">
-              <label for="searchPageSizeSelect">Показывать по:</label>
-              <select
-                id="searchPageSizeSelect"
-                v-model="searchPageSize"
-                class="form-select size-select"
-                @change="onSearchPageSizeChange"
-              >
-                <option :value="5">5</option>
-                <option :value="10">10</option>
-                <option :value="25">25</option>
-              </select>
+              <span>Показывать по:</span>
+              <div class="size-select-wrap">
+                <BaseSelect
+                  :model-value="searchPageSize"
+                  :options="searchPageSizeOptions"
+                  size="sm"
+                  @update:model-value="
+                    (val) => {
+                      searchPageSize = Number(val);
+                      onSearchPageSizeChange();
+                    }
+                  "
+                />
+              </div>
             </div>
           </div>
 
@@ -568,14 +578,12 @@ function getTypeLabel(type: string): string {
   color: var(--text-muted);
 }
 
-.size-select {
-  padding: 0.25rem 0.6rem;
-  font-size: 0.825rem;
-  border-radius: var(--radius-sm);
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  cursor: pointer;
+.size-select-wrap {
+  width: 70px;
+}
+
+.size-select-wrap :deep(.form-group) {
+  margin-bottom: 0;
 }
 
 .empty-results {
@@ -585,12 +593,12 @@ function getTypeLabel(type: string): string {
 }
 
 .stat-attack {
-  color: #fb7185;
+  color: var(--danger);
   font-weight: 600;
 }
 
 .stat-defense {
-  color: #34d399;
+  color: var(--success);
   font-weight: 600;
 }
 </style>

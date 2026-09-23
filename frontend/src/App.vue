@@ -92,6 +92,7 @@ onUnmounted(() => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-base);
 }
 
 .navbar {
@@ -99,14 +100,13 @@ onUnmounted(() => {
   top: 0;
   z-index: 500;
   background: var(--bg-header);
-  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
 }
 
 .nav-container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -116,13 +116,13 @@ onUnmounted(() => {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   text-decoration: none;
   color: inherit;
 }
 
 .brand-icon {
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   line-height: 1;
 }
 
@@ -132,35 +132,32 @@ onUnmounted(() => {
 }
 
 .brand-title {
-  font-weight: 800;
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
   color: var(--text-main);
-  background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  background: var(--bg-surface);
-  padding: 0.25rem;
-  border-radius: var(--radius-md);
+  gap: 0.25rem;
+  background: var(--bg-input);
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.9rem;
-  border-radius: var(--radius-sm);
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-xs);
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: 12.5px;
   font-weight: 500;
-  transition: all 0.15s ease;
+  transition: all 0.12s ease;
   text-decoration: none;
 }
 
@@ -171,30 +168,30 @@ onUnmounted(() => {
 
 .nav-item.router-link-active {
   background: var(--primary);
-  color: #0b0f19;
-  font-weight: 600;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .main-content {
   flex: 1;
-  padding-bottom: 3rem;
+  padding-bottom: 2.5rem;
 }
 
 .page-fade-enter-active,
 .page-fade-leave-active {
   transition:
-    opacity 0.15s ease,
-    transform 0.15s ease;
+    opacity 0.12s ease,
+    transform 0.12s ease;
 }
 
 .page-fade-enter-from {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(4px);
 }
 
 .page-fade-leave-to {
   opacity: 0;
-  transform: translateY(-6px);
+  transform: translateY(-4px);
 }
 
 @media (max-width: 768px) {

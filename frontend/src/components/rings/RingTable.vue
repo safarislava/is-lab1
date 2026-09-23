@@ -77,13 +77,13 @@ const emit = defineEmits<{
 
 .ring-name {
   font-weight: 600;
-  color: #f59e0b;
+  color: var(--warning);
 }
 
 .power-badge {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: var(--warning-bg);
+  color: var(--warning);
+  border: 1px solid rgba(242, 197, 92, 0.35);
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-sm);
   font-weight: 600;
