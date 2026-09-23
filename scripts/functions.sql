@@ -51,8 +51,8 @@ DECLARE
 BEGIN
     SELECT id INTO v_mordor_id FROM magiccity WHERE name = 'Мордор' LIMIT 1;
     IF v_mordor_id IS NULL THEN
-        INSERT INTO magiccity (name, area, population, establishmentdate, governor, capital, populationDensity)
-        VALUES ("Мордор", "1000", "10000000", '20-09-06 00:00:05', 'ORC', false, 10000.0)
+        INSERT INTO magiccity (name, area, population, establishmentdate, governor, capital, populationdensity)
+        VALUES ('Мордор', 1000, 10000000, '2020-09-06 00:00:05', 'ORC', false, 10000.0)
         RETURNING id INTO v_mordor_id;
     END IF;
     UPDATE bookcreature SET creaturelocation_id = v_mordor_id WHERE creaturetype = 'HOBBIT' AND ring_id IS NOT NULL;

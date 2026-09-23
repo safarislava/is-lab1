@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 public class MagicCity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, columnDefinition = "INT CHECK (id > 0)")
     private int id;
 
     @Column(nullable = false, columnDefinition = "TEXT CHECK (TRIM(name) != '')")

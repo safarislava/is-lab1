@@ -11,8 +11,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageResponse<T> {
-    private List<T> content;
+public class PageResponse {
+    private List<BookCreatureResponse> content;
     private long total;
     private int page;
     private int size;

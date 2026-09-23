@@ -6,8 +6,13 @@
     <persistence-unit name="is-lab1-pu" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <non-jta-data-source>java:jboss/datasources/PostgresDS</non-jta-data-source>
-
+        <class>ru.ifmo.se.persistence.entity.BookCreature</class>
+        <class>ru.ifmo.se.persistence.entity.Coordinates</class>
+        <class>ru.ifmo.se.persistence.entity.MagicCity</class>
+        <class>ru.ifmo.se.persistence.entity.Ring</class>
+        <class>ru.ifmo.se.persistence.converter.ZonedDateTimeConverter</class>
         <properties>
+            <property name="eclipselink.target-database" value="PostgreSQL"/>
             <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.logging.level" value="INFO"/>
