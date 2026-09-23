@@ -298,8 +298,8 @@ function getTypeLabel(type: string): string {
       </div>
 
       <div class="op-body">
-        <div class="search-form-row">
-          <div class="input-col">
+        <form class="search-form-block" novalidate @submit.prevent="handleSearchAttackLessThan">
+          <div class="search-input-box">
             <BaseInput
               v-model="maxAttackLevel"
               label="Максимальный порог attackLevel"
@@ -309,16 +309,19 @@ function getTypeLabel(type: string): string {
               :error="error3 || undefined"
             />
           </div>
-          <div class="btn-col">
+
+          <div class="op-action-row">
             <BaseButton
               variant="primary"
+              size="sm"
               :loading="specialStore.attackLessThanLoading"
-              @click="handleSearchAttackLessThan"
+              type="submit"
             >
+              <Search :size="14" />
               Найти существ
             </BaseButton>
           </div>
-        </div>
+        </form>
 
         <!-- Results Table -->
         <div v-if="specialStore.attackLessThanResult !== null" class="search-results-section">
@@ -532,15 +535,14 @@ function getTypeLabel(type: string): string {
   font-size: 0.8rem;
 }
 
-.search-form-row {
+.search-form-block {
   display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  max-width: 500px;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.input-col {
-  flex: 1;
+.search-input-box {
+  max-width: 380px;
 }
 
 .search-results-section {
