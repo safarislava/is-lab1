@@ -1,6 +1,7 @@
 package ru.ifmo.se.persistence.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.ifmo.se.persistence.converter.ZonedDateTimeConverter;
 
 import java.time.ZonedDateTime;
 
@@ -35,6 +37,7 @@ public class BookCreature {
     @Embedded
     private Coordinates coordinates;
 
+    @Convert(converter = ZonedDateTimeConverter.class)
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ DEFAULT now()")
     private ZonedDateTime creationDate;
 

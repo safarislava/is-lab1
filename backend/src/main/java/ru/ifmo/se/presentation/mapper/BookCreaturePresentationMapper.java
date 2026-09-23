@@ -92,14 +92,14 @@ public class BookCreaturePresentationMapper {
         );
     }
 
-    public PageResponse<BookCreatureResponse> toResponse(PageResult<BookCreatureResult> pageResult) {
+    public PageResponse toResponse(PageResult<BookCreatureResult> pageResult) {
         if (pageResult == null) {
             return null;
         }
         List<BookCreatureResponse> content = pageResult.getContent().stream()
                 .map(this::toResponse)
                 .toList();
-        return new PageResponse<>(
+        return new PageResponse(
                 content,
                 pageResult.getTotal(),
                 pageResult.getPage(),

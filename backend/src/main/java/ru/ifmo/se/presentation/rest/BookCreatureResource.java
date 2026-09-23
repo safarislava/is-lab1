@@ -43,7 +43,7 @@ public class BookCreatureResource {
     public Response search(@BeanParam @Valid CreatureSearchRequest request) {
         CreatureSearchQuery query = bookCreatureMapper.toQuery(request);
         PageResult<BookCreatureResult> result = bookCreatureUseCase.search(query);
-        PageResponse<BookCreatureResponse> response = bookCreatureMapper.toResponse(result);
+        PageResponse response = bookCreatureMapper.toResponse(result);
         return Response.ok(response).build();
     }
 
