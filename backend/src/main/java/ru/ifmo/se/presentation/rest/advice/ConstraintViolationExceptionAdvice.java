@@ -31,6 +31,7 @@ public class ConstraintViolationExceptionAdvice implements ExceptionMapper<Const
                 .type(MediaType.APPLICATION_JSON)
                 .build();
     }
+
     private String formatViolation(ConstraintViolation<?> violation) {
         return String.format("%s: %s", violation.getPropertyPath(), violation.getMessage());
     }
