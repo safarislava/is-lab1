@@ -7,14 +7,12 @@ import jakarta.enterprise.inject.Disposes;
 import jakarta.enterprise.inject.Produces;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.eclipse.persistence.jpa.PersistenceProvider;
-
-import java.util.Collections;
+import jakarta.persistence.PersistenceUnit;
 
 @ApplicationScoped
 public class EntityManagerProducer {
-    private final EntityManagerFactory emf = new PersistenceProvider()
-            .createEntityManagerFactory("is-lab1-pu", Collections.emptyMap());
+    @PersistenceUnit(unitName = "is-lab1-pu")
+    private EntityManagerFactory emf;
 
     @Produces
     @RequestScoped
@@ -25,13 +23,6 @@ public class EntityManagerProducer {
     public void closeEntityManager(@Disposes EntityManager em) {
         if (em != null && em.isOpen()) {
             em.close();
-        }
-    }
-
-    @PreDestroy
-    public void closeFactory() {
-        if (emf != null && emf.isOpen()) {
-            emf.close();
         }
     }
 }

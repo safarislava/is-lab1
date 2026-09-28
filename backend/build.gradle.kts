@@ -22,12 +22,8 @@ repositories {
 
 dependencies {
     providedCompile("jakarta.platform:jakarta.jakartaee-api:10.0.0")
-
-    implementation("jakarta.enterprise:jakarta.enterprise.cdi-api:4.1.0")
-    implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
-    implementation("org.eclipse.persistence:eclipselink:4.0.4")
-
-    implementation("org.postgresql:postgresql:42.7.12")
+    providedCompile("org.eclipse.persistence:eclipselink:4.0.4")
+    providedCompile("org.postgresql:postgresql:42.7.12")
 }
 
 tasks.withType<JavaCompile> {
