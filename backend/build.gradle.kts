@@ -11,9 +11,8 @@ group = "ru.ifmo.se"
 version = "1.0"
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -27,6 +26,7 @@ dependencies {
 }
 
 tasks.withType<JavaCompile> {
+    options.release.set(17)
     options.encoding = "UTF-8"
     options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror", "-parameters"))
 }

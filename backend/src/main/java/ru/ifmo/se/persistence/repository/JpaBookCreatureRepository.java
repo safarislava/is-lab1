@@ -42,7 +42,7 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
                 "SELECT b FROM BookCreature b WHERE b.ring.id = :ringId", BookCreature.class)
                 .setParameter("ringId", ringId)
                 .getResultList();
-        return results.isEmpty() ? Optional.empty() : Optional.of(results.getFirst());
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
     @Override
