@@ -2,6 +2,7 @@ package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.command.RingCreateCommand;
 import ru.ifmo.se.application.dto.command.RingUpdateCommand;
 import ru.ifmo.se.application.dto.result.RingResult;
@@ -28,6 +29,7 @@ public class RingService implements RingUseCase {
     private NotificationBroadcastUseCase notificationBroadcastUseCase;
 
     @Override
+    @Transactional
     public RingResult create(RingCreateCommand command) {
         Ring ring = ringMapper.toEntity(command);
         Ring saved = ringRepository.save(ring);
@@ -43,6 +45,7 @@ public class RingService implements RingUseCase {
     }
 
     @Override
+    @Transactional
     public RingResult update(int id, RingUpdateCommand command) {
         Ring ring = ringRepository.findById(id)
                 .orElseThrow(() -> new RingNotFoundException(id));
@@ -53,6 +56,7 @@ public class RingService implements RingUseCase {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         if (ringRepository.findById(id).isEmpty()) {
             throw new RingNotFoundException(id);

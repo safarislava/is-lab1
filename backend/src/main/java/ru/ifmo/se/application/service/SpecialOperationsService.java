@@ -2,6 +2,7 @@ package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.result.BookCreatureResult;
 import ru.ifmo.se.application.dto.result.PageResult;
 import ru.ifmo.se.application.enums.ActionType;
@@ -26,6 +27,7 @@ public class SpecialOperationsService implements SpecialOperationsUseCase {
     private NotificationBroadcastUseCase notificationBroadcastUseCase;
 
     @Override
+    @Transactional
     public int deleteByDefenseLevel(float defenseLevel) {
         int deletedCount = specialOperationsRepository.deleteByDefenseLevel(defenseLevel);
         if (deletedCount > 0) {
@@ -54,6 +56,7 @@ public class SpecialOperationsService implements SpecialOperationsUseCase {
     }
 
     @Override
+    @Transactional
     public int takeAllRingsFromHobbits() {
         int updatedCount = specialOperationsRepository.takeAllRingsFromHobbits();
         if (updatedCount > 0) {
@@ -63,6 +66,7 @@ public class SpecialOperationsService implements SpecialOperationsUseCase {
     }
 
     @Override
+    @Transactional
     public int moveHobbitsWithRingsToMordor() {
         int movedCount = specialOperationsRepository.moveHobbitsWithRingsToMordor();
         if (movedCount > 0) {

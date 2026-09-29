@@ -2,6 +2,7 @@ package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.command.MagicCityCreateCommand;
 import ru.ifmo.se.application.dto.command.MagicCityUpdateCommand;
 import ru.ifmo.se.application.dto.result.MagicCityResult;
@@ -33,6 +34,7 @@ public class MagicCityService implements MagicCityUseCase {
     private NotificationBroadcastUseCase notificationBroadcastUseCase;
 
     @Override
+    @Transactional
     public MagicCityResult create(MagicCityCreateCommand command) {
         MagicCity city = magicCityMapper.toEntity(command);
         MagicCity saved = magicCityRepository.save(city);
@@ -48,6 +50,7 @@ public class MagicCityService implements MagicCityUseCase {
     }
 
     @Override
+    @Transactional
     public MagicCityResult update(int id, MagicCityUpdateCommand command) {
         MagicCity city = magicCityRepository.findById(id)
                 .orElseThrow(() -> new MagicCityNotFoundException(id));
@@ -58,6 +61,7 @@ public class MagicCityService implements MagicCityUseCase {
     }
 
     @Override
+    @Transactional
     public void delete(int id, int replacementCityId) {
         if (replacementCityId == id) {
             throw new MagicCitySwapSameException(id);

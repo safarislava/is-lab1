@@ -2,6 +2,7 @@ package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.command.BookCreatureCreateCommand;
 import ru.ifmo.se.application.dto.command.BookCreatureUpdateCommand;
 import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
@@ -43,6 +44,7 @@ public class BookCreatureService implements BookCreatureUseCase {
     private NotificationBroadcastUseCase notificationBroadcastUseCase;
 
     @Override
+    @Transactional
     public BookCreatureResult create(BookCreatureCreateCommand command) {
         MagicCity city = resolveCity(command.getCreatureLocationId());
         Ring ring = resolveRing(command.getRingId(), null);
@@ -60,6 +62,7 @@ public class BookCreatureService implements BookCreatureUseCase {
     }
 
     @Override
+    @Transactional
     public BookCreatureResult update(int id, BookCreatureUpdateCommand command) {
         BookCreature creature = bookCreatureRepository.findById(id)
                 .orElseThrow(() -> new BookCreatureNotFoundException(id));
@@ -72,6 +75,7 @@ public class BookCreatureService implements BookCreatureUseCase {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         if (bookCreatureRepository.findById(id).isEmpty()) {
             throw new BookCreatureNotFoundException(id);
