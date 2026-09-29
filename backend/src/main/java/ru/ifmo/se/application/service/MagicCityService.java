@@ -1,10 +1,12 @@
 package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.command.MagicCityCreateCommand;
 import ru.ifmo.se.application.dto.command.MagicCityUpdateCommand;
+import ru.ifmo.se.application.dto.event.NotificationEvent;
 import ru.ifmo.se.application.dto.result.MagicCityResult;
 import ru.ifmo.se.application.enums.ActionType;
 import ru.ifmo.se.application.enums.EntityType;
@@ -14,7 +16,6 @@ import ru.ifmo.se.application.mapper.MagicCityMapper;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.application.repository.MagicCityRepository;
 import ru.ifmo.se.application.usecase.MagicCityUseCase;
-import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
 import ru.ifmo.se.persistence.entity.MagicCity;
 
 import java.util.List;
@@ -31,14 +32,14 @@ public class MagicCityService implements MagicCityUseCase {
     private MagicCityMapper magicCityMapper;
 
     @Inject
-    private NotificationBroadcastUseCase notificationBroadcastUseCase;
+    private Event<NotificationEvent> eventPublisher;
 
     @Override
     @Transactional
     public MagicCityResult create(MagicCityCreateCommand command) {
         MagicCity city = magicCityMapper.toEntity(command);
         MagicCity saved = magicCityRepository.save(city);
-        notificationBroadcastUseCase.broadcastChange(ActionType.CREATE, EntityType.MAGIC_CITY, saved.getId());
+        eventPublisher.fire(new NotificationEvent(ActionType.CREATE, EntityType.MAGIC_CITY, saved.getId()));
         return magicCityMapper.toResult(saved);
     }
 
@@ -56,7 +57,7 @@ public class MagicCityService implements MagicCityUseCase {
                 .orElseThrow(() -> new MagicCityNotFoundException(id));
         magicCityMapper.updateEntity(city, command);
         MagicCity saved = magicCityRepository.save(city);
-        notificationBroadcastUseCase.broadcastChange(ActionType.UPDATE, EntityType.MAGIC_CITY, saved.getId());
+        eventPublisher.fire(new NotificationEvent(ActionType.UPDATE, EntityType.MAGIC_CITY, saved.getId()));
         return magicCityMapper.toResult(saved);
     }
 
@@ -73,7 +74,7 @@ public class MagicCityService implements MagicCityUseCase {
                 .orElseThrow(() -> new MagicCityNotFoundException(replacementCityId));
         bookCreatureRepository.reassignCity(id, replacementCity);
         magicCityRepository.deleteById(id);
-        notificationBroadcastUseCase.broadcastChange(ActionType.DELETE, EntityType.MAGIC_CITY, id);
+        eventPublisher.fire(new NotificationEvent(ActionType.DELETE, EntityType.MAGIC_CITY, id));
     }
 
     @Override

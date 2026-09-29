@@ -1,17 +1,18 @@
 package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.command.RingCreateCommand;
 import ru.ifmo.se.application.dto.command.RingUpdateCommand;
+import ru.ifmo.se.application.dto.event.NotificationEvent;
 import ru.ifmo.se.application.dto.result.RingResult;
 import ru.ifmo.se.application.enums.ActionType;
 import ru.ifmo.se.application.enums.EntityType;
 import ru.ifmo.se.application.exception.RingNotFoundException;
 import ru.ifmo.se.application.mapper.RingMapper;
 import ru.ifmo.se.application.repository.RingRepository;
-import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
 import ru.ifmo.se.application.usecase.RingUseCase;
 import ru.ifmo.se.persistence.entity.Ring;
 
@@ -26,14 +27,14 @@ public class RingService implements RingUseCase {
     private RingMapper ringMapper;
 
     @Inject
-    private NotificationBroadcastUseCase notificationBroadcastUseCase;
+    private Event<NotificationEvent> eventPublisher;
 
     @Override
     @Transactional
     public RingResult create(RingCreateCommand command) {
         Ring ring = ringMapper.toEntity(command);
         Ring saved = ringRepository.save(ring);
-        notificationBroadcastUseCase.broadcastChange(ActionType.CREATE, EntityType.RING, saved.getId());
+        eventPublisher.fire(new NotificationEvent(ActionType.CREATE, EntityType.RING, saved.getId()));
         return ringMapper.toResult(saved);
     }
 
@@ -51,7 +52,7 @@ public class RingService implements RingUseCase {
                 .orElseThrow(() -> new RingNotFoundException(id));
         ringMapper.updateEntity(ring, command);
         Ring saved = ringRepository.save(ring);
-        notificationBroadcastUseCase.broadcastChange(ActionType.UPDATE, EntityType.RING, saved.getId());
+        eventPublisher.fire(new NotificationEvent(ActionType.UPDATE, EntityType.RING, saved.getId()));
         return ringMapper.toResult(saved);
     }
 
@@ -62,7 +63,7 @@ public class RingService implements RingUseCase {
             throw new RingNotFoundException(id);
         }
         ringRepository.deleteById(id);
-        notificationBroadcastUseCase.broadcastChange(ActionType.DELETE, EntityType.RING, id);
+        eventPublisher.fire(new NotificationEvent(ActionType.DELETE, EntityType.RING, id));
     }
 
     @Override
