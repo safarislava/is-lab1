@@ -1,22 +1,20 @@
 package ru.ifmo.se.persistence.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import ru.ifmo.se.application.repository.RingRepository;
 import ru.ifmo.se.persistence.entity.Ring;
-import ru.ifmo.se.persistence.interceptor.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class JpaRingRepository implements RingRepository {
-    @Inject
+    @PersistenceContext()
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public Ring save(Ring ring) {
         if (ring.getId() == 0) {
             entityManager.persist(ring);
@@ -37,7 +35,6 @@ public class JpaRingRepository implements RingRepository {
     }
 
     @Override
-    @Transactional
     public void deleteById(int id) {
         entityManager.createNativeQuery("SELECT delete_ring_with_detach(:ring)")
             .setParameter("ring", id)

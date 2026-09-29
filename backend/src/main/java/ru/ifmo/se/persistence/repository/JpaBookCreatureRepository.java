@@ -1,25 +1,23 @@
 package ru.ifmo.se.persistence.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
 import ru.ifmo.se.application.dto.result.PageResult;
 import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
-import ru.ifmo.se.persistence.interceptor.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class JpaBookCreatureRepository implements BookCreatureRepository {
-    @Inject
+    @PersistenceContext()
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public BookCreature save(BookCreature bookCreature) {
         if (bookCreature.getId() == 0) {
             entityManager.persist(bookCreature);
@@ -46,7 +44,6 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
     }
 
     @Override
-    @Transactional
     public void reassignCity(int oldCityId, MagicCity newCity) {
         entityManager.createQuery(
                 "UPDATE BookCreature b SET b.creatureLocation = :newCity WHERE b.creatureLocation.id = :oldCityId")
@@ -56,7 +53,6 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
     }
 
     @Override
-    @Transactional
     public void deleteById(int id) {
         BookCreature creature = entityManager.find(BookCreature.class, id);
         if (creature != null) {
