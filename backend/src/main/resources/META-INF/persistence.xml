@@ -11,6 +11,7 @@
         <class>ru.ifmo.se.persistence.entity.MagicCity</class>
         <class>ru.ifmo.se.persistence.entity.Ring</class>
         <class>ru.ifmo.se.persistence.converter.ZonedDateTimeConverter</class>
+        <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="jboss.as.jpa.providerModule" value="org.eclipse.persistence"/>
             <property name="eclipselink.target-server" value="WildFly"/>
@@ -19,6 +20,9 @@
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.logging.level" value="INFO"/>
             <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.query-results-cache" value="false"/>
+            <property name="eclipselink.refresh" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

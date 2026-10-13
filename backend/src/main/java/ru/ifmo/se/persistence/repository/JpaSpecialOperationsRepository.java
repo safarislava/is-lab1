@@ -20,6 +20,7 @@ public class JpaSpecialOperationsRepository implements SpecialOperationsReposito
                 "SELECT delete_by_defense_level(?1)")
                 .setParameter(1, defenseLevel)
                 .getSingleResult();
+        entityManager.getEntityManagerFactory().getCache().evictAll();
         entityManager.clear();
         return result.intValue();
     }
@@ -52,6 +53,7 @@ public class JpaSpecialOperationsRepository implements SpecialOperationsReposito
         Number result = (Number) entityManager.createNativeQuery(
                 "SELECT take_rings_from_hobbits()")
                 .getSingleResult();
+        entityManager.getEntityManagerFactory().getCache().evictAll();
         entityManager.clear();
         return result.intValue();
     }
@@ -61,6 +63,7 @@ public class JpaSpecialOperationsRepository implements SpecialOperationsReposito
         Number result = (Number) entityManager.createNativeQuery(
                 "SELECT move_hobbits_with_rings_to_mordor()")
                 .getSingleResult();
+        entityManager.getEntityManagerFactory().getCache().evictAll();
         entityManager.clear();
         return result.intValue();
     }
