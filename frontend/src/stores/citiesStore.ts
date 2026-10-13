@@ -21,7 +21,7 @@ export const useCitiesStore = defineStore('cities', () => {
     try {
       cities.value = await citiesApi.getAll();
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch cities';
+      error.value = err instanceof Error ? err.message : 'Не удалось загрузить список городов';
       throw err;
     } finally {
       loading.value = false;
@@ -73,10 +73,14 @@ export const useCitiesStore = defineStore('cities', () => {
   function handleSseEvent(event: NotificationEvent) {
     if (event.entityType === 'MAGIC_CITY') {
       fetchCities().catch(() => {});
+      const message =
+        event.entityId === 0
+          ? `Все города были обновлены на сервере (${event.action})`
+          : `Город #${event.entityId} был изменен на сервере (${event.action})`;
       notificationStore.addToast({
         type: 'info',
         title: 'Синхронизация данных',
-        message: `Город #${event.entityId} был изменен на сервере (${event.action})`,
+        message,
         duration: 3000,
       });
     }

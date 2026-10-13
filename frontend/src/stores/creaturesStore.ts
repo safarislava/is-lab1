@@ -47,7 +47,7 @@ export const useCreaturesStore = defineStore('creatures', () => {
       creatures.value = result.content;
       total.value = result.total;
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch creatures';
+      error.value = err instanceof Error ? err.message : 'Не удалось загрузить список существ';
       throw err;
     } finally {
       loading.value = false;
@@ -147,10 +147,14 @@ export const useCreaturesStore = defineStore('creatures', () => {
   function handleSseEvent(event: NotificationEvent) {
     if (event.entityType === 'BOOK_CREATURE') {
       fetchCreatures().catch(() => {});
+      const message =
+        event.entityId === 0
+          ? `Все существа обновлены на сервере (${event.action})`
+          : `Существо #${event.entityId} обновлено на сервере (${event.action})`;
       notificationStore.addToast({
         type: 'info',
         title: 'Синхронизация данных',
-        message: `Существо #${event.entityId} обновлено на сервере (${event.action})`,
+        message,
         duration: 3000,
       });
     } else if (event.entityType === 'MAGIC_CITY' || event.entityType === 'RING') {
