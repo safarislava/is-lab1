@@ -16,11 +16,7 @@ public class WebApplicationExceptionAdvice implements ExceptionMapper<WebApplica
     @Override
     public Response toResponse(WebApplicationException exception) {
         int status = exception.getResponse().getStatus();
-        String message = exception.getMessage();
-        if (message == null || message.isBlank()) {
-            Response.Status statusEnum = Response.Status.fromStatusCode(status);
-            message = statusEnum != null ? statusEnum.getReasonPhrase() : "HTTP Error " + status;
-        }
+        String message = resolveStatusMessage(status);
         ErrorResponse errorResponse = new ErrorResponse(
                 message,
                 status,
@@ -31,5 +27,18 @@ public class WebApplicationExceptionAdvice implements ExceptionMapper<WebApplica
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();
+    }
+
+    private String resolveStatusMessage(int status) {
+        return switch (status) {
+            case 400 -> "Некорректный запрос";
+            case 401 -> "Требуется авторизация";
+            case 403 -> "Доступ запрещен";
+            case 404 -> "Запрашиваемый ресурс не найден";
+            case 405 -> "Метод HTTP не поддерживается";
+            case 409 -> "Конфликт данных";
+            case 500 -> "Внутренняя ошибка сервера";
+            default -> "Ошибка HTTP " + status;
+        };
     }
 }

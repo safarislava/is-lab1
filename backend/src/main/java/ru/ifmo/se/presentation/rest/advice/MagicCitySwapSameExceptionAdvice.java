@@ -13,7 +13,7 @@ public class MagicCitySwapSameExceptionAdvice implements ExceptionMapper<MagicCi
     @Override
     public Response toResponse(MagicCitySwapSameException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
-                exception.getMessage(),
+                exception.getLocalizedMessage(),
                 Response.Status.BAD_REQUEST.getStatusCode()
         );
         return Response.status(Response.Status.BAD_REQUEST)

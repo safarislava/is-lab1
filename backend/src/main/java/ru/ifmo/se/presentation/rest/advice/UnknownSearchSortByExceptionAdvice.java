@@ -13,7 +13,7 @@ public class UnknownSearchSortByExceptionAdvice implements ExceptionMapper<Unkno
     @Override
     public Response toResponse(UnknownSearchSortByException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
-                exception.getMessage(),
+                exception.getLocalizedMessage(),
                 Response.Status.BAD_REQUEST.getStatusCode()
         );
         return Response.status(Response.Status.BAD_REQUEST)

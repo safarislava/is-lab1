@@ -13,7 +13,7 @@ public class BookCreatureNotFoundExceptionAdvice implements ExceptionMapper<Book
     @Override
     public Response toResponse(BookCreatureNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
-                exception.getMessage(),
+                exception.getLocalizedMessage(),
                 Response.Status.NOT_FOUND.getStatusCode()
         );
         return Response.status(Response.Status.NOT_FOUND)

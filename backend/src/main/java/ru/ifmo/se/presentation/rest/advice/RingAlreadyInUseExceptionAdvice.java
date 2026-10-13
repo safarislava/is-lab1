@@ -13,7 +13,7 @@ public class RingAlreadyInUseExceptionAdvice implements ExceptionMapper<RingAlre
     @Override
     public Response toResponse(RingAlreadyInUseException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
-                exception.getMessage(),
+                exception.getLocalizedMessage(),
                 Response.Status.CONFLICT.getStatusCode()
         );
         return Response.status(Response.Status.CONFLICT)
