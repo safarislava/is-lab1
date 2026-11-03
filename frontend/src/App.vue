@@ -42,14 +42,6 @@ onUnmounted(() => {
   <div class="app-layout">
     <header class="navbar">
       <div class="nav-container">
-        <!-- Logo -->
-        <RouterLink to="/" class="nav-brand">
-          <div class="brand-icon">🧙‍♂️</div>
-          <div class="brand-text">
-            <span class="brand-title">BookCreatures</span>
-          </div>
-        </RouterLink>
-
         <!-- Navigation Menu -->
         <nav class="nav-menu">
           <RouterLink to="/creatures" class="nav-item">

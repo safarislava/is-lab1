@@ -56,10 +56,6 @@ function onPageChange(newPage: number) {
 <template>
   <div class="page-container">
     <div class="page-header">
-      <div>
-        <h1 class="page-title"><span>🧙‍♂️</span> Существа из книги</h1>
-      </div>
-
       <BaseButton variant="primary" @click="openCreateDialog">
         <Plus :size="16" />
         Создать существо
