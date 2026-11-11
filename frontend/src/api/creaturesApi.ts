@@ -23,8 +23,7 @@ export const creaturesApi = {
   update: (id: number, data: BookCreatureUpdateRequest): Promise<BookCreatureResponse> =>
     mutateEndpoint(apiSlice.endpoints.updateCreature, { id, data }),
 
-  delete: (id: number): Promise<void> =>
-    mutateEndpoint(apiSlice.endpoints.deleteCreature, id),
+  delete: (id: number): Promise<void> => mutateEndpoint(apiSlice.endpoints.deleteCreature, id),
 
   deleteByDefenseLevel: (defenseLevel: number): Promise<CountResponse> =>
     mutateEndpoint(apiSlice.endpoints.deleteByDefenseLevel, defenseLevel),
