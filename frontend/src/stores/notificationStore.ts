@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { SseConnectionStatus } from '@/api/sseClient';
 
 export interface ToastMessage {
   id: string;
@@ -11,12 +10,7 @@ export interface ToastMessage {
 }
 
 export const useNotificationStore = defineStore('notification', () => {
-  const connectionStatus = ref<SseConnectionStatus>('CONNECTING');
   const toasts = ref<ToastMessage[]>([]);
-
-  function setStatus(status: SseConnectionStatus) {
-    connectionStatus.value = status;
-  }
 
   function addToast(toast: Omit<ToastMessage, 'id'>): string {
     const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -37,9 +31,7 @@ export const useNotificationStore = defineStore('notification', () => {
   }
 
   return {
-    connectionStatus,
     toasts,
-    setStatus,
     addToast,
     removeToast,
   };
