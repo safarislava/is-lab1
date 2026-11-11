@@ -21,11 +21,9 @@ onMounted(() => {
     }),
     sseClient.on('MAGIC_CITY', (event) => {
       citiesStore.handleSseEvent(event);
-      creaturesStore.handleSseEvent(event);
     }),
     sseClient.on('RING', (event) => {
       ringsStore.handleSseEvent(event);
-      creaturesStore.handleSseEvent(event);
     }),
   );
 

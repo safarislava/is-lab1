@@ -12,12 +12,16 @@ import type {
 
 export const creaturesApi = {
   async search(params: CreatureSearchParams = {}): Promise<PageResponse<BookCreatureResponse>> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.getCreatures.initiate(params));
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.getCreatures.initiate(params, { subscribe: false, forceRefetch: true }),
+    );
     return unwrapApiResult(action);
   },
 
   async getById(id: number): Promise<BookCreatureResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.getCreatureById.initiate(id));
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.getCreatureById.initiate(id, { subscribe: false, forceRefetch: true }),
+    );
     return unwrapApiResult(action);
   },
 
@@ -44,7 +48,12 @@ export const creaturesApi = {
   },
 
   async calculateAverageDefenseLevel(): Promise<AverageResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.calculateAverageDefenseLevel.initiate());
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.calculateAverageDefenseLevel.initiate(undefined, {
+        subscribe: false,
+        forceRefetch: true,
+      }),
+    );
     return unwrapApiResult(action);
   },
 
@@ -54,11 +63,10 @@ export const creaturesApi = {
     size: number = 10,
   ): Promise<PageResponse<BookCreatureResponse>> {
     const action = reduxStore.dispatch(
-      apiSlice.endpoints.findCreaturesWithAttackLevelLessThan.initiate({
-        maxAttackLevel,
-        page,
-        size,
-      }),
+      apiSlice.endpoints.findCreaturesWithAttackLevelLessThan.initiate(
+        { maxAttackLevel, page, size },
+        { subscribe: false, forceRefetch: true },
+      ),
     );
     return unwrapApiResult(action);
   },

@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ringsApi } from '@/api/ringsApi';
-import { apiSlice } from '@/api/apiSlice';
-import { reduxStore } from '@/api/reduxStore';
 import type { RingResponse, RingCreateRequest, RingUpdateRequest } from '@/types/ring';
 import type { NotificationEvent } from '@/types/common';
 import { useNotificationStore } from './notificationStore';
@@ -70,7 +68,6 @@ export const useRingsStore = defineStore('rings', () => {
 
   function handleSseEvent(event: NotificationEvent) {
     if (event.entityType === 'RING') {
-      reduxStore.dispatch(apiSlice.util.invalidateTags([{ type: 'Ring', id: 'LIST' }]));
       fetchRings().catch(() => {});
       const message =
         event.entityId === 0

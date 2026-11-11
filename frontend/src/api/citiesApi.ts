@@ -8,12 +8,16 @@ import type {
 
 export const citiesApi = {
   async getAll(): Promise<MagicCityResponse[]> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.getCities.initiate());
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.getCities.initiate(undefined, { subscribe: false, forceRefetch: true }),
+    );
     return unwrapApiResult(action);
   },
 
   async getById(id: number): Promise<MagicCityResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.getCityById.initiate(id));
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.getCityById.initiate(id, { subscribe: false, forceRefetch: true }),
+    );
     return unwrapApiResult(action);
   },
 

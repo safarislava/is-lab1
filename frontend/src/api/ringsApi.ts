@@ -4,12 +4,16 @@ import type { RingResponse, RingCreateRequest, RingUpdateRequest } from '@/types
 
 export const ringsApi = {
   async getAll(): Promise<RingResponse[]> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.getRings.initiate());
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.getRings.initiate(undefined, { subscribe: false, forceRefetch: true }),
+    );
     return unwrapApiResult(action);
   },
 
   async getById(id: number): Promise<RingResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.getRingById.initiate(id));
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.getRingById.initiate(id, { subscribe: false, forceRefetch: true }),
+    );
     return unwrapApiResult(action);
   },
 
