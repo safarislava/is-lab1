@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { citiesApi } from '@/api/citiesApi';
+import { apiSlice } from '@/api/apiSlice';
+import { reduxStore } from '@/api/reduxStore';
 import type {
   MagicCityResponse,
   MagicCityCreateRequest,
@@ -72,6 +74,7 @@ export const useCitiesStore = defineStore('cities', () => {
 
   function handleSseEvent(event: NotificationEvent) {
     if (event.entityType === 'MAGIC_CITY') {
+      reduxStore.dispatch(apiSlice.util.invalidateTags([{ type: 'City', id: 'LIST' }]));
       fetchCities().catch(() => {});
       const message =
         event.entityId === 0

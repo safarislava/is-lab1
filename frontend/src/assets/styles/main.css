@@ -1,5 +1,4 @@
 :root {
-  /* JetBrains New UI / Darcula Theme Palette */
   --bg-base: #1e1f22;
   --bg-surface: #2b2d30;
   --bg-card: #2b2d30;
@@ -17,7 +16,6 @@
   --text-muted: #9da0a8;
   --text-dim: #6f737a;
 
-  /* JetBrains Action Colors */
   --primary: #3574f0;
   --primary-hover: #3b7ffc;
   --primary-active: #3069d9;
@@ -38,21 +36,18 @@
   --info: #56b6c2;
   --info-bg: rgba(86, 182, 194, 0.16);
 
-  /* Entity types - JetBrains Syntax Highlighting */
   --type-hobbit: #59a869;
   --type-elf: #c77dbb;
   --type-human: #56b6c2;
   --type-gollum: #8c929e;
   --type-orc: #e5534b;
 
-  /* JetBrains UI Radius (Compact, crisp, geometric 4px) */
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
   --radius-full: 9999px;
 
-  /* Shadows - Crisp, dark, IDE-like */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.45);
@@ -99,7 +94,6 @@ textarea {
   font: inherit;
 }
 
-/* Custom JetBrains Scrollbars */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -118,7 +112,6 @@ textarea {
   background: #4e5157;
 }
 
-/* Common Layout Containers */
 .container {
   max-width: 1440px;
   margin: 0 auto;
@@ -150,7 +143,6 @@ textarea {
   margin-top: 0.2rem;
 }
 
-/* JetBrains Tool Card Style */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -159,7 +151,6 @@ textarea {
   box-shadow: var(--shadow-sm);
 }
 
-/* JetBrains IDE Table Style */
 .table-container {
   overflow-x: auto;
   border-radius: var(--radius-md);
@@ -217,7 +208,6 @@ textarea {
   border-bottom: none;
 }
 
-/* Form Styles - JetBrains Inset Input & Focus */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -287,7 +277,6 @@ textarea {
   margin-top: 0.15rem;
 }
 
-/* JetBrains Button Styles */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -382,7 +371,6 @@ textarea {
   border-radius: var(--radius-sm);
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -398,7 +386,6 @@ textarea {
   animation: fadeIn 0.15s ease-out forwards;
 }
 
-/* Spinner */
 .spinner {
   width: 13px;
   height: 13px;

@@ -1,34 +1,30 @@
-import { request } from './httpClient';
+import { apiSlice } from './apiSlice';
+import { reduxStore, unwrapApiResult } from './reduxStore';
 import type { RingResponse, RingCreateRequest, RingUpdateRequest } from '@/types/ring';
-
-const BASE_URL = '/api/rings';
 
 export const ringsApi = {
   async getAll(): Promise<RingResponse[]> {
-    return request<RingResponse[]>(BASE_URL);
+    const action = reduxStore.dispatch(apiSlice.endpoints.getRings.initiate());
+    return unwrapApiResult(action);
   },
 
   async getById(id: number): Promise<RingResponse> {
-    return request<RingResponse>(`${BASE_URL}/${id}`);
+    const action = reduxStore.dispatch(apiSlice.endpoints.getRingById.initiate(id));
+    return unwrapApiResult(action);
   },
 
   async create(data: RingCreateRequest): Promise<RingResponse> {
-    return request<RingResponse>(BASE_URL, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.createRing.initiate(data));
+    return unwrapApiResult(action);
   },
 
   async update(id: number, data: RingUpdateRequest): Promise<RingResponse> {
-    return request<RingResponse>(`${BASE_URL}/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.updateRing.initiate({ id, data }));
+    return unwrapApiResult(action);
   },
 
   async delete(id: number): Promise<void> {
-    return request<void>(`${BASE_URL}/${id}`, {
-      method: 'DELETE',
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.deleteRing.initiate(id));
+    return unwrapApiResult(action);
   },
 };

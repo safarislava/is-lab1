@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { creaturesApi } from '@/api/creaturesApi';
+import { apiSlice } from '@/api/apiSlice';
+import { reduxStore } from '@/api/reduxStore';
 import type {
   BookCreatureResponse,
   BookCreatureCreateRequest,
@@ -18,7 +20,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
   const sortBy = ref<string | null>(null);
   const sortDirection = ref<SortDirection>('ASC');
 
-  // Filters
   const nameFilter = ref('');
   const creatureTypeFilter = ref<BookCreatureType | ''>('');
   const cityNameFilter = ref('');
@@ -146,6 +147,7 @@ export const useCreaturesStore = defineStore('creatures', () => {
 
   function handleSseEvent(event: NotificationEvent) {
     if (event.entityType === 'BOOK_CREATURE') {
+      reduxStore.dispatch(apiSlice.util.invalidateTags([{ type: 'Creature', id: 'LIST' }]));
       fetchCreatures().catch(() => {});
       const message =
         event.entityId === 0
@@ -158,6 +160,7 @@ export const useCreaturesStore = defineStore('creatures', () => {
         duration: 3000,
       });
     } else if (event.entityType === 'MAGIC_CITY' || event.entityType === 'RING') {
+      reduxStore.dispatch(apiSlice.util.invalidateTags([{ type: 'Creature', id: 'LIST' }]));
       fetchCreatures().catch(() => {});
     }
   }

@@ -1,39 +1,36 @@
-import { request, buildQueryString } from './httpClient';
+import { apiSlice } from './apiSlice';
+import { reduxStore, unwrapApiResult } from './reduxStore';
 import type {
   MagicCityResponse,
   MagicCityCreateRequest,
   MagicCityUpdateRequest,
 } from '@/types/city';
 
-const BASE_URL = '/api/cities';
-
 export const citiesApi = {
   async getAll(): Promise<MagicCityResponse[]> {
-    return request<MagicCityResponse[]>(BASE_URL);
+    const action = reduxStore.dispatch(apiSlice.endpoints.getCities.initiate());
+    return unwrapApiResult(action);
   },
 
   async getById(id: number): Promise<MagicCityResponse> {
-    return request<MagicCityResponse>(`${BASE_URL}/${id}`);
+    const action = reduxStore.dispatch(apiSlice.endpoints.getCityById.initiate(id));
+    return unwrapApiResult(action);
   },
 
   async create(data: MagicCityCreateRequest): Promise<MagicCityResponse> {
-    return request<MagicCityResponse>(BASE_URL, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.createCity.initiate(data));
+    return unwrapApiResult(action);
   },
 
   async update(id: number, data: MagicCityUpdateRequest): Promise<MagicCityResponse> {
-    return request<MagicCityResponse>(`${BASE_URL}/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.updateCity.initiate({ id, data }));
+    return unwrapApiResult(action);
   },
 
   async delete(id: number, replacementCityId: number): Promise<void> {
-    const qs = buildQueryString({ replacementCityId });
-    return request<void>(`${BASE_URL}/${id}${qs}`, {
-      method: 'DELETE',
-    });
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.deleteCity.initiate({ id, replacementCityId }),
+    );
+    return unwrapApiResult(action);
   },
 };

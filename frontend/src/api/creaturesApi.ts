@@ -1,4 +1,5 @@
-import { request, buildQueryString } from './httpClient';
+import { apiSlice } from './apiSlice';
+import { reduxStore, unwrapApiResult } from './reduxStore';
 import type { PageResponse } from '@/types/common';
 import type {
   BookCreatureResponse,
@@ -9,57 +10,42 @@ import type {
   AverageResponse,
 } from '@/types/creature';
 
-const BASE_URL = '/api/creatures';
-
 export const creaturesApi = {
   async search(params: CreatureSearchParams = {}): Promise<PageResponse<BookCreatureResponse>> {
-    const qs = buildQueryString({
-      page: params.page ?? 0,
-      size: params.size ?? 10,
-      sortBy: params.sortBy,
-      sortDirection: params.sortDirection,
-      nameFilter: params.nameFilter,
-      creatureTypeFilter: params.creatureTypeFilter,
-      cityNameFilter: params.cityNameFilter,
-      ringNameFilter: params.ringNameFilter,
-    });
-    return request<PageResponse<BookCreatureResponse>>(`${BASE_URL}${qs}`);
+    const action = reduxStore.dispatch(apiSlice.endpoints.getCreatures.initiate(params));
+    return unwrapApiResult(action);
   },
 
   async getById(id: number): Promise<BookCreatureResponse> {
-    return request<BookCreatureResponse>(`${BASE_URL}/${id}`);
+    const action = reduxStore.dispatch(apiSlice.endpoints.getCreatureById.initiate(id));
+    return unwrapApiResult(action);
   },
 
   async create(data: BookCreatureCreateRequest): Promise<BookCreatureResponse> {
-    return request<BookCreatureResponse>(BASE_URL, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.createCreature.initiate(data));
+    return unwrapApiResult(action);
   },
 
   async update(id: number, data: BookCreatureUpdateRequest): Promise<BookCreatureResponse> {
-    return request<BookCreatureResponse>(`${BASE_URL}/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.updateCreature.initiate({ id, data }));
+    return unwrapApiResult(action);
   },
 
   async delete(id: number): Promise<void> {
-    return request<void>(`${BASE_URL}/${id}`, {
-      method: 'DELETE',
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.deleteCreature.initiate(id));
+    return unwrapApiResult(action);
   },
 
-  // Special Operations
   async deleteByDefenseLevel(defenseLevel: number): Promise<CountResponse> {
-    const qs = buildQueryString({ defense_level: defenseLevel });
-    return request<CountResponse>(`${BASE_URL}/special/by-defense${qs}`, {
-      method: 'DELETE',
-    });
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.deleteByDefenseLevel.initiate(defenseLevel),
+    );
+    return unwrapApiResult(action);
   },
 
   async calculateAverageDefenseLevel(): Promise<AverageResponse> {
-    return request<AverageResponse>(`${BASE_URL}/special/avg-defense`);
+    const action = reduxStore.dispatch(apiSlice.endpoints.calculateAverageDefenseLevel.initiate());
+    return unwrapApiResult(action);
   },
 
   async findCreaturesWithAttackLevelLessThan(
@@ -67,23 +53,23 @@ export const creaturesApi = {
     page: number = 0,
     size: number = 10,
   ): Promise<PageResponse<BookCreatureResponse>> {
-    const qs = buildQueryString({
-      max_attack_level: maxAttackLevel,
-      page,
-      size,
-    });
-    return request<PageResponse<BookCreatureResponse>>(`${BASE_URL}/special/attack-less-than${qs}`);
+    const action = reduxStore.dispatch(
+      apiSlice.endpoints.findCreaturesWithAttackLevelLessThan.initiate({
+        maxAttackLevel,
+        page,
+        size,
+      }),
+    );
+    return unwrapApiResult(action);
   },
 
   async takeAllRingsFromHobbits(): Promise<CountResponse> {
-    return request<CountResponse>(`${BASE_URL}/special/take-rings-from-hobbits`, {
-      method: 'POST',
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.takeAllRingsFromHobbits.initiate());
+    return unwrapApiResult(action);
   },
 
   async moveHobbitsWithRingsToMordor(): Promise<CountResponse> {
-    return request<CountResponse>(`${BASE_URL}/special/move-hobbits-to-mordor`, {
-      method: 'POST',
-    });
+    const action = reduxStore.dispatch(apiSlice.endpoints.moveHobbitsWithRingsToMordor.initiate());
+    return unwrapApiResult(action);
   },
 };
