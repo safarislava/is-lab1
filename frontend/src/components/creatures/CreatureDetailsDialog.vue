@@ -64,7 +64,6 @@ function getTypeLabel(type?: string): string {
     @close="emit('close')"
   >
     <div v-if="creature" class="details-content">
-      <!-- Main Info -->
       <div class="detail-section">
         <div class="header-card">
           <div class="title-with-badge">
@@ -98,7 +97,6 @@ function getTypeLabel(type?: string): string {
         </div>
       </div>
 
-      <!-- Coordinates -->
       <div class="detail-section">
         <h4 class="section-title">📍 Координаты</h4>
         <div class="coords-box">
@@ -115,7 +113,6 @@ function getTypeLabel(type?: string): string {
         </div>
       </div>
 
-      <!-- Magic City -->
       <div class="detail-section">
         <h4 class="section-title">🏙️ Волшебный город</h4>
         <div v-if="creature.creatureLocation" class="card inner-card">
@@ -154,7 +151,6 @@ function getTypeLabel(type?: string): string {
         </div>
       </div>
 
-      <!-- Ring -->
       <div class="detail-section">
         <h4 class="section-title">💍 Кольцо</h4>
         <div v-if="creature.ring" class="card inner-card ring-card">

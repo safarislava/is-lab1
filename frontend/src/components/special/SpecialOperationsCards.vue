@@ -18,11 +18,9 @@ const searchPageSizeOptions = [
   { label: '25', value: 25 },
 ];
 
-// Form inputs
 const targetDefenseLevel = ref<number | null>(10.0);
 const maxAttackLevel = ref<number | null>(50.0);
 
-// Server-side pagination for search results
 const searchPage = ref(0);
 const searchPageSize = ref(5);
 
@@ -138,7 +136,6 @@ function getTypeLabel(type: string): string {
 
 <template>
   <div class="special-grid">
-    <!-- Op 1: Delete by Defense -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-danger-icon">
@@ -176,7 +173,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 2: Avg Defense -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-info-icon">
@@ -211,7 +207,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 4: Take Rings from Hobbits -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-warning-icon">
@@ -243,7 +238,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 5: Move Hobbits to Mordor -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-danger-icon">
@@ -274,7 +268,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 3: Find Attack Less Than (Full Width Card with Table) -->
     <div class="card op-card full-card">
       <div class="op-header">
         <div class="op-icon bg-primary-icon">
@@ -310,7 +303,6 @@ function getTypeLabel(type: string): string {
           </div>
         </form>
 
-        <!-- Results Table -->
         <div v-if="specialStore.attackLessThanResult !== null" class="search-results-section">
           <div class="results-header">
             <h4>Найдено существ: {{ totalSearchResults }}</h4>

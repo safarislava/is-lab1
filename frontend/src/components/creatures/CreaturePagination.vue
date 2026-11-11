@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-vue-next';
 
 const props = defineProps<{
-  page: number; // 0-indexed
+  page: number;
   size: number;
   total: number;
 }>();
