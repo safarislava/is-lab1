@@ -1,5 +1,5 @@
 import { apiSlice } from './apiSlice';
-import { reduxStore, unwrapApiResult } from './reduxStore';
+import { queryEndpoint, mutateEndpoint } from './reduxStore';
 import type {
   MagicCityResponse,
   MagicCityCreateRequest,
@@ -7,34 +7,18 @@ import type {
 } from '@/types/city';
 
 export const citiesApi = {
-  async getAll(): Promise<MagicCityResponse[]> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.getCities.initiate(undefined, { subscribe: false, forceRefetch: true }),
-    );
-    return unwrapApiResult(action);
-  },
+  getAll: (): Promise<MagicCityResponse[]> =>
+    queryEndpoint(apiSlice.endpoints.getCities, undefined),
 
-  async getById(id: number): Promise<MagicCityResponse> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.getCityById.initiate(id, { subscribe: false, forceRefetch: true }),
-    );
-    return unwrapApiResult(action);
-  },
+  getById: (id: number): Promise<MagicCityResponse> =>
+    queryEndpoint(apiSlice.endpoints.getCityById, id),
 
-  async create(data: MagicCityCreateRequest): Promise<MagicCityResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.createCity.initiate(data));
-    return unwrapApiResult(action);
-  },
+  create: (data: MagicCityCreateRequest): Promise<MagicCityResponse> =>
+    mutateEndpoint(apiSlice.endpoints.createCity, data),
 
-  async update(id: number, data: MagicCityUpdateRequest): Promise<MagicCityResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.updateCity.initiate({ id, data }));
-    return unwrapApiResult(action);
-  },
+  update: (id: number, data: MagicCityUpdateRequest): Promise<MagicCityResponse> =>
+    mutateEndpoint(apiSlice.endpoints.updateCity, { id, data }),
 
-  async delete(id: number, replacementCityId: number): Promise<void> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.deleteCity.initiate({ id, replacementCityId }),
-    );
-    return unwrapApiResult(action);
-  },
+  delete: (id: number, replacementCityId: number): Promise<void> =>
+    mutateEndpoint(apiSlice.endpoints.deleteCity, { id, replacementCityId }),
 };

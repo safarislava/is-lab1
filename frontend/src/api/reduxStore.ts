@@ -32,3 +32,26 @@ export async function unwrapApiResult<T>(promise: { unwrap: () => Promise<T> }):
     );
   }
 }
+
+export async function queryEndpoint<TData = unknown, TArg = unknown>(
+  endpoint: {
+    initiate: (
+      arg: TArg,
+      options?: { subscribe?: boolean; forceRefetch?: boolean },
+    ) => any;
+  },
+  arg: TArg,
+): Promise<TData> {
+  const action = (reduxStore.dispatch as any)(
+    endpoint.initiate(arg, { subscribe: false, forceRefetch: true }),
+  );
+  return unwrapApiResult<TData>(action);
+}
+
+export async function mutateEndpoint<TData = unknown, TArg = unknown>(
+  endpoint: { initiate: (arg: TArg) => any },
+  arg: TArg,
+): Promise<TData> {
+  const action = (reduxStore.dispatch as any)(endpoint.initiate(arg));
+  return unwrapApiResult<TData>(action);
+}

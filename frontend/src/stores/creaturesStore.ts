@@ -25,7 +25,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
 
   const loading = ref(false);
   const error = ref<string | null>(null);
-  const selectedCreature = ref<BookCreatureResponse | null>(null);
 
   const notificationStore = useNotificationStore();
 
@@ -94,12 +93,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
     return fetchCreatures();
   }
 
-  async function getCreatureById(id: number): Promise<BookCreatureResponse> {
-    const creature = await creaturesApi.getById(id);
-    selectedCreature.value = creature;
-    return creature;
-  }
-
   async function createCreature(data: BookCreatureCreateRequest): Promise<BookCreatureResponse> {
     const created = await creaturesApi.create(data);
     notificationStore.addToast({
@@ -121,9 +114,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
       title: 'Существо обновлено',
       message: `Существо "${updated.name}" (ID: ${updated.id}) успешно сохранено`,
     });
-    if (selectedCreature.value?.id === id) {
-      selectedCreature.value = updated;
-    }
     await fetchCreatures();
     return updated;
   }
@@ -137,9 +127,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
       title: 'Существо удалено',
       message: `Существо "${name}" удалено`,
     });
-    if (selectedCreature.value?.id === id) {
-      selectedCreature.value = null;
-    }
     await fetchCreatures();
   }
 
@@ -172,14 +159,12 @@ export const useCreaturesStore = defineStore('creatures', () => {
     ringNameFilter,
     loading,
     error,
-    selectedCreature,
     fetchCreatures,
     setPage,
     setSize,
     toggleSort,
     applyFilters,
     resetFilters,
-    getCreatureById,
     createCreature,
     updateCreature,
     deleteCreature,

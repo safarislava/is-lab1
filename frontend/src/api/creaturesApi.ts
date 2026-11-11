@@ -1,5 +1,5 @@
 import { apiSlice } from './apiSlice';
-import { reduxStore, unwrapApiResult } from './reduxStore';
+import { queryEndpoint, mutateEndpoint } from './reduxStore';
 import type { PageResponse } from '@/types/common';
 import type {
   BookCreatureResponse,
@@ -11,73 +11,41 @@ import type {
 } from '@/types/creature';
 
 export const creaturesApi = {
-  async search(params: CreatureSearchParams = {}): Promise<PageResponse<BookCreatureResponse>> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.getCreatures.initiate(params, { subscribe: false, forceRefetch: true }),
-    );
-    return unwrapApiResult(action);
-  },
+  search: (params: CreatureSearchParams = {}): Promise<PageResponse<BookCreatureResponse>> =>
+    queryEndpoint(apiSlice.endpoints.getCreatures, params),
 
-  async getById(id: number): Promise<BookCreatureResponse> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.getCreatureById.initiate(id, { subscribe: false, forceRefetch: true }),
-    );
-    return unwrapApiResult(action);
-  },
+  getById: (id: number): Promise<BookCreatureResponse> =>
+    queryEndpoint(apiSlice.endpoints.getCreatureById, id),
 
-  async create(data: BookCreatureCreateRequest): Promise<BookCreatureResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.createCreature.initiate(data));
-    return unwrapApiResult(action);
-  },
+  create: (data: BookCreatureCreateRequest): Promise<BookCreatureResponse> =>
+    mutateEndpoint(apiSlice.endpoints.createCreature, data),
 
-  async update(id: number, data: BookCreatureUpdateRequest): Promise<BookCreatureResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.updateCreature.initiate({ id, data }));
-    return unwrapApiResult(action);
-  },
+  update: (id: number, data: BookCreatureUpdateRequest): Promise<BookCreatureResponse> =>
+    mutateEndpoint(apiSlice.endpoints.updateCreature, { id, data }),
 
-  async delete(id: number): Promise<void> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.deleteCreature.initiate(id));
-    return unwrapApiResult(action);
-  },
+  delete: (id: number): Promise<void> =>
+    mutateEndpoint(apiSlice.endpoints.deleteCreature, id),
 
-  async deleteByDefenseLevel(defenseLevel: number): Promise<CountResponse> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.deleteByDefenseLevel.initiate(defenseLevel),
-    );
-    return unwrapApiResult(action);
-  },
+  deleteByDefenseLevel: (defenseLevel: number): Promise<CountResponse> =>
+    mutateEndpoint(apiSlice.endpoints.deleteByDefenseLevel, defenseLevel),
 
-  async calculateAverageDefenseLevel(): Promise<AverageResponse> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.calculateAverageDefenseLevel.initiate(undefined, {
-        subscribe: false,
-        forceRefetch: true,
-      }),
-    );
-    return unwrapApiResult(action);
-  },
+  calculateAverageDefenseLevel: (): Promise<AverageResponse> =>
+    queryEndpoint(apiSlice.endpoints.calculateAverageDefenseLevel, undefined),
 
-  async findCreaturesWithAttackLevelLessThan(
+  findCreaturesWithAttackLevelLessThan: (
     maxAttackLevel: number,
     page: number = 0,
     size: number = 10,
-  ): Promise<PageResponse<BookCreatureResponse>> {
-    const action = reduxStore.dispatch(
-      apiSlice.endpoints.findCreaturesWithAttackLevelLessThan.initiate(
-        { maxAttackLevel, page, size },
-        { subscribe: false, forceRefetch: true },
-      ),
-    );
-    return unwrapApiResult(action);
-  },
+  ): Promise<PageResponse<BookCreatureResponse>> =>
+    queryEndpoint(apiSlice.endpoints.findCreaturesWithAttackLevelLessThan, {
+      maxAttackLevel,
+      page,
+      size,
+    }),
 
-  async takeAllRingsFromHobbits(): Promise<CountResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.takeAllRingsFromHobbits.initiate());
-    return unwrapApiResult(action);
-  },
+  takeAllRingsFromHobbits: (): Promise<CountResponse> =>
+    mutateEndpoint(apiSlice.endpoints.takeAllRingsFromHobbits, undefined),
 
-  async moveHobbitsWithRingsToMordor(): Promise<CountResponse> {
-    const action = reduxStore.dispatch(apiSlice.endpoints.moveHobbitsWithRingsToMordor.initiate());
-    return unwrapApiResult(action);
-  },
+  moveHobbitsWithRingsToMordor: (): Promise<CountResponse> =>
+    mutateEndpoint(apiSlice.endpoints.moveHobbitsWithRingsToMordor, undefined),
 };
