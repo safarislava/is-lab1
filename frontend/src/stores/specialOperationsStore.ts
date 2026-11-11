@@ -8,23 +8,18 @@ import { useNotificationStore } from './notificationStore';
 export const useSpecialOperationsStore = defineStore('specialOperations', () => {
   const notificationStore = useNotificationStore();
 
-  // Operation 1: Delete by defense level
   const deleteByDefenseLoading = ref(false);
   const deleteByDefenseResult = ref<number | null>(null);
 
-  // Operation 2: Average defense level
   const avgDefenseLoading = ref(false);
   const avgDefenseResult = ref<number | null>(null);
 
-  // Operation 3: Attack less than
   const attackLessThanLoading = ref(false);
   const attackLessThanResult = ref<PageResponse<BookCreatureResponse> | null>(null);
 
-  // Operation 4: Take rings from hobbits
   const takeRingsLoading = ref(false);
   const takeRingsResult = ref<number | null>(null);
 
-  // Operation 5: Move hobbits to Mordor
   const moveHobbitsLoading = ref(false);
   const moveHobbitsResult = ref<number | null>(null);
 

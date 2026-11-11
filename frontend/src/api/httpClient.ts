@@ -48,7 +48,7 @@ export async function request<T>(url: string, options: RequestInit = {}): Promis
 
   if (!response.ok) {
     const errorData = data as ErrorResponse | null;
-    const message = errorData?.message || `Request failed with status ${response.status}`;
+    const message = errorData?.message || `Ошибка выполнения запроса (HTTP ${response.status})`;
     const details = errorData?.details || [];
     throw new ApiError(message, response.status, details);
   }

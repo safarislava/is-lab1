@@ -34,7 +34,6 @@ const modalTitle = computed(() =>
   isEdit.value ? `Редактирование существа #${props.creature?.id}` : 'Создание нового существа',
 );
 
-// Form state
 const name = ref('');
 const coordX = ref<number | null>(0);
 const coordY = ref<number | null>(0);

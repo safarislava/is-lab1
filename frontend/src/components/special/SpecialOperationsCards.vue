@@ -18,11 +18,9 @@ const searchPageSizeOptions = [
   { label: '25', value: 25 },
 ];
 
-// Form inputs
 const targetDefenseLevel = ref<number | null>(10.0);
 const maxAttackLevel = ref<number | null>(50.0);
 
-// Server-side pagination for search results
 const searchPage = ref(0);
 const searchPageSize = ref(5);
 
@@ -138,7 +136,6 @@ function getTypeLabel(type: string): string {
 
 <template>
   <div class="special-grid">
-    <!-- Op 1: Delete by Defense -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-danger-icon">
@@ -146,7 +143,6 @@ function getTypeLabel(type: string): string {
         </div>
         <div>
           <h3 class="op-title">Удалить по уровню защиты</h3>
-          <p class="op-desc">Удаляет всех существ с точно указанным значением поля defenseLevel</p>
         </div>
       </div>
 
@@ -177,7 +173,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 2: Avg Defense -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-info-icon">
@@ -185,9 +180,6 @@ function getTypeLabel(type: string): string {
         </div>
         <div>
           <h3 class="op-title">Средний уровень защиты</h3>
-          <p class="op-desc">
-            Вычисляет среднее арифметическое defenseLevel для всех существ в базе
-          </p>
         </div>
       </div>
 
@@ -215,7 +207,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 4: Take Rings from Hobbits -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-warning-icon">
@@ -223,15 +214,10 @@ function getTypeLabel(type: string): string {
         </div>
         <div>
           <h3 class="op-title">Забрать все кольца у хоббитов</h3>
-          <p class="op-desc">
-            Снимает кольца со всех существ типа HOBBIT в системе (ring_id = NULL)
-          </p>
         </div>
       </div>
 
       <div class="op-body">
-        <p class="op-hint">Операция выполняется на уровне хранимой процедуры PostgreSQL.</p>
-
         <div v-if="error4" class="error-text">⚠️ {{ error4 }}</div>
 
         <div class="op-action-row">
@@ -252,7 +238,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 5: Move Hobbits to Mordor -->
     <div class="card op-card">
       <div class="op-header">
         <div class="op-icon bg-danger-icon">
@@ -260,17 +245,10 @@ function getTypeLabel(type: string): string {
         </div>
         <div>
           <h3 class="op-title">Переместить хоббитов с кольцами в Мордор</h3>
-          <p class="op-desc">
-            Находит всех хоббитов с надетыми кольцами и меняет их город на Мордор
-          </p>
         </div>
       </div>
 
       <div class="op-body">
-        <p class="op-hint">
-          Если город Мордор еще не создан, хранимая процедура создаст его автоматически.
-        </p>
-
         <div v-if="error5" class="error-text">⚠️ {{ error5 }}</div>
 
         <div class="op-action-row">
@@ -290,7 +268,6 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <!-- Op 3: Find Attack Less Than (Full Width Card with Table) -->
     <div class="card op-card full-card">
       <div class="op-header">
         <div class="op-icon bg-primary-icon">
@@ -298,9 +275,6 @@ function getTypeLabel(type: string): string {
         </div>
         <div>
           <h3 class="op-title">Поиск существ с атакой меньше заданной</h3>
-          <p class="op-desc">
-            Возвращает массив существ, значение поля attackLevel которых меньше заданного порога
-          </p>
         </div>
       </div>
 
@@ -309,7 +283,6 @@ function getTypeLabel(type: string): string {
           <div class="search-input-box">
             <BaseInput
               v-model="maxAttackLevel"
-              label="Максимальный порог attackLevel"
               type="number"
               step="any"
               placeholder="Например: 50.0"
@@ -330,7 +303,6 @@ function getTypeLabel(type: string): string {
           </div>
         </form>
 
-        <!-- Results Table -->
         <div v-if="specialStore.attackLessThanResult !== null" class="search-results-section">
           <div class="results-header">
             <h4>Найдено существ: {{ totalSearchResults }}</h4>
@@ -414,8 +386,8 @@ function getTypeLabel(type: string): string {
 <style scoped>
 .special-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
 }
 
 @media (max-width: 900px) {
@@ -432,21 +404,25 @@ function getTypeLabel(type: string): string {
   display: flex;
   flex-direction: column;
   background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  min-height: 170px;
 }
 
 .op-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.85rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
   margin-bottom: 1rem;
 }
 
 .op-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: var(--radius-md);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -474,10 +450,11 @@ function getTypeLabel(type: string): string {
 }
 
 .op-title {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
   margin: 0;
+  line-height: 1.35;
 }
 
 .op-desc {
@@ -487,30 +464,42 @@ function getTypeLabel(type: string): string {
 }
 
 .op-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .op-action-row {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: auto;
 }
 
 .result-badge {
-  background: var(--bg-card);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-well);
   border: 1px solid var(--border-color);
-  padding: 0.35rem 0.75rem;
+  padding: 0.35rem 0.65rem;
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   color: var(--text-main);
 }
 
+.result-badge strong {
+  color: var(--success);
+  font-weight: 600;
+}
+
 .calc-display {
-  background: var(--bg-card);
-  padding: 0.85rem 1rem;
-  border-radius: var(--radius-md);
+  background: var(--bg-well);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -523,15 +512,14 @@ function getTypeLabel(type: string): string {
 }
 
 .calc-value {
-  font-size: 1.35rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--success);
 }
 
 .calc-empty {
   font-size: 0.825rem;
   color: var(--text-dim);
-  font-style: italic;
 }
 
 .op-hint {
@@ -542,32 +530,51 @@ function getTypeLabel(type: string): string {
 
 .error-text {
   color: var(--danger);
-  font-size: 0.8rem;
+  font-size: 0.825rem;
+  background: var(--danger-bg);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
 }
 
 .search-form-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.search-input-box {
+  flex: 1;
+  min-width: 240px;
+  max-width: 380px;
+}
+
+.search-form-block .op-action-row {
+  margin-top: 0;
+}
+
+.search-results-section {
+  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.search-input-box {
-  max-width: 380px;
-}
-
-.search-results-section {
-  margin-top: 1rem;
-}
-
 .results-header {
-  margin-bottom: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.results-header h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
 }
 
 .page-size-selector {

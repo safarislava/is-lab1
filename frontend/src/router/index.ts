@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import CreaturesView from '@/views/CreaturesView.vue';
 import CitiesView from '@/views/CitiesView.vue';
 import RingsView from '@/views/RingsView.vue';
 import SpecialOperationsView from '@/views/SpecialOperationsView.vue';
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',

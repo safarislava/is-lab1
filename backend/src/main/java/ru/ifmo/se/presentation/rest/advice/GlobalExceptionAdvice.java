@@ -14,11 +14,8 @@ public class GlobalExceptionAdvice implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable exception) {
-        String message = exception.getMessage() != null && !exception.getMessage().isBlank()
-                ? exception.getMessage()
-                : "Internal server error";
         ErrorResponse errorResponse = new ErrorResponse(
-                message,
+                "Внутренняя ошибка сервера",
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 ZonedDateTime.now(),
                 List.of()

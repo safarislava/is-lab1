@@ -1,4 +1,4 @@
-package ru.ifmo.se.presentation.dto.response;
+package ru.ifmo.se.application.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +18,8 @@ public class NotificationEvent {
     private EntityType entityType;
     private int entityId;
     private ZonedDateTime timestamp;
+
+    public NotificationEvent(ActionType action, EntityType entityType, int entityId) {
+        this(action, entityType, entityId, ZonedDateTime.now());
+    }
 }

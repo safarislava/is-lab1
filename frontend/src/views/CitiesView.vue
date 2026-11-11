@@ -49,7 +49,6 @@ function openDeleteDialog(city: MagicCityResponse) {
 
     <CityTable :cities="citiesStore.cities" :loading="citiesStore.loading" @edit="openEditDialog" />
 
-    <!-- Dialogs -->
     <CityFormDialog
       :is-open="isFormOpen"
       :city="activeCity"

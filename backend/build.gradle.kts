@@ -11,9 +11,8 @@ group = "ru.ifmo.se"
 version = "1.0"
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -22,15 +21,12 @@ repositories {
 
 dependencies {
     providedCompile("jakarta.platform:jakarta.jakartaee-api:10.0.0")
-
-    implementation("jakarta.enterprise:jakarta.enterprise.cdi-api:4.1.0")
-    implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
-    implementation("org.eclipse.persistence:eclipselink:4.0.4")
-
-    implementation("org.postgresql:postgresql:42.7.12")
+    providedCompile("org.eclipse.persistence:eclipselink:4.0.4")
+    providedCompile("org.postgresql:postgresql:42.7.12")
 }
 
 tasks.withType<JavaCompile> {
+    options.release.set(17)
     options.encoding = "UTF-8"
     options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror", "-parameters"))
 }

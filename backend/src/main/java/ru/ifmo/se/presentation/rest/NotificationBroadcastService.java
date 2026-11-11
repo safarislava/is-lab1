@@ -2,21 +2,18 @@ package ru.ifmo.se.presentation.rest;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.event.TransactionPhase;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.sse.OutboundSseEvent;
 import jakarta.ws.rs.sse.Sse;
 import jakarta.ws.rs.sse.SseBroadcaster;
 import jakarta.ws.rs.sse.SseEventSink;
-import ru.ifmo.se.application.enums.ActionType;
-import ru.ifmo.se.application.enums.EntityType;
-import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
-import ru.ifmo.se.presentation.dto.response.NotificationEvent;
-
-import java.time.ZonedDateTime;
+import ru.ifmo.se.application.dto.event.NotificationEvent;
 
 @ApplicationScoped
-public class NotificationBroadcastService implements NotificationBroadcastUseCase {
+public class NotificationBroadcastService {
 
     @Inject
     private Sse sse;
@@ -35,9 +32,7 @@ public class NotificationBroadcastService implements NotificationBroadcastUseCas
         broadcaster.register(sink);
     }
 
-    @Override
-    public void broadcastChange(ActionType action, EntityType entityType, int entityId) {
-        NotificationEvent event = new NotificationEvent(action, entityType, entityId, ZonedDateTime.now());
+    public void onEntityChange(@Observes(during = TransactionPhase.AFTER_SUCCESS) NotificationEvent event) {
         OutboundSseEvent sseEvent = sse.newEventBuilder()
                 .name("entity-change")
                 .data(NotificationEvent.class, event)

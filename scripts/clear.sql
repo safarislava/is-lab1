@@ -1,0 +1,5 @@
+TRUNCATE TABLE bookcreature, ring, magiccity CASCADE;
+
+ALTER SEQUENCE IF EXISTS bookcreature_id_seq RESTART WITH 1;
+ALTER SEQUENCE IF EXISTS ring_id_seq RESTART WITH 1;
+ALTER SEQUENCE IF EXISTS magiccity_id_seq RESTART WITH 1;

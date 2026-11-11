@@ -17,7 +17,7 @@ export const useRingsStore = defineStore('rings', () => {
     try {
       rings.value = await ringsApi.getAll();
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch rings';
+      error.value = err instanceof Error ? err.message : 'Не удалось загрузить список колец';
       throw err;
     } finally {
       loading.value = false;
@@ -69,10 +69,14 @@ export const useRingsStore = defineStore('rings', () => {
   function handleSseEvent(event: NotificationEvent) {
     if (event.entityType === 'RING') {
       fetchRings().catch(() => {});
+      const message =
+        event.entityId === 0
+          ? `Все кольца были обновлены на сервере (${event.action})`
+          : `Кольцо #${event.entityId} было изменено на сервере (${event.action})`;
       notificationStore.addToast({
         type: 'info',
         title: 'Синхронизация данных',
-        message: `Кольцо #${event.entityId} было изменено на сервере (${event.action})`,
+        message,
         duration: 3000,
       });
     }

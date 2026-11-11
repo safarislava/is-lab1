@@ -49,7 +49,6 @@ function openDeleteDialog(ring: RingResponse) {
 
     <RingTable :rings="ringsStore.rings" :loading="ringsStore.loading" @edit="openEditDialog" />
 
-    <!-- Dialogs -->
     <RingFormDialog
       :is-open="isFormOpen"
       :ring="activeRing"

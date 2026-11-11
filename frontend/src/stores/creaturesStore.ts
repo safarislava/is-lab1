@@ -18,7 +18,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
   const sortBy = ref<string | null>(null);
   const sortDirection = ref<SortDirection>('ASC');
 
-  // Filters
   const nameFilter = ref('');
   const creatureTypeFilter = ref<BookCreatureType | ''>('');
   const cityNameFilter = ref('');
@@ -26,7 +25,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
 
   const loading = ref(false);
   const error = ref<string | null>(null);
-  const selectedCreature = ref<BookCreatureResponse | null>(null);
 
   const notificationStore = useNotificationStore();
 
@@ -47,7 +45,7 @@ export const useCreaturesStore = defineStore('creatures', () => {
       creatures.value = result.content;
       total.value = result.total;
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch creatures';
+      error.value = err instanceof Error ? err.message : 'Не удалось загрузить список существ';
       throw err;
     } finally {
       loading.value = false;
@@ -95,12 +93,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
     return fetchCreatures();
   }
 
-  async function getCreatureById(id: number): Promise<BookCreatureResponse> {
-    const creature = await creaturesApi.getById(id);
-    selectedCreature.value = creature;
-    return creature;
-  }
-
   async function createCreature(data: BookCreatureCreateRequest): Promise<BookCreatureResponse> {
     const created = await creaturesApi.create(data);
     notificationStore.addToast({
@@ -122,9 +114,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
       title: 'Существо обновлено',
       message: `Существо "${updated.name}" (ID: ${updated.id}) успешно сохранено`,
     });
-    if (selectedCreature.value?.id === id) {
-      selectedCreature.value = updated;
-    }
     await fetchCreatures();
     return updated;
   }
@@ -138,23 +127,22 @@ export const useCreaturesStore = defineStore('creatures', () => {
       title: 'Существо удалено',
       message: `Существо "${name}" удалено`,
     });
-    if (selectedCreature.value?.id === id) {
-      selectedCreature.value = null;
-    }
     await fetchCreatures();
   }
 
   function handleSseEvent(event: NotificationEvent) {
     if (event.entityType === 'BOOK_CREATURE') {
       fetchCreatures().catch(() => {});
+      const message =
+        event.entityId === 0
+          ? `Все существа обновлены на сервере (${event.action})`
+          : `Существо #${event.entityId} обновлено на сервере (${event.action})`;
       notificationStore.addToast({
         type: 'info',
         title: 'Синхронизация данных',
-        message: `Существо #${event.entityId} обновлено на сервере (${event.action})`,
+        message,
         duration: 3000,
       });
-    } else if (event.entityType === 'MAGIC_CITY' || event.entityType === 'RING') {
-      fetchCreatures().catch(() => {});
     }
   }
 
@@ -171,14 +159,12 @@ export const useCreaturesStore = defineStore('creatures', () => {
     ringNameFilter,
     loading,
     error,
-    selectedCreature,
     fetchCreatures,
     setPage,
     setSize,
     toggleSort,
     applyFilters,
     resetFilters,
-    getCreatureById,
     createCreature,
     updateCreature,
     deleteCreature,

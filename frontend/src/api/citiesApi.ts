@@ -1,39 +1,24 @@
-import { request, buildQueryString } from './httpClient';
+import { apiSlice } from './apiSlice';
+import { queryEndpoint, mutateEndpoint } from './reduxStore';
 import type {
   MagicCityResponse,
   MagicCityCreateRequest,
   MagicCityUpdateRequest,
 } from '@/types/city';
 
-const BASE_URL = '/api/cities';
-
 export const citiesApi = {
-  async getAll(): Promise<MagicCityResponse[]> {
-    return request<MagicCityResponse[]>(BASE_URL);
-  },
+  getAll: (): Promise<MagicCityResponse[]> =>
+    queryEndpoint(apiSlice.endpoints.getCities, undefined),
 
-  async getById(id: number): Promise<MagicCityResponse> {
-    return request<MagicCityResponse>(`${BASE_URL}/${id}`);
-  },
+  getById: (id: number): Promise<MagicCityResponse> =>
+    queryEndpoint(apiSlice.endpoints.getCityById, id),
 
-  async create(data: MagicCityCreateRequest): Promise<MagicCityResponse> {
-    return request<MagicCityResponse>(BASE_URL, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  },
+  create: (data: MagicCityCreateRequest): Promise<MagicCityResponse> =>
+    mutateEndpoint(apiSlice.endpoints.createCity, data),
 
-  async update(id: number, data: MagicCityUpdateRequest): Promise<MagicCityResponse> {
-    return request<MagicCityResponse>(`${BASE_URL}/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
-  },
+  update: (id: number, data: MagicCityUpdateRequest): Promise<MagicCityResponse> =>
+    mutateEndpoint(apiSlice.endpoints.updateCity, { id, data }),
 
-  async delete(id: number, replacementCityId: number): Promise<void> {
-    const qs = buildQueryString({ replacementCityId });
-    return request<void>(`${BASE_URL}/${id}${qs}`, {
-      method: 'DELETE',
-    });
-  },
+  delete: (id: number, replacementCityId: number): Promise<void> =>
+    mutateEndpoint(apiSlice.endpoints.deleteCity, { id, replacementCityId }),
 };

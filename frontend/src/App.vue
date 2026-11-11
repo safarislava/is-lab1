@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
-import { useNotificationStore } from '@/stores/notificationStore';
 import { useCreaturesStore } from '@/stores/creaturesStore';
 import { useCitiesStore } from '@/stores/citiesStore';
 import { useRingsStore } from '@/stores/ringsStore';
@@ -9,31 +8,30 @@ import { sseClient } from '@/api/sseClient';
 import ToastContainer from '@/components/ui/ToastContainer.vue';
 import { Sparkles, Building2, CircleDot, Zap } from 'lucide-vue-next';
 
-const notificationStore = useNotificationStore();
 const creaturesStore = useCreaturesStore();
 const citiesStore = useCitiesStore();
 const ringsStore = useRingsStore();
 
-let unsubscribeEvent: (() => void) | null = null;
-let unsubscribeStatus: (() => void) | null = null;
+const unsubscribers: (() => void)[] = [];
 
 onMounted(() => {
-  unsubscribeStatus = sseClient.onStatusChange((status) => {
-    notificationStore.setStatus(status);
-  });
-
-  unsubscribeEvent = sseClient.onEvent((event) => {
-    creaturesStore.handleSseEvent(event);
-    citiesStore.handleSseEvent(event);
-    ringsStore.handleSseEvent(event);
-  });
+  unsubscribers.push(
+    sseClient.on('BOOK_CREATURE', (event) => {
+      creaturesStore.handleSseEvent(event);
+    }),
+    sseClient.on('MAGIC_CITY', (event) => {
+      citiesStore.handleSseEvent(event);
+    }),
+    sseClient.on('RING', (event) => {
+      ringsStore.handleSseEvent(event);
+    }),
+  );
 
   sseClient.connect();
 });
 
 onUnmounted(() => {
-  if (unsubscribeEvent) unsubscribeEvent();
-  if (unsubscribeStatus) unsubscribeStatus();
+  unsubscribers.forEach((unsub) => unsub());
   sseClient.disconnect();
 });
 </script>
@@ -42,15 +40,6 @@ onUnmounted(() => {
   <div class="app-layout">
     <header class="navbar">
       <div class="nav-container">
-        <!-- Logo -->
-        <RouterLink to="/" class="nav-brand">
-          <div class="brand-icon">🧙‍♂️</div>
-          <div class="brand-text">
-            <span class="brand-title">BookCreatures</span>
-          </div>
-        </RouterLink>
-
-        <!-- Navigation Menu -->
         <nav class="nav-menu">
           <RouterLink to="/creatures" class="nav-item">
             <Sparkles :size="16" />
@@ -82,7 +71,6 @@ onUnmounted(() => {
       </div>
     </main>
 
-    <!-- Global Toasts -->
     <ToastContainer />
   </div>
 </template>

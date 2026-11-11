@@ -8,7 +8,15 @@ public class RingAlreadyInUseException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private final String creatureName;
+
     public RingAlreadyInUseException(BookCreature bookCreature) {
-        super(String.format("Ring is already in use by creature: %s", bookCreature.getName()));
+        super(String.format("Ring is already in use by creature: %s", bookCreature != null ? bookCreature.getName() : "unknown"));
+        this.creatureName = bookCreature != null ? bookCreature.getName() : "неизвестно";
+    }
+
+    @Override
+    public String getLocalizedMessage() {
+        return String.format("Кольцо уже занято существом: %s", creatureName);
     }
 }

@@ -1,9 +1,12 @@
 package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.command.BookCreatureCreateCommand;
 import ru.ifmo.se.application.dto.command.BookCreatureUpdateCommand;
+import ru.ifmo.se.application.dto.event.NotificationEvent;
 import ru.ifmo.se.application.dto.query.CreatureSearchQuery;
 import ru.ifmo.se.application.dto.result.BookCreatureResult;
 import ru.ifmo.se.application.dto.result.PageResult;
@@ -18,7 +21,6 @@ import ru.ifmo.se.application.repository.BookCreatureRepository;
 import ru.ifmo.se.application.repository.MagicCityRepository;
 import ru.ifmo.se.application.repository.RingRepository;
 import ru.ifmo.se.application.usecase.BookCreatureUseCase;
-import ru.ifmo.se.application.usecase.NotificationBroadcastUseCase;
 import ru.ifmo.se.persistence.entity.BookCreature;
 import ru.ifmo.se.persistence.entity.MagicCity;
 import ru.ifmo.se.persistence.entity.Ring;
@@ -40,15 +42,16 @@ public class BookCreatureService implements BookCreatureUseCase {
     private BookCreatureMapper bookCreatureMapper;
 
     @Inject
-    private NotificationBroadcastUseCase notificationBroadcastUseCase;
+    private Event<NotificationEvent> eventPublisher;
 
     @Override
+    @Transactional
     public BookCreatureResult create(BookCreatureCreateCommand command) {
         MagicCity city = resolveCity(command.getCreatureLocationId());
         Ring ring = resolveRing(command.getRingId(), null);
         BookCreature creature = bookCreatureMapper.toEntity(command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
-        notificationBroadcastUseCase.broadcastChange(ActionType.CREATE, EntityType.BOOK_CREATURE, saved.getId());
+        eventPublisher.fire(new NotificationEvent(ActionType.CREATE, EntityType.BOOK_CREATURE, saved.getId()));
         return bookCreatureMapper.toResult(saved);
     }
 
@@ -60,6 +63,7 @@ public class BookCreatureService implements BookCreatureUseCase {
     }
 
     @Override
+    @Transactional
     public BookCreatureResult update(int id, BookCreatureUpdateCommand command) {
         BookCreature creature = bookCreatureRepository.findById(id)
                 .orElseThrow(() -> new BookCreatureNotFoundException(id));
@@ -67,17 +71,18 @@ public class BookCreatureService implements BookCreatureUseCase {
         Ring ring = resolveRing(command.getRingId(), id);
         bookCreatureMapper.updateEntity(creature, command, city, ring);
         BookCreature saved = bookCreatureRepository.save(creature);
-        notificationBroadcastUseCase.broadcastChange(ActionType.UPDATE, EntityType.BOOK_CREATURE, saved.getId());
+        eventPublisher.fire(new NotificationEvent(ActionType.UPDATE, EntityType.BOOK_CREATURE, saved.getId()));
         return bookCreatureMapper.toResult(saved);
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         if (bookCreatureRepository.findById(id).isEmpty()) {
             throw new BookCreatureNotFoundException(id);
         }
         bookCreatureRepository.deleteById(id);
-        notificationBroadcastUseCase.broadcastChange(ActionType.DELETE, EntityType.BOOK_CREATURE, id);
+        eventPublisher.fire(new NotificationEvent(ActionType.DELETE, EntityType.BOOK_CREATURE, id));
     }
 
     @Override

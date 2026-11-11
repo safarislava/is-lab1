@@ -1,22 +1,20 @@
 package ru.ifmo.se.persistence.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import ru.ifmo.se.application.repository.MagicCityRepository;
 import ru.ifmo.se.persistence.entity.MagicCity;
-import ru.ifmo.se.persistence.interceptor.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class JpaMagicCityRepository implements MagicCityRepository {
-    @Inject
+    @PersistenceContext()
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public MagicCity save(MagicCity magicCity) {
         if (magicCity.getId() == 0) {
             entityManager.persist(magicCity);
@@ -37,7 +35,6 @@ public class JpaMagicCityRepository implements MagicCityRepository {
     }
 
     @Override
-    @Transactional
     public void deleteById(int id) {
         MagicCity city = entityManager.find(MagicCity.class, id);
         if (city != null) {

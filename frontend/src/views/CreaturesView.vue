@@ -13,7 +13,6 @@ import { Plus } from 'lucide-vue-next';
 
 const creaturesStore = useCreaturesStore();
 
-// Modals state
 const isFormOpen = ref(false);
 const isDetailsOpen = ref(false);
 const isDeleteOpen = ref(false);
@@ -56,20 +55,14 @@ function onPageChange(newPage: number) {
 <template>
   <div class="page-container">
     <div class="page-header">
-      <div>
-        <h1 class="page-title"><span>🧙‍♂️</span> Существа из книги</h1>
-      </div>
-
       <BaseButton variant="primary" @click="openCreateDialog">
         <Plus :size="16" />
         Создать существо
       </BaseButton>
     </div>
 
-    <!-- Filters Toolbar -->
     <CreatureFilters />
 
-    <!-- Table View -->
     <div class="table-view-wrapper">
       <CreatureTable
         :creatures="creaturesStore.creatures"
@@ -90,7 +83,6 @@ function onPageChange(newPage: number) {
       />
     </div>
 
-    <!-- Dialogs -->
     <CreatureFormDialog
       :is-open="isFormOpen"
       :creature="activeCreature"

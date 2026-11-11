@@ -13,7 +13,7 @@ public class MagicCityNotFoundExceptionAdvice implements ExceptionMapper<MagicCi
     @Override
     public Response toResponse(MagicCityNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
-                exception.getMessage(),
+                exception.getLocalizedMessage(),
                 Response.Status.NOT_FOUND.getStatusCode()
         );
         return Response.status(Response.Status.NOT_FOUND)
