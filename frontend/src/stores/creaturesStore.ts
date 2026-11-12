@@ -50,19 +50,11 @@ export const useCreaturesStore = defineStore('creatures', () => {
     const queryKey = ['creatures', params];
 
     try {
-      let result: PageResponse<BookCreatureResponse>;
-      if (force) {
-        result = await queryClient.fetchQuery({
-          queryKey,
-          queryFn: () => creaturesApi.search(params),
-          staleTime: 0,
-        });
-      } else {
-        result = await queryClient.ensureQueryData({
-          queryKey,
-          queryFn: () => creaturesApi.search(params),
-        });
-      }
+      const result: PageResponse<BookCreatureResponse> = await queryClient.query({
+        queryKey,
+        queryFn: () => creaturesApi.search(params),
+        ...(force ? { staleTime: 0 } : {}),
+      });
       creatures.value = result.content;
       total.value = result.total;
     } catch (err) {

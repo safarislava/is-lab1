@@ -19,18 +19,11 @@ export const useCitiesStore = defineStore('cities', () => {
     loading.value = true;
     error.value = null;
     try {
-      if (force) {
-        cities.value = await queryClient.fetchQuery({
-          queryKey: ['cities'],
-          queryFn: () => citiesApi.getAll(),
-          staleTime: 0,
-        });
-      } else {
-        cities.value = await queryClient.ensureQueryData({
-          queryKey: ['cities'],
-          queryFn: () => citiesApi.getAll(),
-        });
-      }
+      cities.value = await queryClient.query({
+        queryKey: ['cities'],
+        queryFn: () => citiesApi.getAll(),
+        ...(force ? { staleTime: 0 } : {}),
+      });
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Не удалось загрузить список городов';
       throw err;

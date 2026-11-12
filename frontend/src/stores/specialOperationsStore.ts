@@ -43,7 +43,7 @@ export const useSpecialOperationsStore = defineStore('specialOperations', () => 
   async function calculateAvgDefense(): Promise<number> {
     avgDefenseLoading.value = true;
     try {
-      const res = await queryClient.fetchQuery({
+      const res = await queryClient.query({
         queryKey: ['creatures', 'avgDefense'],
         queryFn: () => creaturesApi.calculateAverageDefenseLevel(),
       });
@@ -62,7 +62,7 @@ export const useSpecialOperationsStore = defineStore('specialOperations', () => 
     attackLessThanLoading.value = true;
     try {
       const params = { maxAttackLevel, page, size };
-      const res = await queryClient.fetchQuery({
+      const res = await queryClient.query({
         queryKey: ['creatures', 'attackLessThan', params],
         queryFn: () =>
           creaturesApi.findCreaturesWithAttackLevelLessThan(maxAttackLevel, page, size),

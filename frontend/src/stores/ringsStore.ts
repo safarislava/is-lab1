@@ -15,18 +15,11 @@ export const useRingsStore = defineStore('rings', () => {
     loading.value = true;
     error.value = null;
     try {
-      if (force) {
-        rings.value = await queryClient.fetchQuery({
-          queryKey: ['rings'],
-          queryFn: () => ringsApi.getAll(),
-          staleTime: 0,
-        });
-      } else {
-        rings.value = await queryClient.ensureQueryData({
-          queryKey: ['rings'],
-          queryFn: () => ringsApi.getAll(),
-        });
-      }
+      rings.value = await queryClient.query({
+        queryKey: ['rings'],
+        queryFn: () => ringsApi.getAll(),
+        ...(force ? { staleTime: 0 } : {}),
+      });
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Не удалось загрузить список колец';
       throw err;
