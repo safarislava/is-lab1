@@ -1,17 +1,25 @@
-import { apiSlice } from './apiSlice';
-import { queryEndpoint, mutateEndpoint } from './reduxStore';
+import { request } from './httpClient';
 import type { RingResponse, RingCreateRequest, RingUpdateRequest } from '@/types/ring';
 
 export const ringsApi = {
-  getAll: (): Promise<RingResponse[]> => queryEndpoint(apiSlice.endpoints.getRings, undefined),
+  getAll: (): Promise<RingResponse[]> => request<RingResponse[]>('/api/rings'),
 
-  getById: (id: number): Promise<RingResponse> => queryEndpoint(apiSlice.endpoints.getRingById, id),
+  getById: (id: number): Promise<RingResponse> => request<RingResponse>(`/api/rings/${id}`),
 
   create: (data: RingCreateRequest): Promise<RingResponse> =>
-    mutateEndpoint(apiSlice.endpoints.createRing, data),
+    request<RingResponse>('/api/rings', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 
   update: (id: number, data: RingUpdateRequest): Promise<RingResponse> =>
-    mutateEndpoint(apiSlice.endpoints.updateRing, { id, data }),
+    request<RingResponse>(`/api/rings/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
 
-  delete: (id: number): Promise<void> => mutateEndpoint(apiSlice.endpoints.deleteRing, id),
+  delete: (id: number): Promise<void> =>
+    request<void>(`/api/rings/${id}`, {
+      method: 'DELETE',
+    }),
 };

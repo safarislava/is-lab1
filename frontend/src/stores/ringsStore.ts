@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ringsApi } from '@/api/ringsApi';
+import { queryClient } from '@/api/queryClient';
 import type { RingResponse, RingCreateRequest, RingUpdateRequest } from '@/types/ring';
-import type { NotificationEvent } from '@/types/common';
 import { useNotificationStore } from './notificationStore';
 
 export const useRingsStore = defineStore('rings', () => {
@@ -11,11 +11,22 @@ export const useRingsStore = defineStore('rings', () => {
   const error = ref<string | null>(null);
   const notificationStore = useNotificationStore();
 
-  async function fetchRings() {
+  async function fetchRings(force = false) {
     loading.value = true;
     error.value = null;
     try {
-      rings.value = await ringsApi.getAll();
+      if (force) {
+        rings.value = await queryClient.fetchQuery({
+          queryKey: ['rings'],
+          queryFn: () => ringsApi.getAll(),
+          staleTime: 0,
+        });
+      } else {
+        rings.value = await queryClient.ensureQueryData({
+          queryKey: ['rings'],
+          queryFn: () => ringsApi.getAll(),
+        });
+      }
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Не удалось загрузить список колец';
       throw err;
@@ -26,12 +37,6 @@ export const useRingsStore = defineStore('rings', () => {
 
   async function createRing(data: RingCreateRequest): Promise<RingResponse> {
     const created = await ringsApi.create(data);
-    const idx = rings.value.findIndex((r) => r.id === created.id);
-    if (idx === -1) {
-      rings.value.push(created);
-    } else {
-      rings.value[idx] = created;
-    }
     notificationStore.addToast({
       type: 'success',
       title: 'Кольцо создано',
@@ -42,10 +47,6 @@ export const useRingsStore = defineStore('rings', () => {
 
   async function updateRing(id: number, data: RingUpdateRequest): Promise<RingResponse> {
     const updated = await ringsApi.update(id, data);
-    const idx = rings.value.findIndex((r) => r.id === id);
-    if (idx !== -1) {
-      rings.value[idx] = updated;
-    }
     notificationStore.addToast({
       type: 'success',
       title: 'Кольцо обновлено',
@@ -58,28 +59,11 @@ export const useRingsStore = defineStore('rings', () => {
     const ring = rings.value.find((r) => r.id === id);
     const ringName = ring?.name || `#${id}`;
     await ringsApi.delete(id);
-    rings.value = rings.value.filter((r) => r.id !== id);
     notificationStore.addToast({
       type: 'info',
       title: 'Кольцо удалено',
       message: `Кольцо "${ringName}" удалено`,
     });
-  }
-
-  function handleSseEvent(event: NotificationEvent) {
-    if (event.entityType === 'RING') {
-      fetchRings().catch(() => {});
-      const message =
-        event.entityId === 0
-          ? `Все кольца были обновлены на сервере (${event.action})`
-          : `Кольцо #${event.entityId} было изменено на сервере (${event.action})`;
-      notificationStore.addToast({
-        type: 'info',
-        title: 'Синхронизация данных',
-        message,
-        duration: 3000,
-      });
-    }
   }
 
   return {
@@ -90,6 +74,5 @@ export const useRingsStore = defineStore('rings', () => {
     createRing,
     updateRing,
     deleteRing,
-    handleSseEvent,
   };
 });

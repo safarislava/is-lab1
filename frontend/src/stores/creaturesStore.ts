@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { creaturesApi } from '@/api/creaturesApi';
+import { queryClient } from '@/api/queryClient';
 import type {
   BookCreatureResponse,
   BookCreatureCreateRequest,
   BookCreatureUpdateRequest,
   BookCreatureType,
+  CreatureSearchParams,
 } from '@/types/creature';
-import type { NotificationEvent, SortDirection } from '@/types/common';
+import type { PageResponse, SortDirection } from '@/types/common';
 import { useNotificationStore } from './notificationStore';
 
 export const useCreaturesStore = defineStore('creatures', () => {
@@ -28,20 +30,39 @@ export const useCreaturesStore = defineStore('creatures', () => {
 
   const notificationStore = useNotificationStore();
 
-  async function fetchCreatures() {
+  function getQueryParams(): CreatureSearchParams {
+    return {
+      page: page.value,
+      size: size.value,
+      sortBy: sortBy.value || undefined,
+      sortDirection: sortDirection.value || undefined,
+      nameFilter: nameFilter.value.trim() || undefined,
+      creatureTypeFilter: creatureTypeFilter.value || undefined,
+      cityNameFilter: cityNameFilter.value.trim() || undefined,
+      ringNameFilter: ringNameFilter.value.trim() || undefined,
+    };
+  }
+
+  async function fetchCreatures(force = false) {
     loading.value = true;
     error.value = null;
+    const params = getQueryParams();
+    const queryKey = ['creatures', params];
+
     try {
-      const result = await creaturesApi.search({
-        page: page.value,
-        size: size.value,
-        sortBy: sortBy.value || undefined,
-        sortDirection: sortDirection.value || undefined,
-        nameFilter: nameFilter.value.trim() || undefined,
-        creatureTypeFilter: creatureTypeFilter.value || undefined,
-        cityNameFilter: cityNameFilter.value.trim() || undefined,
-        ringNameFilter: ringNameFilter.value.trim() || undefined,
-      });
+      let result: PageResponse<BookCreatureResponse>;
+      if (force) {
+        result = await queryClient.fetchQuery({
+          queryKey,
+          queryFn: () => creaturesApi.search(params),
+          staleTime: 0,
+        });
+      } else {
+        result = await queryClient.ensureQueryData({
+          queryKey,
+          queryFn: () => creaturesApi.search(params),
+        });
+      }
       creatures.value = result.content;
       total.value = result.total;
     } catch (err) {
@@ -100,7 +121,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
       title: 'Существо создано',
       message: `Существо "${created.name}" (ID: ${created.id}) успешно добавлено`,
     });
-    await fetchCreatures();
     return created;
   }
 
@@ -114,7 +134,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
       title: 'Существо обновлено',
       message: `Существо "${updated.name}" (ID: ${updated.id}) успешно сохранено`,
     });
-    await fetchCreatures();
     return updated;
   }
 
@@ -127,23 +146,6 @@ export const useCreaturesStore = defineStore('creatures', () => {
       title: 'Существо удалено',
       message: `Существо "${name}" удалено`,
     });
-    await fetchCreatures();
-  }
-
-  function handleSseEvent(event: NotificationEvent) {
-    if (event.entityType === 'BOOK_CREATURE') {
-      fetchCreatures().catch(() => {});
-      const message =
-        event.entityId === 0
-          ? `Все существа обновлены на сервере (${event.action})`
-          : `Существо #${event.entityId} обновлено на сервере (${event.action})`;
-      notificationStore.addToast({
-        type: 'info',
-        title: 'Синхронизация данных',
-        message,
-        duration: 3000,
-      });
-    }
   }
 
   return {
@@ -168,6 +170,5 @@ export const useCreaturesStore = defineStore('creatures', () => {
     createCreature,
     updateCreature,
     deleteCreature,
-    handleSseEvent,
   };
 });
