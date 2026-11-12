@@ -1,37 +1,15 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
-import { useCreaturesStore } from '@/stores/creaturesStore';
-import { useCitiesStore } from '@/stores/citiesStore';
-import { useRingsStore } from '@/stores/ringsStore';
 import { sseClient } from '@/api/sseClient';
 import ToastContainer from '@/components/ui/ToastContainer.vue';
 import { Sparkles, Building2, CircleDot, Zap } from 'lucide-vue-next';
 
-const creaturesStore = useCreaturesStore();
-const citiesStore = useCitiesStore();
-const ringsStore = useRingsStore();
-
-const unsubscribers: (() => void)[] = [];
-
 onMounted(() => {
-  unsubscribers.push(
-    sseClient.on('BOOK_CREATURE', (event) => {
-      creaturesStore.handleSseEvent(event);
-    }),
-    sseClient.on('MAGIC_CITY', (event) => {
-      citiesStore.handleSseEvent(event);
-    }),
-    sseClient.on('RING', (event) => {
-      ringsStore.handleSseEvent(event);
-    }),
-  );
-
   sseClient.connect();
 });
 
 onUnmounted(() => {
-  unsubscribers.forEach((unsub) => unsub());
   sseClient.disconnect();
 });
 </script>

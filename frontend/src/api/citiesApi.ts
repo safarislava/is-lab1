@@ -1,5 +1,4 @@
-import { apiSlice } from './apiSlice';
-import { queryEndpoint, mutateEndpoint } from './reduxStore';
+import { request } from './httpClient';
 import type {
   MagicCityResponse,
   MagicCityCreateRequest,
@@ -7,18 +6,25 @@ import type {
 } from '@/types/city';
 
 export const citiesApi = {
-  getAll: (): Promise<MagicCityResponse[]> =>
-    queryEndpoint(apiSlice.endpoints.getCities, undefined),
+  getAll: (): Promise<MagicCityResponse[]> => request<MagicCityResponse[]>('/api/cities'),
 
   getById: (id: number): Promise<MagicCityResponse> =>
-    queryEndpoint(apiSlice.endpoints.getCityById, id),
+    request<MagicCityResponse>(`/api/cities/${id}`),
 
   create: (data: MagicCityCreateRequest): Promise<MagicCityResponse> =>
-    mutateEndpoint(apiSlice.endpoints.createCity, data),
+    request<MagicCityResponse>('/api/cities', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 
   update: (id: number, data: MagicCityUpdateRequest): Promise<MagicCityResponse> =>
-    mutateEndpoint(apiSlice.endpoints.updateCity, { id, data }),
+    request<MagicCityResponse>(`/api/cities/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
 
   delete: (id: number, replacementCityId: number): Promise<void> =>
-    mutateEndpoint(apiSlice.endpoints.deleteCity, { id, replacementCityId }),
+    request<void>(`/api/cities/${id}?replacement_city_id=${replacementCityId}`, {
+      method: 'DELETE',
+    }),
 };

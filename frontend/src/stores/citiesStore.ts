@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { citiesApi } from '@/api/citiesApi';
+import { queryClient } from '@/api/queryClient';
 import type {
   MagicCityResponse,
   MagicCityCreateRequest,
   MagicCityUpdateRequest,
 } from '@/types/city';
-import type { NotificationEvent } from '@/types/common';
 import { useNotificationStore } from './notificationStore';
 
 export const useCitiesStore = defineStore('cities', () => {
@@ -15,11 +15,15 @@ export const useCitiesStore = defineStore('cities', () => {
   const error = ref<string | null>(null);
   const notificationStore = useNotificationStore();
 
-  async function fetchCities() {
+  async function fetchCities(force = false) {
     loading.value = true;
     error.value = null;
     try {
-      cities.value = await citiesApi.getAll();
+      cities.value = await queryClient.query({
+        queryKey: ['cities'],
+        queryFn: () => citiesApi.getAll(),
+        ...(force ? { staleTime: 0 } : {}),
+      });
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Не удалось загрузить список городов';
       throw err;
@@ -30,12 +34,6 @@ export const useCitiesStore = defineStore('cities', () => {
 
   async function createCity(data: MagicCityCreateRequest): Promise<MagicCityResponse> {
     const created = await citiesApi.create(data);
-    const idx = cities.value.findIndex((c) => c.id === created.id);
-    if (idx === -1) {
-      cities.value.push(created);
-    } else {
-      cities.value[idx] = created;
-    }
     notificationStore.addToast({
       type: 'success',
       title: 'Город создан',
@@ -46,10 +44,6 @@ export const useCitiesStore = defineStore('cities', () => {
 
   async function updateCity(id: number, data: MagicCityUpdateRequest): Promise<MagicCityResponse> {
     const updated = await citiesApi.update(id, data);
-    const idx = cities.value.findIndex((c) => c.id === id);
-    if (idx !== -1) {
-      cities.value[idx] = updated;
-    }
     notificationStore.addToast({
       type: 'success',
       title: 'Город обновлен',
@@ -62,28 +56,11 @@ export const useCitiesStore = defineStore('cities', () => {
     const city = cities.value.find((c) => c.id === id);
     const cityName = city?.name || `#${id}`;
     await citiesApi.delete(id, replacementCityId);
-    cities.value = cities.value.filter((c) => c.id !== id);
     notificationStore.addToast({
       type: 'info',
       title: 'Город удален',
       message: `Город "${cityName}" удален, существа перепривязаны`,
     });
-  }
-
-  function handleSseEvent(event: NotificationEvent) {
-    if (event.entityType === 'MAGIC_CITY') {
-      fetchCities().catch(() => {});
-      const message =
-        event.entityId === 0
-          ? `Все города были обновлены на сервере (${event.action})`
-          : `Город #${event.entityId} был изменен на сервере (${event.action})`;
-      notificationStore.addToast({
-        type: 'info',
-        title: 'Синхронизация данных',
-        message,
-        duration: 3000,
-      });
-    }
   }
 
   return {
@@ -94,6 +71,5 @@ export const useCitiesStore = defineStore('cities', () => {
     createCity,
     updateCity,
     deleteCity,
-    handleSseEvent,
   };
 });

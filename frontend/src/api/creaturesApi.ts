@@ -1,5 +1,4 @@
-import { apiSlice } from './apiSlice';
-import { queryEndpoint, mutateEndpoint } from './reduxStore';
+import { request, buildQueryString } from './httpClient';
 import type { PageResponse } from '@/types/common';
 import type {
   BookCreatureResponse,
@@ -12,39 +11,54 @@ import type {
 
 export const creaturesApi = {
   search: (params: CreatureSearchParams = {}): Promise<PageResponse<BookCreatureResponse>> =>
-    queryEndpoint(apiSlice.endpoints.getCreatures, params),
+    request<PageResponse<BookCreatureResponse>>(
+      `/api/creatures${buildQueryString(params as Record<string, unknown>)}`,
+    ),
 
   getById: (id: number): Promise<BookCreatureResponse> =>
-    queryEndpoint(apiSlice.endpoints.getCreatureById, id),
+    request<BookCreatureResponse>(`/api/creatures/${id}`),
 
   create: (data: BookCreatureCreateRequest): Promise<BookCreatureResponse> =>
-    mutateEndpoint(apiSlice.endpoints.createCreature, data),
+    request<BookCreatureResponse>('/api/creatures', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 
   update: (id: number, data: BookCreatureUpdateRequest): Promise<BookCreatureResponse> =>
-    mutateEndpoint(apiSlice.endpoints.updateCreature, { id, data }),
+    request<BookCreatureResponse>(`/api/creatures/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
 
-  delete: (id: number): Promise<void> => mutateEndpoint(apiSlice.endpoints.deleteCreature, id),
+  delete: (id: number): Promise<void> =>
+    request<void>(`/api/creatures/${id}`, {
+      method: 'DELETE',
+    }),
 
   deleteByDefenseLevel: (defenseLevel: number): Promise<CountResponse> =>
-    mutateEndpoint(apiSlice.endpoints.deleteByDefenseLevel, defenseLevel),
+    request<CountResponse>(`/api/creatures/special/by-defense?defense_level=${defenseLevel}`, {
+      method: 'DELETE',
+    }),
 
   calculateAverageDefenseLevel: (): Promise<AverageResponse> =>
-    queryEndpoint(apiSlice.endpoints.calculateAverageDefenseLevel, undefined),
+    request<AverageResponse>('/api/creatures/special/avg-defense'),
 
   findCreaturesWithAttackLevelLessThan: (
     maxAttackLevel: number,
     page: number = 0,
     size: number = 10,
   ): Promise<PageResponse<BookCreatureResponse>> =>
-    queryEndpoint(apiSlice.endpoints.findCreaturesWithAttackLevelLessThan, {
-      maxAttackLevel,
-      page,
-      size,
-    }),
+    request<PageResponse<BookCreatureResponse>>(
+      `/api/creatures/special/attack-less-than?max_attack_level=${maxAttackLevel}&page=${page}&size=${size}`,
+    ),
 
   takeAllRingsFromHobbits: (): Promise<CountResponse> =>
-    mutateEndpoint(apiSlice.endpoints.takeAllRingsFromHobbits, undefined),
+    request<CountResponse>('/api/creatures/special/take-rings-from-hobbits', {
+      method: 'POST',
+    }),
 
   moveHobbitsWithRingsToMordor: (): Promise<CountResponse> =>
-    mutateEndpoint(apiSlice.endpoints.moveHobbitsWithRingsToMordor, undefined),
+    request<CountResponse>('/api/creatures/special/move-hobbits-to-mordor', {
+      method: 'POST',
+    }),
 };

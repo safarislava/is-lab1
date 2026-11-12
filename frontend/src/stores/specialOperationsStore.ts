@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { creaturesApi } from '@/api/creaturesApi';
+import { queryClient } from '@/api/queryClient';
 import type { PageResponse } from '@/types/common';
 import type { BookCreatureResponse } from '@/types/creature';
 import { useNotificationStore } from './notificationStore';
@@ -42,7 +43,10 @@ export const useSpecialOperationsStore = defineStore('specialOperations', () => 
   async function calculateAvgDefense(): Promise<number> {
     avgDefenseLoading.value = true;
     try {
-      const res = await creaturesApi.calculateAverageDefenseLevel();
+      const res = await queryClient.query({
+        queryKey: ['creatures', 'avgDefense'],
+        queryFn: () => creaturesApi.calculateAverageDefenseLevel(),
+      });
       avgDefenseResult.value = res.average;
       return res.average;
     } finally {
@@ -57,11 +61,12 @@ export const useSpecialOperationsStore = defineStore('specialOperations', () => 
   ): Promise<PageResponse<BookCreatureResponse>> {
     attackLessThanLoading.value = true;
     try {
-      const res = await creaturesApi.findCreaturesWithAttackLevelLessThan(
-        maxAttackLevel,
-        page,
-        size,
-      );
+      const params = { maxAttackLevel, page, size };
+      const res = await queryClient.query({
+        queryKey: ['creatures', 'attackLessThan', params],
+        queryFn: () =>
+          creaturesApi.findCreaturesWithAttackLevelLessThan(maxAttackLevel, page, size),
+      });
       attackLessThanResult.value = res;
       return res;
     } finally {
