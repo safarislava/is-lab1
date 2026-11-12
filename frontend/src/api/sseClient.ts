@@ -1,11 +1,50 @@
-import type { NotificationEvent, EntityType } from '@/types/common';
+import type { NotificationEvent } from '@/types/common';
+import { queryClient } from './queryClient';
+import { useCreaturesStore } from '@/stores/creaturesStore';
+import { useCitiesStore } from '@/stores/citiesStore';
+import { useRingsStore } from '@/stores/ringsStore';
+import { useNotificationStore } from '@/stores/notificationStore';
 
-export type EventHandler = (event: NotificationEvent) => void;
+const SYNC_CONFIG = {
+  BOOK_CREATURE: {
+    label: 'Существо',
+    plural: 'Все существа',
+    queryKey: ['creatures'],
+    refetch: () => useCreaturesStore().fetchCreatures(true),
+  },
+  MAGIC_CITY: {
+    label: 'Город',
+    plural: 'Все города',
+    queryKey: ['cities'],
+    refetch: () => useCitiesStore().fetchCities(true),
+  },
+  RING: {
+    label: 'Кольцо',
+    plural: 'Все кольца',
+    queryKey: ['rings'],
+    refetch: () => useRingsStore().fetchRings(true),
+  },
+} as const;
+
+function handleSseMessage(event: NotificationEvent): void {
+  const config = SYNC_CONFIG[event.entityType];
+  if (!config) return;
+
+  queryClient.invalidateQueries({ queryKey: config.queryKey });
+  config.refetch().catch(() => {});
+
+  const subject = event.entityId === 0 ? config.plural : `${config.label} #${event.entityId}`;
+  useNotificationStore().addToast({
+    type: 'info',
+    title: 'Синхронизация данных',
+    message: `${subject} обновлены на сервере (${event.action})`,
+    duration: 3000,
+  });
+}
 
 class SseClient {
   private eventSource: EventSource | null = null;
   private url = '/api/notifications/events';
-  private handlers = new Map<EntityType, Set<EventHandler>>();
   private reconnectTimer: number | null = null;
   private reconnectDelay = 2000;
   private maxReconnectDelay = 30000;
@@ -25,7 +64,7 @@ class SseClient {
       this.eventSource.addEventListener('entity-change', (e: MessageEvent) => {
         try {
           const parsed: NotificationEvent = JSON.parse(e.data);
-          this.handlers.get(parsed.entityType)?.forEach((handler) => handler(parsed));
+          handleSseMessage(parsed);
         } catch (err) {
           console.error('Failed to parse SSE entity-change data:', err);
         }
@@ -49,18 +88,6 @@ class SseClient {
       this.reconnectTimer = null;
     }
     this.cleanup();
-  }
-
-  public on(entityType: EntityType, handler: EventHandler): () => void {
-    let set = this.handlers.get(entityType);
-    if (!set) {
-      set = new Set();
-      this.handlers.set(entityType, set);
-    }
-    set.add(handler);
-    return () => {
-      set?.delete(handler);
-    };
   }
 
   private cleanup(): void {
