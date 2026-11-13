@@ -19,9 +19,12 @@ public class JpaRefreshTokenRepository implements RefreshTokenRepository {
     public RefreshToken save(RefreshToken refreshToken) {
         if (refreshToken.getId() == 0) {
             entityManager.persist(refreshToken);
+            entityManager.flush();
             return refreshToken;
         }
-        return entityManager.merge(refreshToken);
+        RefreshToken merged = entityManager.merge(refreshToken);
+        entityManager.flush();
+        return merged;
     }
 
     @Override

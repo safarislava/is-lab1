@@ -18,9 +18,12 @@ public class JpaUserRepository implements UserRepository {
     public User save(User user) {
         if (user.getId() == 0) {
             entityManager.persist(user);
+            entityManager.flush();
             return user;
         }
-        return entityManager.merge(user);
+        User merged = entityManager.merge(user);
+        entityManager.flush();
+        return merged;
     }
 
     @Override

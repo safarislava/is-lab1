@@ -21,9 +21,12 @@ public class JpaBookCreatureRepository implements BookCreatureRepository {
     public BookCreature save(BookCreature bookCreature) {
         if (bookCreature.getId() == 0) {
             entityManager.persist(bookCreature);
+            entityManager.flush();
             return bookCreature;
         }
-        return entityManager.merge(bookCreature);
+        BookCreature merged = entityManager.merge(bookCreature);
+        entityManager.flush();
+        return merged;
     }
 
     @Override
