@@ -1,5 +1,6 @@
 package ru.ifmo.se.presentation.rest;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ import java.util.List;
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed("USER")
 public class RingResource {
     @Inject
     private RingUseCase ringUseCase;

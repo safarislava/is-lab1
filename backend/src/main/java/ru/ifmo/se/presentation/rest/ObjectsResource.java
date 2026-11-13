@@ -1,5 +1,6 @@
 package ru.ifmo.se.presentation.rest;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -17,11 +18,11 @@ import ru.ifmo.se.presentation.dto.request.BatchObjectsCreateRequest;
 import ru.ifmo.se.presentation.dto.response.BatchObjectsResponse;
 import ru.ifmo.se.presentation.mapper.ObjectsPresentationMapper;
 
-
 @Path("/objects")
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed("USER")
 public class ObjectsResource {
     @Inject
     private ObjectsUseCase objectsUseCase;
