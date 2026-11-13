@@ -2,12 +2,15 @@ package ru.ifmo.se.presentation.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import ru.ifmo.se.application.dto.command.BookCreatureCreateCommand;
-import ru.ifmo.se.application.dto.command.MagicCityCreateCommand;
+import ru.ifmo.se.application.dto.command.BatchBookCreatureCreateCommand;
+import ru.ifmo.se.application.dto.command.BatchMagicCityCreateCommand;
+import ru.ifmo.se.application.dto.command.BatchRingCreateCommand;
 import ru.ifmo.se.application.dto.command.ObjectsCreateCommand;
-import ru.ifmo.se.application.dto.command.RingCreateCommand;
 import ru.ifmo.se.application.dto.result.ObjectsResult;
+import ru.ifmo.se.presentation.dto.request.BatchBookCreatureCreateRequest;
+import ru.ifmo.se.presentation.dto.request.BatchMagicCityCreateRequest;
 import ru.ifmo.se.presentation.dto.request.BatchObjectsCreateRequest;
+import ru.ifmo.se.presentation.dto.request.BatchRingCreateRequest;
 import ru.ifmo.se.presentation.dto.response.BatchObjectsResponse;
 import ru.ifmo.se.presentation.dto.response.BookCreatureResponse;
 import ru.ifmo.se.presentation.dto.response.MagicCityResponse;
@@ -18,6 +21,9 @@ import java.util.List;
 
 @ApplicationScoped
 public class ObjectsPresentationMapper {
+
+    @Inject
+    private CoordinatesPresentationMapper coordinatesMapper;
 
     @Inject
     private MagicCityPresentationMapper magicCityMapper;
@@ -33,25 +39,66 @@ public class ObjectsPresentationMapper {
             return null;
         }
 
-        List<BookCreatureCreateCommand> creatures = request.getCreatures() == null
+        List<BatchBookCreatureCreateCommand> creatures = request.getCreatures() == null
                 ? Collections.emptyList()
                 : request.getCreatures().stream()
-                        .map(bookCreatureMapper::toCommand)
+                        .map(this::toCommand)
                         .toList();
 
-        List<RingCreateCommand> rings = request.getRings() == null
+        List<BatchRingCreateCommand> rings = request.getRings() == null
                 ? Collections.emptyList()
                 : request.getRings().stream()
-                        .map(ringMapper::toCommand)
+                        .map(this::toCommand)
                         .toList();
 
-        List<MagicCityCreateCommand> cities = request.getCities() == null
+        List<BatchMagicCityCreateCommand> cities = request.getCities() == null
                 ? Collections.emptyList()
                 : request.getCities().stream()
-                        .map(magicCityMapper::toCommand)
+                        .map(this::toCommand)
                         .toList();
 
         return new ObjectsCreateCommand(creatures, rings, cities);
+    }
+
+    public BatchRingCreateCommand toCommand(BatchRingCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return new BatchRingCreateCommand(request.getTempId(), request.getName(), request.getPower());
+    }
+
+    public BatchMagicCityCreateCommand toCommand(BatchMagicCityCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return new BatchMagicCityCreateCommand(
+                request.getTempId(),
+                request.getName(),
+                request.getArea(),
+                request.getPopulation(),
+                request.getEstablishmentDate(),
+                request.getGovernor(),
+                request.getCapital(),
+                request.getPopulationDensity()
+        );
+    }
+
+    public BatchBookCreatureCreateCommand toCommand(BatchBookCreatureCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return new BatchBookCreatureCreateCommand(
+                request.getName(),
+                coordinatesMapper.toCommand(request.getCoordinates()),
+                request.getAge(),
+                request.getCreatureType(),
+                request.getCreatureLocationId(),
+                request.getAttackLevel(),
+                request.getDefenseLevel(),
+                request.getRingId(),
+                request.getTempCreatureLocationId(),
+                request.getTempRingId()
+        );
     }
 
     public BatchObjectsResponse toResponse(ObjectsResult result) {

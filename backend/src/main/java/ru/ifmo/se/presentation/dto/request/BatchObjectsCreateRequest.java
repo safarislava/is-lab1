@@ -16,11 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class BatchObjectsCreateRequest {
     @NotNull
-    private List<@Valid @NotNull BookCreatureCreateRequest> creatures = new ArrayList<>();
+    private List<@Valid @NotNull BatchBookCreatureCreateRequest> creatures = new ArrayList<>();
 
     @NotNull
-    private List<@Valid @NotNull RingCreateRequest> rings = new ArrayList<>();
+    private List<@Valid @NotNull BatchRingCreateRequest> rings = new ArrayList<>();
 
     @NotNull
-    private List<@Valid @NotNull MagicCityCreateRequest> cities = new ArrayList<>();
+    private List<@Valid @NotNull BatchMagicCityCreateRequest> cities = new ArrayList<>();
 }

@@ -16,11 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ObjectsCreateCommand {
     @NotNull
-    private List<@Valid @NotNull BookCreatureCreateCommand> creatures = new ArrayList<>();
+    private List<@Valid @NotNull BatchBookCreatureCreateCommand> creatures = new ArrayList<>();
 
     @NotNull
-    private List<@Valid @NotNull RingCreateCommand> rings = new ArrayList<>();
+    private List<@Valid @NotNull BatchRingCreateCommand> rings = new ArrayList<>();
 
     @NotNull
-    private List<@Valid @NotNull MagicCityCreateCommand> cities = new ArrayList<>();
+    private List<@Valid @NotNull BatchMagicCityCreateCommand> cities = new ArrayList<>();
 }
