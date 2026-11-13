@@ -35,3 +35,4 @@ pnpm-debug.log*
 wildfly-41.0.1.Final
 /backend/src/main/webapp/index.html
 /backend/src/main/webapp/assets/
+/.env
