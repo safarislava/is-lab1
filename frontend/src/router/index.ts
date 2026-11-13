@@ -3,6 +3,9 @@ import CreaturesView from '@/views/CreaturesView.vue';
 import CitiesView from '@/views/CitiesView.vue';
 import RingsView from '@/views/RingsView.vue';
 import SpecialOperationsView from '@/views/SpecialOperationsView.vue';
+import ImportView from '@/views/ImportView.vue';
+import LoginView from '@/views/LoginView.vue';
+import { useAuthStore } from '@/stores/authStore';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -10,6 +13,11 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/creatures',
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
     },
     {
       path: '/creatures',
@@ -31,7 +39,27 @@ const router = createRouter({
       name: 'special',
       component: SpecialOperationsView,
     },
+    {
+      path: '/import',
+      name: 'import',
+      component: ImportView,
+    },
   ],
+});
+
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore();
+  if (!authStore.initialized) {
+    await authStore.checkAuth();
+  }
+
+  if (to.name !== 'login' && !authStore.isAuthenticated) {
+    return { name: 'login', query: { redirect: to.fullPath } };
+  }
+
+  if (to.name === 'login' && authStore.isAuthenticated) {
+    return { path: '/creatures' };
+  }
 });
 
 export default router;
