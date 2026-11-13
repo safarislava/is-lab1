@@ -18,9 +18,12 @@ public class JpaRingRepository implements RingRepository {
     public Ring save(Ring ring) {
         if (ring.getId() == 0) {
             entityManager.persist(ring);
+            entityManager.flush();
             return ring;
         }
-        return entityManager.merge(ring);
+        Ring merged = entityManager.merge(ring);
+        entityManager.flush();
+        return merged;
     }
 
     @Override

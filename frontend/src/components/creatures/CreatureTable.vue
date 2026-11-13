@@ -281,6 +281,12 @@ function getTypeLabel(type: string): string {
 </template>
 
 <style scoped>
+.table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 .clickable-row {
   cursor: pointer;
   transition: background-color 0.15s ease;

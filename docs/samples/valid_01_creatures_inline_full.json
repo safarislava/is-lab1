@@ -1,0 +1,64 @@
+{
+  "rings": [
+    {
+      "tempId": 1,
+      "name": "Единое Кольцо Власти",
+      "power": 1000
+    },
+    {
+      "tempId": 2,
+      "name": "Малое лесное кольцо",
+      "power": 120
+    }
+  ],
+  "cities": [
+    {
+      "tempId": 1,
+      "name": "Шир (Заселье)",
+      "area": 45000,
+      "population": 150000,
+      "establishmentDate": "1601-03-15T00:00:00",
+      "governor": "HOBBIT",
+      "capital": true,
+      "populationDensity": 3.33
+    },
+    {
+      "tempId": 2,
+      "name": "Лихолесье (Эльфийские чертоги)",
+      "area": 32000,
+      "population": 40000,
+      "establishmentDate": "1050-01-01T00:00:00",
+      "governor": "ELF",
+      "capital": false,
+      "populationDensity": 1.25
+    }
+  ],
+  "creatures": [
+    {
+      "name": "Фродо Бэггинс",
+      "coordinates": {
+        "x": 100,
+        "y": 250.5
+      },
+      "age": 50,
+      "creatureType": "HOBBIT",
+      "attackLevel": 25.0,
+      "defenseLevel": 50.0,
+      "tempCreatureLocationId": 1,
+      "tempRingId": 1
+    },
+    {
+      "name": "Леголас Зеленолист",
+      "coordinates": {
+        "x": 215,
+        "y": -40.0
+      },
+      "age": 2931,
+      "creatureType": "ELF",
+      "attackLevel": 95.0,
+      "defenseLevel": 80.0,
+      "tempCreatureLocationId": 2,
+      "tempRingId": 2
+    }
+  ]
+}

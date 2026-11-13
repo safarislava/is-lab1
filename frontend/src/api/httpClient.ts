@@ -22,6 +22,7 @@ export async function request<T>(url: string, options: RequestInit = {}): Promis
   }
 
   const response = await fetch(url, {
+    credentials: 'include',
     ...options,
     headers,
   });

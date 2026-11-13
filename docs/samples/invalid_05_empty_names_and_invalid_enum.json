@@ -1,0 +1,17 @@
+{
+  "rings": [],
+  "cities": [],
+  "creatures": [
+    {
+      "name": "   ",
+      "coordinates": {
+        "x": 50,
+        "y": 50.0
+      },
+      "age": 20,
+      "creatureType": "UNKNOWN_CREATURE",
+      "attackLevel": 10.0,
+      "defenseLevel": 10.0
+    }
+  ]
+}

@@ -1,24 +1,53 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
-import { RouterLink, RouterView } from 'vue-router';
+import { onMounted, onUnmounted, watch, computed } from 'vue';
+import { RouterLink, RouterView, useRouter, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
 import { sseClient } from '@/api/sseClient';
 import ToastContainer from '@/components/ui/ToastContainer.vue';
-import { Sparkles, Building2, CircleDot, Zap } from 'lucide-vue-next';
+import BaseBadge from '@/components/ui/BaseBadge.vue';
+import { Sparkles, Building2, CircleDot, Zap, Upload, LogIn, LogOut, User } from 'lucide-vue-next';
 
-onMounted(() => {
-  sseClient.connect();
+const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
+
+const isLoginPage = computed(() => route.name === 'login');
+
+onMounted(async () => {
+  if (!authStore.initialized) {
+    await authStore.checkAuth();
+  }
+  if (authStore.isAuthenticated) {
+    sseClient.connect();
+  }
 });
 
 onUnmounted(() => {
   sseClient.disconnect();
 });
+
+watch(
+  () => authStore.isAuthenticated,
+  (isAuth) => {
+    if (isAuth) {
+      sseClient.connect();
+    } else {
+      sseClient.disconnect();
+    }
+  },
+);
+
+async function handleLogout() {
+  await authStore.logout();
+  await router.push('/login');
+}
 </script>
 
 <template>
   <div class="app-layout">
-    <header class="navbar">
+    <header v-if="!isLoginPage" class="navbar">
       <div class="nav-container">
-        <nav class="nav-menu">
+        <nav v-if="authStore.isAuthenticated" class="nav-menu">
           <RouterLink to="/creatures" class="nav-item">
             <Sparkles :size="16" />
             <span>Существа</span>
@@ -35,7 +64,40 @@ onUnmounted(() => {
             <Zap :size="16" />
             <span>Спец. операции</span>
           </RouterLink>
+          <RouterLink to="/import" class="nav-item">
+            <Upload :size="16" />
+            <span>Импорт</span>
+          </RouterLink>
         </nav>
+
+        <div class="nav-auth">
+          <template v-if="authStore.isAuthenticated">
+            <div class="user-info">
+              <User :size="14" class="user-icon" />
+              <span class="user-name">{{ authStore.username }}</span>
+              <div class="role-badges">
+                <BaseBadge
+                  v-for="role in authStore.roles"
+                  :key="role"
+                  :variant="role === 'ADMIN' ? 'warning' : 'info'"
+                  size="sm"
+                >
+                  {{ role }}
+                </BaseBadge>
+              </div>
+            </div>
+            <button type="button" class="nav-item btn-logout" @click="handleLogout">
+              <LogOut :size="14" />
+              <span>Выход</span>
+            </button>
+          </template>
+          <template v-else>
+            <RouterLink to="/login" class="nav-item">
+              <LogIn :size="14" />
+              <span>Вход</span>
+            </RouterLink>
+          </template>
+        </div>
       </div>
     </header>
 
@@ -59,6 +121,8 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-base);
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .navbar {
@@ -141,6 +205,8 @@ onUnmounted(() => {
 .main-content {
   flex: 1;
   padding-bottom: 2.5rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .page-fade-enter-active,
@@ -168,5 +234,49 @@ onUnmounted(() => {
   .nav-menu {
     overflow-x: auto;
   }
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.55rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-main);
+}
+
+.user-icon {
+  color: var(--text-muted);
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+.role-badges {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
 }
 </style>

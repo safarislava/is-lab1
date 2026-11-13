@@ -1,0 +1,36 @@
+{
+  "rings": [
+    {
+      "tempId": 1,
+      "name": "Единое Кольцо",
+      "power": 1000
+    }
+  ],
+  "cities": [],
+  "creatures": [
+    {
+      "name": "Фродо Бэггинс",
+      "coordinates": {
+        "x": 10,
+        "y": 20.0
+      },
+      "age": 50,
+      "creatureType": "HOBBIT",
+      "attackLevel": 20.0,
+      "defenseLevel": 30.0,
+      "tempRingId": 1
+    },
+    {
+      "name": "Горлум (пытается отобрать)",
+      "coordinates": {
+        "x": 15,
+        "y": 25.0
+      },
+      "age": 589,
+      "creatureType": "GOLLUM",
+      "attackLevel": 40.0,
+      "defenseLevel": 20.0,
+      "tempRingId": 1
+    }
+  ]
+}

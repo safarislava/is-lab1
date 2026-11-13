@@ -34,7 +34,7 @@ public class User {
     @Column(nullable = false, unique = true, columnDefinition = "TEXT CHECK (trim(username) != '')")
     private String username;
 
-    @Column(nullable = false, columnDefinition = "TEXT CHECK (trim(password_hash) != '')")
+    @Column(name = "password_hash", nullable = false, columnDefinition = "TEXT CHECK (trim(password_hash) != '')")
     private String passwordHash;
 
     @ElementCollection(fetch = FetchType.EAGER)

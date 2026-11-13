@@ -1,0 +1,55 @@
+{
+  "rings": [
+    {
+      "tempId": 1,
+      "name": "Вилья (Кольцо Воздуха)",
+      "power": 380
+    }
+  ],
+  "cities": [
+    {
+      "tempId": 1,
+      "name": "Ривенделл (Тайная долина)",
+      "area": 1200,
+      "population": 3500,
+      "establishmentDate": "1697-01-01T00:00:00",
+      "governor": "ELF",
+      "capital": false,
+      "populationDensity": 2.91
+    },
+    {
+      "tempId": 2,
+      "name": "Эребор (Одинокая гора)",
+      "area": 15000,
+      "population": 45000,
+      "capital": false
+    }
+  ],
+  "creatures": [
+    {
+      "name": "Элронд Полуэльф",
+      "coordinates": {
+        "x": 220,
+        "y": -45.0
+      },
+      "age": 6520,
+      "creatureType": "ELF",
+      "attackLevel": 85.0,
+      "defenseLevel": 95.0,
+      "tempRingId": 1,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Даин Железностоп",
+      "coordinates": {
+        "x": 310,
+        "y": 90.0
+      },
+      "age": 252,
+      "creatureType": "HUMAN",
+      "attackLevel": 82.0,
+      "defenseLevel": 88.0,
+      "tempCreatureLocationId": 2
+    }
+  ]
+}

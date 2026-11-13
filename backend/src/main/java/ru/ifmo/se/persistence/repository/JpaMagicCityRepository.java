@@ -18,9 +18,12 @@ public class JpaMagicCityRepository implements MagicCityRepository {
     public MagicCity save(MagicCity magicCity) {
         if (magicCity.getId() == 0) {
             entityManager.persist(magicCity);
+            entityManager.flush();
             return magicCity;
         }
-        return entityManager.merge(magicCity);
+        MagicCity merged = entityManager.merge(magicCity);
+        entityManager.flush();
+        return merged;
     }
 
     @Override

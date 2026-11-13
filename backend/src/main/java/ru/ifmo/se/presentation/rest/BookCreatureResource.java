@@ -1,5 +1,6 @@
 package ru.ifmo.se.presentation.rest;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -32,6 +33,7 @@ import ru.ifmo.se.presentation.mapper.BookCreaturePresentationMapper;
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed("USER")
 public class BookCreatureResource {
     @Inject
     private BookCreatureUseCase bookCreatureUseCase;
