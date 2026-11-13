@@ -1,0 +1,17 @@
+{
+  "rings": [],
+  "cities": [],
+  "creatures": [
+    {
+      "name": "Горлум (Смеагол)",
+      "coordinates": {
+        "x": -150,
+        "y": 50.0
+      },
+      "age": 589,
+      "creatureType": "GOLLUM",
+      "attackLevel": 15.0,
+      "defenseLevel": 30.0
+    }
+  ]
+}

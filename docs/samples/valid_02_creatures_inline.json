@@ -1,0 +1,40 @@
+{
+  "rings": [],
+  "cities": [
+    {
+      "tempId": 1,
+      "name": "Минас Тирит",
+      "area": 25000,
+      "population": 50000,
+      "establishmentDate": "3320-01-01T00:00:00",
+      "governor": "HUMAN",
+      "capital": true,
+      "populationDensity": 2.0
+    }
+  ],
+  "creatures": [
+    {
+      "name": "Арагорн II",
+      "coordinates": {
+        "x": 320,
+        "y": 110.0
+      },
+      "age": 87,
+      "creatureType": "HUMAN",
+      "attackLevel": 90.0,
+      "defenseLevel": 85.0,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Сэмуайз Гэмджи",
+      "coordinates": {
+        "x": 98,
+        "y": 248.0
+      },
+      "age": 38,
+      "creatureType": "HOBBIT",
+      "attackLevel": 20.0,
+      "defenseLevel": 45.0
+    }
+  ]
+}

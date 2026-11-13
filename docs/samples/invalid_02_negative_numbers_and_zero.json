@@ -1,0 +1,28 @@
+{
+  "rings": [],
+  "cities": [],
+  "creatures": [
+    {
+      "name": "Невалидное существо (возраст <= 0)",
+      "coordinates": {
+        "x": 100,
+        "y": 100.0
+      },
+      "age": 0,
+      "creatureType": "HOBBIT",
+      "attackLevel": 10.0,
+      "defenseLevel": 10.0
+    },
+    {
+      "name": "Невалидное существо (атака <= 0)",
+      "coordinates": {
+        "x": 100,
+        "y": 100.0
+      },
+      "age": 50,
+      "creatureType": "HUMAN",
+      "attackLevel": 0.0,
+      "defenseLevel": -5.0
+    }
+  ]
+}

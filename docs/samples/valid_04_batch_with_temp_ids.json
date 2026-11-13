@@ -1,0 +1,54 @@
+{
+  "rings": [
+    {
+      "tempId": 101,
+      "name": "Нарья (Кольцо Огня)",
+      "power": 350
+    },
+    {
+      "tempId": 102,
+      "name": "Ненья (Кольцо Воды)",
+      "power": 320
+    }
+  ],
+  "cities": [
+    {
+      "tempId": 201,
+      "name": "Лотлориэн (Карас Галадон)",
+      "area": 5000,
+      "population": 12000,
+      "establishmentDate": "1350-05-20T00:00:00",
+      "governor": "ELF",
+      "capital": false,
+      "populationDensity": 2.4
+    }
+  ],
+  "creatures": [
+    {
+      "name": "Гэндальф Серый",
+      "coordinates": {
+        "x": 200,
+        "y": 150.0
+      },
+      "age": 2019,
+      "creatureType": "HUMAN",
+      "attackLevel": 99.0,
+      "defenseLevel": 95.0,
+      "tempRingId": 101,
+      "tempCreatureLocationId": 201
+    },
+    {
+      "name": "Галадриэль",
+      "coordinates": {
+        "x": 205,
+        "y": 155.0
+      },
+      "age": 8372,
+      "creatureType": "ELF",
+      "attackLevel": 90.0,
+      "defenseLevel": 99.0,
+      "tempRingId": 102,
+      "tempCreatureLocationId": 201
+    }
+  ]
+}

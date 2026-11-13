@@ -1,0 +1,32 @@
+{
+  "rings": [
+    {
+      "tempId": 1,
+      "name": "Обычное кольцо",
+      "power": 50
+    }
+  ],
+  "cities": [
+    {
+      "tempId": 1,
+      "name": "Минас Тирит",
+      "area": 5000,
+      "population": 20000
+    }
+  ],
+  "creatures": [
+    {
+      "name": "Странник",
+      "coordinates": {
+        "x": 100,
+        "y": 100.0
+      },
+      "age": 45,
+      "creatureType": "HUMAN",
+      "attackLevel": 50.0,
+      "defenseLevel": 50.0,
+      "tempCreatureLocationId": 999,
+      "tempRingId": 888
+    }
+  ]
+}
