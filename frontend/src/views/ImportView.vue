@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useImportStore } from '@/stores/importStore';
 import { SAMPLE_JSON } from '@/utils/importParser';
+import { formatDateTime } from '@/utils/formatDate';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseBadge, { type BadgeVariant } from '@/components/ui/BaseBadge.vue';
 import CreaturePagination from '@/components/creatures/CreaturePagination.vue';
@@ -111,21 +112,8 @@ function formatBytes(bytes: number | null): string {
   return `${(bytes / 1024).toFixed(1)} KB`;
 }
 
-function formatDate(dateStr: string): string {
-  if (!dateStr) return '—';
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-  } catch {
-    return dateStr;
-  }
+function formatDate(dateVal: string | number | null | undefined): string {
+  return formatDateTime(dateVal);
 }
 
 function getBadgeVariant(type: string): BadgeVariant {
