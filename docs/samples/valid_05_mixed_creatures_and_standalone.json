@@ -2,54 +2,162 @@
   "rings": [
     {
       "tempId": 1,
-      "name": "Вилья (Кольцо Воздуха)",
-      "power": 380
+      "name": "Кольцо Мории",
+      "power": 310
+    },
+    {
+      "tempId": 2,
+      "name": "Кольцо Железных Холмов",
+      "power": 280
+    },
+    {
+      "name": "Старинное серебряное кольцо",
+      "power": 140
     }
   ],
   "cities": [
     {
       "tempId": 1,
-      "name": "Ривенделл (Тайная долина)",
-      "area": 1200,
-      "population": 3500,
-      "establishmentDate": "1697-01-01T00:00:00",
-      "governor": "ELF",
-      "capital": false,
-      "populationDensity": 2.91
+      "name": "Эребор (Одинокая Гора)",
+      "area": 18000,
+      "population": 42000,
+      "establishmentDate": "1999-01-01T00:00:00",
+      "governor": "HUMAN",
+      "capital": true,
+      "populationDensity": 2.33
     },
     {
-      "tempId": 2,
-      "name": "Эребор (Одинокая гора)",
-      "area": 15000,
-      "population": 45000,
-      "capital": false
+      "name": "Дейл (Город Барда)",
+      "area": 12000,
+      "population": 28000,
+      "establishmentDate": "2941-01-01T00:00:00",
+      "governor": "HUMAN",
+      "capital": false,
+      "populationDensity": 2.33
     }
   ],
   "creatures": [
     {
-      "name": "Элронд Полуэльф",
-      "coordinates": {
-        "x": 220,
-        "y": -45.0
-      },
-      "age": 6520,
-      "creatureType": "ELF",
-      "attackLevel": 85.0,
-      "defenseLevel": 95.0,
-      "tempRingId": 1,
-      "tempCreatureLocationId": 1
-    },
-    {
-      "name": "Даин Железностоп",
+      "name": "Даин II Железностоп",
       "coordinates": {
         "x": 310,
         "y": 90.0
       },
       "age": 252,
       "creatureType": "HUMAN",
-      "attackLevel": 82.0,
+      "attackLevel": 91.0,
+      "defenseLevel": 94.0,
+      "tempRingId": 1,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Траин II",
+      "coordinates": {
+        "x": 308,
+        "y": 88.0
+      },
+      "age": 205,
+      "creatureType": "HUMAN",
+      "attackLevel": 85.0,
       "defenseLevel": 88.0,
-      "tempCreatureLocationId": 2
+      "tempRingId": 2,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Балин Сын Фундина",
+      "coordinates": {
+        "x": 305,
+        "y": 85.0
+      },
+      "age": 178,
+      "creatureType": "HUMAN",
+      "attackLevel": 80.0,
+      "defenseLevel": 82.0,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Двалин",
+      "coordinates": {
+        "x": 306,
+        "y": 86.0
+      },
+      "age": 169,
+      "creatureType": "HUMAN",
+      "attackLevel": 86.0,
+      "defenseLevel": 84.0,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Глоин",
+      "coordinates": {
+        "x": 307,
+        "y": 87.0
+      },
+      "age": 158,
+      "creatureType": "HUMAN",
+      "attackLevel": 78.0,
+      "defenseLevel": 80.0,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Гимли Сын Глоина",
+      "coordinates": {
+        "x": 312,
+        "y": 92.0
+      },
+      "age": 139,
+      "creatureType": "HUMAN",
+      "attackLevel": 93.0,
+      "defenseLevel": 89.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Оин",
+      "coordinates": {
+        "x": 304,
+        "y": 84.0
+      },
+      "age": 167,
+      "creatureType": "HUMAN",
+      "attackLevel": 72.0,
+      "defenseLevel": 75.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Ори",
+      "coordinates": {
+        "x": 303,
+        "y": 83.0
+      },
+      "age": 140,
+      "creatureType": "HUMAN",
+      "attackLevel": 65.0,
+      "defenseLevel": 68.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Дори",
+      "coordinates": {
+        "x": 302,
+        "y": 82.0
+      },
+      "age": 165,
+      "creatureType": "HUMAN",
+      "attackLevel": 76.0,
+      "defenseLevel": 77.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Нори",
+      "coordinates": {
+        "x": 301,
+        "y": 81.0
+      },
+      "age": 163,
+      "creatureType": "HUMAN",
+      "attackLevel": 74.0,
+      "defenseLevel": 73.0,
+      "creatureLocationId": 3
     }
   ]
 }

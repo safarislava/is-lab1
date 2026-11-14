@@ -9,18 +9,43 @@
       "tempId": 102,
       "name": "Ненья (Кольцо Воды)",
       "power": 320
+    },
+    {
+      "tempId": 103,
+      "name": "Вилья (Кольцо Сапфира)",
+      "power": 380
     }
   ],
   "cities": [
     {
       "tempId": 201,
-      "name": "Лотлориэн (Карас Галадон)",
+      "name": "Лотлориэн (Золотой Лес)",
       "area": 5000,
       "population": 12000,
       "establishmentDate": "1350-05-20T00:00:00",
       "governor": "ELF",
       "capital": false,
       "populationDensity": 2.4
+    },
+    {
+      "tempId": 202,
+      "name": "Серые Гавани (Митлонд)",
+      "area": 8500,
+      "population": 9000,
+      "establishmentDate": "0001-01-01T00:00:00",
+      "governor": "ELF",
+      "capital": false,
+      "populationDensity": 1.06
+    },
+    {
+      "tempId": 203,
+      "name": "Имладрис (Тайное Убежище)",
+      "area": 6000,
+      "population": 7500,
+      "establishmentDate": "1697-01-01T00:00:00",
+      "governor": "ELF",
+      "capital": false,
+      "populationDensity": 1.25
     }
   ],
   "creatures": [
@@ -35,7 +60,7 @@
       "attackLevel": 99.0,
       "defenseLevel": 95.0,
       "tempRingId": 101,
-      "tempCreatureLocationId": 201
+      "tempCreatureLocationId": 202
     },
     {
       "name": "Галадриэль",
@@ -48,6 +73,103 @@
       "attackLevel": 90.0,
       "defenseLevel": 99.0,
       "tempRingId": 102,
+      "tempCreatureLocationId": 201
+    },
+    {
+      "name": "Элронд Владыка Ривенделла",
+      "coordinates": {
+        "x": 210,
+        "y": 160.0
+      },
+      "age": 6520,
+      "creatureType": "ELF",
+      "attackLevel": 88.0,
+      "defenseLevel": 94.0,
+      "tempRingId": 103,
+      "tempCreatureLocationId": 203
+    },
+    {
+      "name": "Кирдан Корабел",
+      "coordinates": {
+        "x": 190,
+        "y": 140.0
+      },
+      "age": 10000,
+      "creatureType": "ELF",
+      "attackLevel": 85.0,
+      "defenseLevel": 92.0,
+      "tempCreatureLocationId": 202
+    },
+    {
+      "name": "Глорфиндель",
+      "coordinates": {
+        "x": 212,
+        "y": 162.0
+      },
+      "age": 6000,
+      "creatureType": "ELF",
+      "attackLevel": 96.0,
+      "defenseLevel": 91.0,
+      "tempCreatureLocationId": 203
+    },
+    {
+      "name": "Элладан",
+      "coordinates": {
+        "x": 208,
+        "y": 158.0
+      },
+      "age": 2900,
+      "creatureType": "ELF",
+      "attackLevel": 84.0,
+      "defenseLevel": 80.0,
+      "tempCreatureLocationId": 203
+    },
+    {
+      "name": "Элрохир",
+      "coordinates": {
+        "x": 209,
+        "y": 159.0
+      },
+      "age": 2900,
+      "creatureType": "ELF",
+      "attackLevel": 84.0,
+      "defenseLevel": 80.0,
+      "tempCreatureLocationId": 203
+    },
+    {
+      "name": "Арвен Ундомиэль",
+      "coordinates": {
+        "x": 206,
+        "y": 156.0
+      },
+      "age": 2777,
+      "creatureType": "ELF",
+      "attackLevel": 45.0,
+      "defenseLevel": 75.0,
+      "tempCreatureLocationId": 203
+    },
+    {
+      "name": "Орофин",
+      "coordinates": {
+        "x": 202,
+        "y": 152.0
+      },
+      "age": 1200,
+      "creatureType": "ELF",
+      "attackLevel": 78.0,
+      "defenseLevel": 72.0,
+      "tempCreatureLocationId": 201
+    },
+    {
+      "name": "Румил",
+      "coordinates": {
+        "x": 203,
+        "y": 153.0
+      },
+      "age": 1150,
+      "creatureType": "ELF",
+      "attackLevel": 76.0,
+      "defenseLevel": 70.0,
       "tempCreatureLocationId": 201
     }
   ]

@@ -9,6 +9,16 @@
       "tempId": 2,
       "name": "Малое лесное кольцо",
       "power": 120
+    },
+    {
+      "tempId": 3,
+      "name": "Кольцо Барахира",
+      "power": 250
+    },
+    {
+      "tempId": 4,
+      "name": "Гномье кольцо Траина",
+      "power": 450
     }
   ],
   "cities": [
@@ -31,6 +41,16 @@
       "governor": "ELF",
       "capital": false,
       "populationDensity": 1.25
+    },
+    {
+      "tempId": 3,
+      "name": "Лотлориэн (Карас Галадон)",
+      "area": 15000,
+      "population": 25000,
+      "establishmentDate": "1350-05-20T00:00:00",
+      "governor": "ELF",
+      "capital": false,
+      "populationDensity": 1.67
     }
   ],
   "creatures": [
@@ -59,6 +79,104 @@
       "defenseLevel": 80.0,
       "tempCreatureLocationId": 2,
       "tempRingId": 2
+    },
+    {
+      "name": "Арагорн II",
+      "coordinates": {
+        "x": 320,
+        "y": 110.0
+      },
+      "age": 87,
+      "creatureType": "HUMAN",
+      "attackLevel": 90.0,
+      "defenseLevel": 85.0,
+      "tempCreatureLocationId": 1,
+      "tempRingId": 3
+    },
+    {
+      "name": "Торин Дубощит",
+      "coordinates": {
+        "x": 280,
+        "y": 300.0
+      },
+      "age": 195,
+      "creatureType": "HUMAN",
+      "attackLevel": 88.0,
+      "defenseLevel": 92.0,
+      "tempCreatureLocationId": 2,
+      "tempRingId": 4
+    },
+    {
+      "name": "Сэмуайз Гэмджи",
+      "coordinates": {
+        "x": 98,
+        "y": 248.0
+      },
+      "age": 38,
+      "creatureType": "HOBBIT",
+      "attackLevel": 20.0,
+      "defenseLevel": 45.0,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Перегрин Тук",
+      "coordinates": {
+        "x": 102,
+        "y": 252.0
+      },
+      "age": 29,
+      "creatureType": "HOBBIT",
+      "attackLevel": 18.0,
+      "defenseLevel": 35.0,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Мериадок Брендибак",
+      "coordinates": {
+        "x": 105,
+        "y": 245.0
+      },
+      "age": 36,
+      "creatureType": "HOBBIT",
+      "attackLevel": 22.0,
+      "defenseLevel": 40.0,
+      "tempCreatureLocationId": 1
+    },
+    {
+      "name": "Трандуил",
+      "coordinates": {
+        "x": 220,
+        "y": -35.0
+      },
+      "age": 6000,
+      "creatureType": "ELF",
+      "attackLevel": 92.0,
+      "defenseLevel": 89.0,
+      "tempCreatureLocationId": 2
+    },
+    {
+      "name": "Халдир",
+      "coordinates": {
+        "x": 190,
+        "y": -20.0
+      },
+      "age": 1500,
+      "creatureType": "ELF",
+      "attackLevel": 80.0,
+      "defenseLevel": 75.0,
+      "tempCreatureLocationId": 3
+    },
+    {
+      "name": "Келеборн",
+      "coordinates": {
+        "x": 195,
+        "y": -25.0
+      },
+      "age": 7000,
+      "creatureType": "ELF",
+      "attackLevel": 85.0,
+      "defenseLevel": 90.0,
+      "tempCreatureLocationId": 3
     }
   ]
 }

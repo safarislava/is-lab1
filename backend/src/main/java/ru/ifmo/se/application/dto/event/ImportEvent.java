@@ -3,6 +3,8 @@ package ru.ifmo.se.application.dto.event;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.ZonedDateTime;
+
 @Getter
 @Setter
 public class ImportEvent {
@@ -15,6 +17,7 @@ public class ImportEvent {
     private String username;
     private Integer addedObjectsCount;
     private Phase phase;
+    private ZonedDateTime creationDate;
 
     public static ImportEvent start(String username) {
         ImportEvent event = new ImportEvent();

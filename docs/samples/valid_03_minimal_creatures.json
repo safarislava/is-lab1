@@ -11,7 +11,140 @@
       "age": 589,
       "creatureType": "GOLLUM",
       "attackLevel": 15.0,
-      "defenseLevel": 30.0
+      "defenseLevel": 30.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Деагол",
+      "coordinates": {
+        "x": -148,
+        "y": 52.0
+      },
+      "age": 30,
+      "creatureType": "HOBBIT",
+      "attackLevel": 10.0,
+      "defenseLevel": 20.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Гамли Бэггинс",
+      "coordinates": {
+        "x": 101,
+        "y": 240.0
+      },
+      "age": 75,
+      "creatureType": "HOBBIT",
+      "attackLevel": 12.0,
+      "defenseLevel": 18.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Лобелия Саквиль-Бэггинс",
+      "coordinates": {
+        "x": 103,
+        "y": 242.0
+      },
+      "age": 99,
+      "creatureType": "HOBBIT",
+      "attackLevel": 35.0,
+      "defenseLevel": 40.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Ото Саквиль-Бэггинс",
+      "coordinates": {
+        "x": 104,
+        "y": 241.0
+      },
+      "age": 82,
+      "creatureType": "HOBBIT",
+      "attackLevel": 14.0,
+      "defenseLevel": 22.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Дрого Бэггинс",
+      "coordinates": {
+        "x": 102,
+        "y": 239.0
+      },
+      "age": 42,
+      "creatureType": "HOBBIT",
+      "attackLevel": 11.0,
+      "defenseLevel": 19.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Примула Брендибак",
+      "coordinates": {
+        "x": 106,
+        "y": 244.0
+      },
+      "age": 44,
+      "creatureType": "HOBBIT",
+      "attackLevel": 13.0,
+      "defenseLevel": 21.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Рози Гот",
+      "coordinates": {
+        "x": 97,
+        "y": 249.0
+      },
+      "age": 34,
+      "creatureType": "HOBBIT",
+      "attackLevel": 16.0,
+      "defenseLevel": 25.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Толдо Бэггинс",
+      "coordinates": {
+        "x": 99,
+        "y": 247.0
+      },
+      "age": 68,
+      "creatureType": "HOBBIT",
+      "attackLevel": 15.0,
+      "defenseLevel": 20.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Хэмфаст Гэмджи",
+      "coordinates": {
+        "x": 96,
+        "y": 246.0
+      },
+      "age": 98,
+      "creatureType": "HOBBIT",
+      "attackLevel": 17.0,
+      "defenseLevel": 30.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Фредегар Болджер",
+      "coordinates": {
+        "x": 108,
+        "y": 243.0
+      },
+      "age": 35,
+      "creatureType": "HOBBIT",
+      "attackLevel": 19.0,
+      "defenseLevel": 28.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Фолко Боффин",
+      "coordinates": {
+        "x": 107,
+        "y": 245.0
+      },
+      "age": 33,
+      "creatureType": "HOBBIT",
+      "attackLevel": 18.0,
+      "defenseLevel": 24.0,
+      "creatureLocationId": 3
     }
   ]
 }

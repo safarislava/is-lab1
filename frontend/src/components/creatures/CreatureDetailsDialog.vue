@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BookCreatureResponse } from '@/types/creature';
+import { formatDateShort } from '@/utils/formatDate';
 import BaseModal from '@/components/ui/BaseModal.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseBadge, { type BadgeVariant } from '@/components/ui/BaseBadge.vue';
@@ -17,19 +18,7 @@ const emit = defineEmits<{
 }>();
 
 function formatDate(isoString?: string | null): string {
-  if (!isoString) return '—';
-  try {
-    const d = new Date(isoString);
-    return new Intl.DateTimeFormat('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(d);
-  } catch {
-    return isoString;
-  }
+  return formatDateShort(isoString, '—');
 }
 
 function getBadgeVariant(type?: string): BadgeVariant {
