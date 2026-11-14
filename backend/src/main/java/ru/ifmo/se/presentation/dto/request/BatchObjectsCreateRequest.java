@@ -15,12 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BatchObjectsCreateRequest {
-    @NotNull
     private List<@Valid @NotNull BatchBookCreatureCreateRequest> creatures = new ArrayList<>();
 
-    @NotNull
     private List<@Valid @NotNull BatchRingCreateRequest> rings = new ArrayList<>();
 
-    @NotNull
     private List<@Valid @NotNull BatchMagicCityCreateRequest> cities = new ArrayList<>();
 }
