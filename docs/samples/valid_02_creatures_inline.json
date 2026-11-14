@@ -1,40 +1,163 @@
 {
-  "rings": [],
-  "cities": [
+  "rings": [
     {
-      "tempId": 1,
-      "name": "Минас Тирит",
-      "area": 25000,
-      "population": 50000,
-      "establishmentDate": "3320-01-01T00:00:00",
-      "governor": "HUMAN",
-      "capital": true,
-      "populationDensity": 2.0
-    }
-  ],
-  "creatures": [
-    {
-      "name": "Арагорн II",
-      "coordinates": {
-        "x": 320,
-        "y": 110.0
-      },
-      "age": 87,
-      "creatureType": "HUMAN",
-      "attackLevel": 90.0,
-      "defenseLevel": 85.0,
-      "tempCreatureLocationId": 1
+      "tempId": 10,
+      "name": "Северное кольцо следопытов",
+      "power": 180
     },
     {
-      "name": "Сэмуайз Гэмджи",
+      "tempId": 11,
+      "name": "Кольцо гондорской стражи",
+      "power": 210
+    }
+  ],
+  "cities": [],
+  "creatures": [
+    {
+      "name": "Боромир",
       "coordinates": {
-        "x": 98,
-        "y": 248.0
+        "x": 315,
+        "y": 120.0
+      },
+      "age": 40,
+      "creatureType": "HUMAN",
+      "attackLevel": 85.0,
+      "defenseLevel": 78.0,
+      "creatureLocationId": 2,
+      "tempRingId": 10
+    },
+    {
+      "name": "Фарамир",
+      "coordinates": {
+        "x": 310,
+        "y": 115.0
+      },
+      "age": 35,
+      "creatureType": "HUMAN",
+      "attackLevel": 80.0,
+      "defenseLevel": 82.0,
+      "creatureLocationId": 2,
+      "tempRingId": 11
+    },
+    {
+      "name": "Денетор II",
+      "coordinates": {
+        "x": 325,
+        "y": 130.0
+      },
+      "age": 89,
+      "creatureType": "HUMAN",
+      "attackLevel": 50.0,
+      "defenseLevel": 60.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Берегонд",
+      "coordinates": {
+        "x": 305,
+        "y": 112.0
       },
       "age": 38,
-      "creatureType": "HOBBIT",
-      "attackLevel": 20.0,
-      "defenseLevel": 45.0
+      "creatureType": "HUMAN",
+      "attackLevel": 65.0,
+      "defenseLevel": 70.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Имрахиль",
+      "coordinates": {
+        "x": 330,
+        "y": 125.0
+      },
+      "age": 54,
+      "creatureType": "HUMAN",
+      "attackLevel": 88.0,
+      "defenseLevel": 85.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Хурин Хранитель Ключей",
+      "coordinates": {
+        "x": 312,
+        "y": 118.0
+      },
+      "age": 45,
+      "creatureType": "HUMAN",
+      "attackLevel": 72.0,
+      "defenseLevel": 68.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Маблунг Следопыт",
+      "coordinates": {
+        "x": 308,
+        "y": 114.0
+      },
+      "age": 32,
+      "creatureType": "HUMAN",
+      "attackLevel": 68.0,
+      "defenseLevel": 65.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Анборн Разведчик",
+      "coordinates": {
+        "x": 306,
+        "y": 116.0
+      },
+      "age": 36,
+      "creatureType": "HUMAN",
+      "attackLevel": 67.0,
+      "defenseLevel": 66.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Дамрод",
+      "coordinates": {
+        "x": 304,
+        "y": 110.0
+      },
+      "age": 30,
+      "creatureType": "HUMAN",
+      "attackLevel": 64.0,
+      "defenseLevel": 63.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Форлонг Толстый",
+      "coordinates": {
+        "x": 335,
+        "y": 140.0
+      },
+      "age": 60,
+      "creatureType": "HUMAN",
+      "attackLevel": 75.0,
+      "defenseLevel": 80.0,
+      "creatureLocationId": 2
+    },
+    {
+      "name": "Хирлуин Прекрасный",
+      "coordinates": {
+        "x": 328,
+        "y": 135.0
+      },
+      "age": 48,
+      "creatureType": "HUMAN",
+      "attackLevel": 78.0,
+      "defenseLevel": 74.0,
+      "creatureLocationId": 3
+    },
+    {
+      "name": "Дуинхир из Долины Мортонда",
+      "coordinates": {
+        "x": 322,
+        "y": 122.0
+      },
+      "age": 52,
+      "creatureType": "HUMAN",
+      "attackLevel": 70.0,
+      "defenseLevel": 72.0,
+      "creatureLocationId": 3
     }
   ]
 }
