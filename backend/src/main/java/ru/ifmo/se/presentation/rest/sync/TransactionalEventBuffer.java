@@ -11,18 +11,23 @@ import ru.ifmo.se.application.dto.event.NotificationEvent;
 import ru.ifmo.se.application.enums.ActionType;
 import ru.ifmo.se.presentation.rest.NotificationBroadcastService;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @TransactionScoped
-public class TransactionalEventBuffer {
+public class TransactionalEventBuffer implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Resource
-    private TransactionSynchronizationRegistry registry;
+    private transient TransactionSynchronizationRegistry registry;
 
     @Inject
-    private NotificationBroadcastService broadcastService;
+    private transient NotificationBroadcastService broadcastService;
 
-    private final Map<EntityKey, NotificationEvent> events = new ConcurrentHashMap<>();
+    private final transient Map<EntityKey, NotificationEvent> events = new ConcurrentHashMap<>();
 
     public void onEvent(@Observes NotificationEvent event) {
         EntityKey globalKey = new EntityKey(event.getEntityType(), 0);

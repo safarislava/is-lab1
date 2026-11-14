@@ -7,15 +7,20 @@ import jakarta.transaction.TransactionScoped;
 import ru.ifmo.se.application.dto.event.ImportNotificationEvent;
 import ru.ifmo.se.presentation.rest.NotificationBroadcastService;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @TransactionScoped
-public class TransactionalImportBuffer {
-    @Inject
-    private NotificationBroadcastService broadcastService;
+public class TransactionalImportBuffer implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    private final Map<Integer, ImportNotificationEvent> events = new ConcurrentHashMap<>();
+    @Inject
+    private transient NotificationBroadcastService broadcastService;
+
+    private final transient Map<Integer, ImportNotificationEvent> events = new ConcurrentHashMap<>();
 
     public void onEvent(@Observes ImportNotificationEvent event) {
         events.put(event.result().getId(), event);
