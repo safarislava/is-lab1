@@ -334,9 +334,7 @@ function getTypeLabel(type: string): string {
           </div>
 
           <div v-if="activeTab === 'cities'" class="tab-pane">
-            <div v-if="previewCities.length === 0" class="empty-preview">
-              Нет городов в запросе
-            </div>
+            <div v-if="previewCities.length === 0" class="empty-preview">Нет городов в запросе</div>
             <div v-else class="table-container mini-table">
               <table class="data-table">
                 <thead>
@@ -364,9 +362,7 @@ function getTypeLabel(type: string): string {
           </div>
 
           <div v-if="activeTab === 'rings'" class="tab-pane">
-            <div v-if="previewRings.length === 0" class="empty-preview">
-              Нет колец в запросе
-            </div>
+            <div v-if="previewRings.length === 0" class="empty-preview">Нет колец в запросе</div>
             <div v-else class="table-container mini-table">
               <table class="data-table">
                 <thead>

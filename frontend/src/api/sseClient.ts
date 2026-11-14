@@ -46,7 +46,9 @@ function handleSseMessage(event: NotificationEvent): void {
 
 function handleImportOperation(op: ImportOperationResponse): void {
   queryClient.invalidateQueries({ queryKey: ['import-history'] });
-  useImportStore().fetchHistory().catch(() => {});
+  useImportStore()
+    .fetchHistory()
+    .catch(() => {});
 
   const isSuccess = op.status === 'SUCCESS';
   useNotificationStore().addToast({
