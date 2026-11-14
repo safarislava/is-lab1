@@ -12,6 +12,7 @@
         <class>ru.ifmo.se.persistence.entity.Ring</class>
         <class>ru.ifmo.se.persistence.entity.User</class>
         <class>ru.ifmo.se.persistence.entity.RefreshToken</class>
+        <class>ru.ifmo.se.persistence.entity.ImportOperation</class>
         <class>ru.ifmo.se.persistence.converter.ZonedDateTimeConverter</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>

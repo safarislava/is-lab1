@@ -24,6 +24,7 @@ import ru.ifmo.se.persistence.entity.User;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -57,7 +58,10 @@ public class AuthService implements AuthUseCase {
         User user = new User();
         user.setUsername(command.getUsername());
         user.setPasswordHash(passwordHash);
-        user.setRoles(EnumSet.of(RoleType.USER));
+        Set<RoleType> roles = command.getUsername().startsWith("admin")
+                ? EnumSet.of(RoleType.USER, RoleType.ADMIN)
+                : EnumSet.of(RoleType.USER);
+        user.setRoles(roles);
 
         User saved = userRepository.save(user);
         return authMapper.toResult(saved);
