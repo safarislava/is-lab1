@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useImportStore } from '@/stores/importStore';
 import { SAMPLE_JSON } from '@/utils/importParser';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseBadge, { type BadgeVariant } from '@/components/ui/BaseBadge.vue';
+import CreaturePagination from '@/components/creatures/CreaturePagination.vue';
 import {
   Upload,
   FileUp,
@@ -15,6 +16,10 @@ import {
   Trash2,
   Download,
   RotateCcw,
+  History,
+  CheckCircle2,
+  XCircle,
+  Clock,
 } from 'lucide-vue-next';
 
 const importStore = useImportStore();
@@ -26,6 +31,10 @@ const isDragging = ref(false);
 const previewCreatures = computed(() => importStore.parsedRequest?.creatures ?? []);
 const previewCities = computed(() => importStore.parsedRequest?.cities ?? []);
 const previewRings = computed(() => importStore.parsedRequest?.rings ?? []);
+
+onMounted(() => {
+  importStore.fetchHistory();
+});
 
 function triggerFilePicker() {
   fileInput.value?.click();
@@ -92,10 +101,31 @@ async function handleImport() {
   }
 }
 
+function onPageChange(page: number) {
+  importStore.fetchHistory(page);
+}
+
 function formatBytes(bytes: number | null): string {
   if (!bytes) return '';
   if (bytes < 1024) return `${bytes} B`;
   return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '—';
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+  } catch {
+    return dateStr;
+  }
 }
 
 function getBadgeVariant(type: string): BadgeVariant {
@@ -160,29 +190,29 @@ function getTypeLabel(type: string): string {
       </div>
     </div>
 
-    <div class="import-layout">
+    <div class="import-columns-grid">
       <div class="editor-column card">
         <div class="column-header">
           <div class="column-title-wrap">
             <FileText :size="16" class="text-muted" />
             <span class="column-title">JSON файл</span>
-            <span v-if="importStore.fileName" class="file-chip">
-              {{ importStore.fileName }} ({{ formatBytes(importStore.fileSize) }})
+            <span v-if="importStore.fileName" class="file-name-tag">
+              {{ importStore.fileName }}
+              <span v-if="importStore.fileSize">({{ formatBytes(importStore.fileSize) }})</span>
             </span>
           </div>
 
           <BaseButton variant="ghost" size="sm" @click="importStore.loadSample()">
-            Загрузить шаблон
+            Пример
           </BaseButton>
         </div>
 
         <div
-          class="dropzone"
-          :class="{ 'is-dragging': isDragging }"
+          :class="['dropzone', { active: isDragging }]"
+          @click="triggerFilePicker"
           @dragover="onDragOver"
           @dragleave="onDragLeave"
           @drop="onDrop"
-          @click="triggerFilePicker"
         >
           <input
             ref="fileInput"
@@ -264,119 +294,111 @@ function getTypeLabel(type: string): string {
           </button>
         </div>
 
-        <div v-if="activeTab === 'creatures'" class="preview-tab-content">
-          <div v-if="previewCreatures.length === 0" class="empty-preview">Нет существ</div>
-          <div v-else class="table-container mini-table">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Имя</th>
-                  <th>Тип</th>
-                  <th>Координаты</th>
-                  <th>Возраст</th>
-                  <th>Атака</th>
-                  <th>Защита</th>
-                  <th>Город</th>
-                  <th>Кольцо</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(c, idx) in previewCreatures" :key="idx">
-                  <td>{{ idx + 1 }}</td>
-                  <td>
-                    <strong>{{ c.name }}</strong>
-                  </td>
-                  <td>
-                    <BaseBadge :variant="getBadgeVariant(c.creatureType)" size="sm">
-                      {{ getTypeLabel(c.creatureType) }}
-                    </BaseBadge>
-                  </td>
-                  <td>({{ c.coordinates?.x ?? '—' }}, {{ c.coordinates?.y ?? '—' }})</td>
-                  <td>{{ c.age }}</td>
-                  <td>⚔️ {{ c.attackLevel }}</td>
-                  <td>🛡️ {{ c.defenseLevel }}</td>
-                  <td>
-                    <span v-if="c.tempCreatureLocationId" class="ref-badge city-ref">
-                      Новый [tempId: {{ c.tempCreatureLocationId }}]
-                    </span>
-                    <span v-else-if="c.creatureLocationId" class="ref-badge existing-ref">
-                      #{{ c.creatureLocationId }}
-                    </span>
-                    <span v-else class="text-dim">—</span>
-                  </td>
-                  <td>
-                    <span v-if="c.tempRingId" class="ref-badge ring-ref">
-                      Новое [tempId: {{ c.tempRingId }}]
-                    </span>
-                    <span v-else-if="c.ringId" class="ref-badge existing-ref">
-                      #{{ c.ringId }}
-                    </span>
-                    <span v-else class="text-dim">—</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="preview-tab-content">
+          <div v-if="activeTab === 'creatures'" class="tab-pane">
+            <div v-if="previewCreatures.length === 0" class="empty-preview">
+              Нет существ в запросе
+            </div>
+            <div v-else class="table-container mini-table">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Имя</th>
+                    <th>Тип</th>
+                    <th>Возраст</th>
+                    <th>Атака/Защита</th>
+                    <th>Локация</th>
+                    <th>Кольцо</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(c, idx) in previewCreatures" :key="idx">
+                    <td>{{ c.name }}</td>
+                    <td>
+                      <BaseBadge :variant="getBadgeVariant(c.creatureType)" size="sm">
+                        {{ getTypeLabel(c.creatureType) }}
+                      </BaseBadge>
+                    </td>
+                    <td>{{ c.age }}</td>
+                    <td>{{ c.attackLevel }} / {{ c.defenseLevel }}</td>
+                    <td>
+                      <span v-if="c.tempCreatureLocationId != null" class="ref-badge city-ref">
+                        город #{{ c.tempCreatureLocationId }}
+                      </span>
+                      <span v-else-if="c.creatureLocationId != null" class="ref-badge existing-ref">
+                        город #{{ c.creatureLocationId }}
+                      </span>
+                      <span v-else class="text-dim">—</span>
+                    </td>
+                    <td>
+                      <span v-if="c.tempRingId != null" class="ref-badge ring-ref">
+                        кольцо #{{ c.tempRingId }}
+                      </span>
+                      <span v-else-if="c.ringId != null" class="ref-badge existing-ref">
+                        кольцо #{{ c.ringId }}
+                      </span>
+                      <span v-else class="text-dim">—</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <div v-if="activeTab === 'cities'" class="preview-tab-content">
-          <div v-if="previewCities.length === 0" class="empty-preview">Нет городов</div>
-          <div v-else class="table-container mini-table">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>tempId</th>
-                  <th>Название</th>
-                  <th>Площадь</th>
-                  <th>Население</th>
-                  <th>Столица</th>
-                  <th>Губернатор</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(city, idx) in previewCities" :key="idx">
-                  <td>
-                    <span v-if="city.tempId" class="temp-id-pill">#{{ city.tempId }}</span>
-                    <span v-else class="text-dim">—</span>
-                  </td>
-                  <td>
-                    <strong>{{ city.name }}</strong>
-                  </td>
-                  <td>{{ city.area }} км²</td>
-                  <td>{{ city.population }} чел.</td>
-                  <td>{{ city.capital ? '👑 Да' : 'Нет' }}</td>
-                  <td>{{ city.governor ? getTypeLabel(city.governor) : '—' }}</td>
-                </tr>
-              </tbody>
-            </table>
+          <div v-if="activeTab === 'cities'" class="tab-pane">
+            <div v-if="previewCities.length === 0" class="empty-preview">
+              Нет городов в запросе
+            </div>
+            <div v-else class="table-container mini-table">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Temp ID</th>
+                    <th>Название</th>
+                    <th>Площадь</th>
+                    <th>Население</th>
+                    <th>Столица</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(city, idx) in previewCities" :key="idx">
+                    <td>
+                      <span class="temp-id-pill">#{{ city.tempId ?? '—' }}</span>
+                    </td>
+                    <td>{{ city.name }}</td>
+                    <td>{{ city.area }}</td>
+                    <td>{{ city.population }}</td>
+                    <td>{{ city.capital ? 'Да' : 'Нет' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <div v-if="activeTab === 'rings'" class="preview-tab-content">
-          <div v-if="previewRings.length === 0" class="empty-preview">Нет колец</div>
-          <div v-else class="table-container mini-table">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>tempId</th>
-                  <th>Название</th>
-                  <th>Сила</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(ring, idx) in previewRings" :key="idx">
-                  <td>
-                    <span v-if="ring.tempId" class="temp-id-pill">#{{ ring.tempId }}</span>
-                    <span v-else class="text-dim">—</span>
-                  </td>
-                  <td>
-                    <strong>{{ ring.name }}</strong>
-                  </td>
-                  <td>💍 {{ ring.power }}</td>
-                </tr>
-              </tbody>
-            </table>
+          <div v-if="activeTab === 'rings'" class="tab-pane">
+            <div v-if="previewRings.length === 0" class="empty-preview">
+              Нет колец в запросе
+            </div>
+            <div v-else class="table-container mini-table">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Temp ID</th>
+                    <th>Название</th>
+                    <th>Сила</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(ring, idx) in previewRings" :key="idx">
+                    <td>
+                      <span class="temp-id-pill">#{{ ring.tempId ?? '—' }}</span>
+                    </td>
+                    <td>{{ ring.name }}</td>
+                    <td>{{ ring.power }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -400,6 +422,83 @@ function getTypeLabel(type: string): string {
           </BaseButton>
         </div>
       </div>
+    </div>
+
+    <div class="history-card card">
+      <div class="column-header">
+        <div class="column-title-wrap">
+          <History :size="16" class="text-muted" />
+          <span class="column-title">История операций импорта</span>
+        </div>
+
+        <BaseButton
+          variant="ghost"
+          size="sm"
+          :loading="importStore.historyLoading"
+          @click="importStore.fetchHistory()"
+        >
+          <RotateCcw :size="12" />
+          Обновить
+        </BaseButton>
+      </div>
+
+      <div v-if="importStore.history.length === 0" class="empty-history">
+        <Clock :size="24" class="text-dim" />
+        <p>История операций импорта пуста</p>
+      </div>
+
+      <div v-else class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Статус</th>
+              <th>Пользователь</th>
+              <th>Добавлено объектов</th>
+              <th>Время создания</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="op in importStore.history" :key="op.id">
+              <td>
+                <span class="temp-id-pill">#{{ op.id }}</span>
+              </td>
+              <td>
+                <span
+                  :class="[
+                    'status-badge',
+                    op.status === 'SUCCESS' ? 'status-success' : 'status-failed',
+                  ]"
+                >
+                  <CheckCircle2 v-if="op.status === 'SUCCESS'" :size="13" />
+                  <XCircle v-else :size="13" />
+                  {{ op.status === 'SUCCESS' ? 'Успешно' : 'Ошибка' }}
+                </span>
+              </td>
+              <td>
+                <strong>{{ op.username }}</strong>
+              </td>
+              <td>
+                <span v-if="op.status === 'SUCCESS' && op.addedObjectsCount != null">
+                  {{ op.addedObjectsCount }}
+                </span>
+                <span v-else class="text-dim">—</span>
+              </td>
+              <td>
+                <span class="text-muted">{{ formatDate(op.creationDate) }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <CreaturePagination
+        v-if="importStore.historyTotal > 0"
+        :page="importStore.historyPage"
+        :size="importStore.historySize"
+        :total="importStore.historyTotal"
+        @page-change="onPageChange"
+      />
     </div>
   </div>
 </template>
@@ -443,101 +542,91 @@ function getTypeLabel(type: string): string {
 
 .error-title {
   font-weight: 600;
-  font-size: 13.5px;
-  color: #ffffff;
   margin-bottom: 0.25rem;
 }
 
 .error-message {
   font-size: 13px;
-  margin-bottom: 0.5rem;
+  line-height: 1.4;
 }
 
 .error-details-list {
-  padding-left: 1.2rem;
-  margin: 0.5rem 0;
+  margin-top: 0.5rem;
+  padding-left: 1.25rem;
   font-size: 12px;
-  color: #ffcfcc;
 }
 
-.import-layout {
+.import-columns-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 1024px) {
-  .import-layout {
+  .import-columns-grid {
     grid-template-columns: 1fr;
   }
-}
-
-.editor-column,
-.preview-column {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  min-height: 580px;
 }
 
 .column-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 0.65rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-subtle);
 }
 
 .column-title-wrap {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
 .column-title {
+  font-size: 14px;
   font-weight: 600;
-  font-size: 13.5px;
   color: var(--text-main);
 }
 
-.file-chip {
-  font-size: 11px;
+.file-name-tag {
+  font-size: 12px;
   color: var(--text-muted);
   background: var(--bg-well);
-  border: 1px solid var(--border-color);
-  padding: 0.15rem 0.45rem;
+  padding: 0.15rem 0.5rem;
   border-radius: var(--radius-xs);
+  border: 1px solid var(--border-color);
 }
 
 .dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
-  border: 2px dashed var(--border-color);
-  border-radius: var(--radius-sm);
-  background: var(--bg-well);
+  gap: 0.5rem;
   cursor: pointer;
-  transition: all 0.15s ease;
-  text-align: center;
+  background: var(--bg-well);
+  transition: all 0.2s ease;
+  margin-bottom: 0.85rem;
 }
 
 .dropzone:hover,
-.dropzone.is-dragging {
+.dropzone.active {
   border-color: var(--primary);
-  background: var(--bg-card-hover);
+  background: rgba(120, 119, 198, 0.08);
 }
 
 .dropzone-icon {
-  color: var(--primary);
-  margin-bottom: 0.35rem;
+  color: var(--text-muted);
 }
 
 .dropzone-text {
   font-size: 12.5px;
-  color: var(--text-main);
+  color: var(--text-muted);
 }
 
 .browse-link {
@@ -553,46 +642,43 @@ function getTypeLabel(type: string): string {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 260px;
 }
 
 .editor-toolbar {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  padding: 0.25rem 0.5rem;
   font-size: 11px;
   color: var(--text-dim);
-  margin-bottom: 0.35rem;
 }
 
 .raw-textarea {
   width: 100%;
-  min-height: 280px;
   flex: 1;
-  background: var(--bg-input);
-  border: 1px solid var(--border-input);
-  border-radius: var(--radius-sm);
-  color: var(--text-main);
-  font-family: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+  min-height: 240px;
+  font-family: monospace;
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.45;
+  background: var(--bg-well);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   padding: 0.75rem;
   resize: vertical;
-  tab-size: 2;
-  white-space: pre;
 }
 
 .raw-textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 1px var(--primary);
 }
 
 .validation-errors-box {
-  background: var(--danger-bg);
-  border: 1px solid var(--danger);
+  background: rgba(224, 108, 117, 0.1);
+  border: 1px solid rgba(224, 108, 117, 0.35);
   border-radius: var(--radius-sm);
-  padding: 0.75rem 0.85rem;
-  color: #ff9b96;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
 .validation-header {
@@ -600,34 +686,21 @@ function getTypeLabel(type: string): string {
   align-items: center;
   gap: 0.4rem;
   font-size: 12.5px;
-  margin-bottom: 0.4rem;
-  color: #ffffff;
+  color: #ff9b96;
+  margin-bottom: 0.35rem;
 }
 
 .validation-list {
   padding-left: 1.25rem;
   font-size: 11.5px;
-  line-height: 1.45;
-  max-height: 140px;
-  overflow-y: auto;
-}
-
-.validation-success-box {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  background: var(--success-bg);
-  border: 1px solid var(--success);
-  border-radius: var(--radius-sm);
-  padding: 0.65rem 0.85rem;
-  color: var(--text-main);
-  font-size: 12px;
+  color: #ff9b96;
 }
 
 .preview-tabs {
   display: flex;
-  border-bottom: 1px solid var(--border-color);
   gap: 0.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 0.75rem;
 }
 
 .preview-tab-btn {
@@ -638,11 +711,10 @@ function getTypeLabel(type: string): string {
   border: none;
   border-bottom: 2px solid transparent;
   padding: 0.45rem 0.75rem;
+  font-size: 12.5px;
   color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all 0.15s ease;
 }
 
 .preview-tab-btn:hover {
@@ -725,5 +797,42 @@ function getTypeLabel(type: string): string {
 
 .submit-summary strong {
   color: var(--text-main);
+}
+
+.history-card {
+  margin-top: 0.5rem;
+}
+
+.empty-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1rem;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.status-success {
+  background: rgba(152, 195, 121, 0.15);
+  color: #98c379;
+  border: 1px solid rgba(152, 195, 121, 0.35);
+}
+
+.status-failed {
+  background: rgba(224, 108, 117, 0.15);
+  color: #e06c75;
+  border: 1px solid rgba(224, 108, 117, 0.35);
 }
 </style>

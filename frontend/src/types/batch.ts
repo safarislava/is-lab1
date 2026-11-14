@@ -44,3 +44,20 @@ export interface BatchObjectsResponse {
   rings: RingResponse[];
   creatures: BookCreatureResponse[];
 }
+
+export type ImportStatus = 'SUCCESS' | 'FAILED';
+
+export interface ImportOperationResponse {
+  id: number;
+  status: ImportStatus;
+  username: string;
+  addedObjectsCount: number | null;
+  creationDate: string;
+}
+
+export interface ImportOperationPageResponse {
+  content: ImportOperationResponse[];
+  total: number;
+  page: number;
+  size: number;
+}
