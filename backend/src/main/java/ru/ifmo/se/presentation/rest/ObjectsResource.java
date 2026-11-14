@@ -3,10 +3,8 @@ package ru.ifmo.se.presentation.rest;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -49,7 +47,7 @@ public class ObjectsResource {
     private ImportPresentationMapper importMapper;
 
     @POST
-    public Response create(@Valid @NotNull BatchObjectsCreateRequest request,
+    public Response create(BatchObjectsCreateRequest request,
                            @Context SecurityContext securityContext) {
         String username = securityContext.getUserPrincipal().getName();
         ObjectsCreateCommand command = objectsMapper.toCommand(request);
