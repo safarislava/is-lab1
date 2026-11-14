@@ -9,8 +9,10 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import ru.ifmo.se.application.dto.command.ObjectsCreateCommand;
 import ru.ifmo.se.application.dto.result.ObjectsResult;
 import ru.ifmo.se.application.usecase.ObjectsUseCase;
@@ -31,9 +33,11 @@ public class ObjectsResource {
     private ObjectsPresentationMapper mapper;
 
     @POST
-    public Response create(@Valid @NotNull BatchObjectsCreateRequest request) {
+    public Response create(@Valid @NotNull BatchObjectsCreateRequest request,
+                           @Context SecurityContext securityContext) {
+        String username = securityContext.getUserPrincipal().getName();
         ObjectsCreateCommand command = mapper.toCommand(request);
-        ObjectsResult result = objectsUseCase.create(command);
+        ObjectsResult result = objectsUseCase.create(command, username);
         BatchObjectsResponse response = mapper.toResponse(result);
         return Response.status(Response.Status.CREATED).entity(response).build();
     }

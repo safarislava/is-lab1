@@ -1,12 +1,14 @@
 package ru.ifmo.se.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import ru.ifmo.se.application.dto.command.BatchBookCreatureCreateCommand;
 import ru.ifmo.se.application.dto.command.BatchMagicCityCreateCommand;
 import ru.ifmo.se.application.dto.command.BatchRingCreateCommand;
 import ru.ifmo.se.application.dto.command.ObjectsCreateCommand;
+import ru.ifmo.se.application.dto.event.ImportEvent;
 import ru.ifmo.se.application.dto.result.BookCreatureResult;
 import ru.ifmo.se.application.dto.result.MagicCityResult;
 import ru.ifmo.se.application.dto.result.ObjectsResult;
@@ -39,14 +41,23 @@ public class ObjectsService implements ObjectsUseCase {
     @Inject
     private ObjectsMapper objectsMapper;
 
+    @Inject
+    private Event<ImportEvent> importEventPublisher;
+
     @Override
     @Transactional
-    public ObjectsResult create(ObjectsCreateCommand command) {
+    public ObjectsResult create(ObjectsCreateCommand command, String username) {
+        ImportEvent startEvent = ImportEvent.start(username);
+        importEventPublisher.fire(startEvent);
+
         ObjectsResult result = new ObjectsResult();
 
         Map<Integer, Integer> ringRefs = createRings(command.getRings(), result.getRings());
         Map<Integer, Integer> cityRefs = createCities(command.getCities(), result.getCities());
         createCreatures(command.getCreatures(), ringRefs, cityRefs, result.getCreatures());
+
+        int count = result.getRings().size() + result.getCities().size() + result.getCreatures().size();
+        importEventPublisher.fire(ImportEvent.complete(startEvent.getOperationId(), count));
 
         return result;
     }
