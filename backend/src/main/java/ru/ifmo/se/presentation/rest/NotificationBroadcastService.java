@@ -2,8 +2,6 @@ package ru.ifmo.se.presentation.rest;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.event.TransactionPhase;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.sse.OutboundSseEvent;
@@ -32,14 +30,13 @@ public class NotificationBroadcastService {
     }
 
     public void registerSink(SseEventSink sink, String username, boolean isAdmin) {
-        if (sink == null || sink.isClosed()) {
-            return;
+        if (!sink.isClosed()) {
+            broadcaster.register(sink);
+            sessions.add(new SseSession(sink, username, isAdmin));
         }
-        broadcaster.register(sink);
-        sessions.add(new SseSession(sink, username, isAdmin));
     }
 
-    public void onEntityChange(@Observes(during = TransactionPhase.AFTER_SUCCESS) NotificationEvent event) {
+    public void broadcastEvent(NotificationEvent event) {
         OutboundSseEvent sseEvent = sse.newEventBuilder()
                 .name("entity-change")
                 .data(NotificationEvent.class, event)
@@ -67,5 +64,5 @@ public class NotificationBroadcastService {
         }
     }
 
-    private record SseSession(SseEventSink sink, String username, boolean admin) {}
+    private record SseSession(SseEventSink sink, String username, boolean admin) { }
 }
